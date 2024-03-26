@@ -1,8 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<jsp:useBean id="login" class="match.UserBean"/>
+<jsp:useBean id="ulogin" class="match.UserBean"/>
+<jsp:useBean id="mlogin" class="match.ManagerBean"/>
 <%
-	String id = (String)session.getAttribute("idKey");
-	String url = request.getParameter("url");
+	String uid = (String)session.getAttribute("idKey");
+	String uurl = request.getParameter("url");
+	String mid = (String)session.getAttribute("idKey");
+	String murl = request.getParameter("url");
 %>
 <html>
 <head>
@@ -70,6 +73,9 @@
             width: 20px; /* 원하는 너비로 조절 */
             height: 20px;
         }
+        .tab-pane{
+        	padding-bottom: 0px;
+        }
         .keep{
         	height: 20px;
         }
@@ -109,9 +115,9 @@
 	        	<div class="main-container">
 	        		
 	        		<%
-        				if(id == null){
+        				if(uid != null){
         			%>
-		        	<form class="login-form" action="loginProc.jsp" method="post" name="loginFrm">
+		        	<form class="login-form" action="userLoginProc.jsp" method="post" name="loginFrm">
 		            	<div class="form-container">
 		                	<div class="form-group input-text">
 		                    	<input type="text" id="user_id" name="user_id" placeholder="아이디">
@@ -136,7 +142,7 @@
 
 	        <div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 	        	<div class="main-container">
-		        	<form class="login-form" action="loginAction.jsp" method="post">
+		        	<form class="login-form" action="managerLoginProc.jsp" method="post" name="loginFrm">
 		            	<div class="form-container">
 		                	<div class="form-group input-text">
 		                    	<input type="text" id="manager_id" name="manager_id" placeholder="기업회원 아이디">

@@ -13,12 +13,18 @@
 			    align-items: center;
 			    justify-content: center;
 			    height: 100vh;
+			    margin: 0; /* 기본 마진 제거 */
+			    padding: 0; /* 기본 패딩 제거 */
 			}
 			body {
 	            background-color: #f5f6f8; /* body의 배경색을 변경 */
+	        	margin: 0;
+	        	padding: 0;
 	        }
 	        main {
 	        	background-color: #ffffff;
+	        }
+	        .body{
 	        }
 			.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
 			    background-color: #3399ff; /* 선택된 탭의 배경색 */
