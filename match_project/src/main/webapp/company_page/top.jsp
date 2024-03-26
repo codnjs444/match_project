@@ -84,12 +84,13 @@
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: auto; /* 수직 가운데 정렬을 위해 margin: auto; 사용 */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Adjust width as needed */
+  width: 60%; /* 모달의 가로 크기 조정 */
+  max-width: 600px; /* 최대 가로 크기 설정 */
   border-radius: 5px;
-  text-align: center; /* Centering the content */
+  text-align: center; /* 모달 내용 가운데 정렬 */
 }
 
 .close {
@@ -110,19 +111,61 @@
   justify-content: space-around; /* Distribute space evenly */
 }
 
+
 .modal-option {
-  text-align: center; /* Centering text */
+  display: flex; /* flexbox를 사용하여 자식 요소를 가로로 정렬 */
+  flex-direction: column; /* 자식 요소를 세로 방향으로 배치 */
+  align-items: center; /* 가로 방향 가운데 정렬 */
   margin: 10px;
 }
 
 .modal-option img {
-  width: 100%; /* Adjust the width as needed */
+  width: 100%; /* 이미지 가로 폭을 100%로 설정하여 부모 요소에 맞춤 */
   margin-bottom: 10px;
 }
 
 .modal-option p {
   margin-bottom: 10px;
 }
+
+.modal-option button {
+  width: 100%; /* 버튼 가로 폭을 100%로 설정하여 부모 요소에 맞춤 */
+}
+
+.image-with-button {
+  position: relative; /* 부모 요소를 상대 위치로 설정 */
+  display: flex; /* flexbox를 사용하여 자식 요소를 가로로 정렬 */
+  flex-direction: column; /* 자식 요소를 세로 방향으로 배치 */
+  align-items: center; /* 가로 방향 가운데 정렬 */
+}
+v
+.image-with-button img {
+  width: 100%; /* 이미지 가로 폭을 100%로 설정하여 부모 요소에 맞춤 */
+  margin-bottom: 10px; /* 이미지와 버튼 사이의 간격 조정 */
+}
+.image-with-button img:hover {
+  border: 2px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
+  border-radius: 5px; /* 테두리 둥글게 만들기 */
+}
+.image-with-button button:hover {
+  cursor: pointer; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
+}
+
+
+.image-with-button button {
+  position: absolute; /* 버튼을 이미지 내에서 절대 위치로 설정 */
+  bottom: 20px; /* 이미지의 아래로부터 10px 만큼 띄움 */
+  left: 50%; /* 이미지의 가운데에 버튼을 배치 */
+  transform: translateX(-50%); /* 가운데 정렬을 위해 왼쪽으로 이동 */
+  width: 160px; /* 버튼 가로 폭 조정 */
+  padding: 12px 20px; /* 버튼 내부 여백 조정 */
+  background-color: #007bff; /* 버튼 배경색 설정 */
+  color: #fff; /* 버튼 텍스트 색상 설정 */
+  font-size: 18px; /* 버튼 폰트 크기 조정 */
+  border: none; /* 버튼 테두리 없애기 */
+  border-radius: 5px; /* 버튼 모서리 둥글게 만들기 */
+}
+
 
 </style>
 </head>
@@ -153,21 +196,22 @@
     <h2>어떤 채용을 진행하시나요?</h2>
     <div class="modal-options">
       <!-- Option 1 -->
-      <div class="modal-option">
-        <img src="path_to_blind_recruitment_image" alt="블라인드 채용 이미지" />
-        <p>블라인드 채용</p>
-        <button onclick="chooseJobType('blind')">선택하기</button>
+       <div class="modal-option">
+        <div class="image-with-button">
+          <img src="${pageContext.request.contextPath}/img/employment1.png" alt="블라인드 채용 이미지" />
+          <button onclick="redirectTo('blind_post.jsp')">등록하기</button>
+        </div>
       </div>
       <!-- Option 2 -->
       <div class="modal-option">
-        <img src="path_to_own_form_recruitment_image" alt="자사양식 채용 이미지" />
-        <p>자사양식 채용</p>
-        <button onclick="chooseJobType('own-form')">등록하기</button>
+        <div class="image-with-button">
+          <img src="${pageContext.request.contextPath}/img/employment2.png" alt="자사양식 채용 이미지" />
+          <button onclick="redirectTo('own_post.jsp')">등록하기</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <script>
 //Open the modal
@@ -185,6 +229,11 @@ function chooseJobType(type) {
   console.log('Chosen job type:', type);
   document.getElementById('myModal').style.display = 'none';
   // Additional logic based on job type
+}
+
+//Function to redirect to the specified page
+function redirectTo(page) {
+  window.location.href = page;
 }
 
 </script>
