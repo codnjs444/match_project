@@ -23,12 +23,13 @@
     color: white;
     padding: 10px;
   }
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 10px;
-  }
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  font-size: 18px; /* 텍스트 크기를 증가 */
+}
   .sidebar a:hover {
     background-color: #ddd;
     color: black;
@@ -37,7 +38,8 @@
     color: #E4D233; /* 현재 선택된 메뉴의 텍스트 색을 노란색으로 변경 */
   }
   .sidebar a .icon {
-    margin-right: 10px;
+ 	margin-right: 10px;
+  	font-size: 20px; /* 아이콘 크기를 증가 */
   }
   .content {
     margin-left: 250px;
@@ -53,7 +55,19 @@
     margin: 0; /* 외부 여백 제거 */
   }
   .sidebar li {
-    padding-left: 20px; /* 아이콘과 텍스트 사이의 간격 조정 */
+    padding-left: 5px; /* 아이콘과 텍스트 사이의 간격 조정 */
+  	margin-top: 20px; /* 위쪽 마진 추가 */
+  	margin-bottom: 10px; /* 아래쪽 마진 추가 */
+  }
+  .submenu {
+    display: none;
+    padding-left: 20px;
+  }
+  .submenu.active {
+    display: block;
+  }
+    .sidebar ul ul {
+    padding-left: 35px; /* 우측으로 이동시키기 위해 padding-left 값을 증가시킵니다. */
   }
 </style>
 </head>
@@ -62,13 +76,22 @@
 <div class="sidebar">
   <ul>
     <li><a href="#" onclick="loadPage('home.jsp')"><i class="fas fa-home icon"></i><span>홈</span></a></li>
-    <li><a href="#" onclick="loadPage('job.jsp')"><i class="fas fa-briefcase icon"></i><span>공고</span></a></li>
+    <li>
+      <a href="#" onclick="toggleSubMenu('jobSubMenu')">
+        <i class="fas fa-briefcase icon"></i><span>공고</span>
+      </a>
+      <ul id="jobSubMenu" class="submenu">
+        <li><a href="#" onclick="loadPage('applicant_management.jsp')"><i class="fas fa-user-friends icon"></i>지원자 관리</a></li>
+        <li><a href="#" onclick="loadPage('job_calendar.jsp')"><i class="far fa-calendar-alt icon"></i>공고 캘린더</a></li>
+      </ul>
+    </li>
     <li><a href="#" onclick="loadPage('talent.jsp')"><i class="fas fa-users icon"></i><span>인재 관리</span></a></li>
     <li><a href="#" onclick="loadPage('promotion.jsp')"><i class="fas fa-bullhorn icon"></i><span>홍보 관리</span></a></li>
     <li><a href="#" onclick="loadPage('member.jsp')"><i class="fas fa-user-cog icon"></i><span>회원정보 관리</span></a></li>
     <li><a href="#" onclick="loadPage('support.jsp')"><i class="fas fa-headset icon"></i><span>고객지원</span></a></li>
   </ul>
 </div>
+
 
 <div class="content" id="content">
   <!-- 초기 페이지 내용을 여기에 로드합니다. -->
@@ -106,6 +129,11 @@
     }
     // 현재 활성화된 링크를 이전에 활성화된 링크로 설정합니다.
     prevActiveLink = currentActiveLink;
+  }
+
+  function toggleSubMenu(subMenuId) {
+    var subMenu = document.getElementById(subMenuId);
+    subMenu.classList.toggle('active');
   }
 </script>
 

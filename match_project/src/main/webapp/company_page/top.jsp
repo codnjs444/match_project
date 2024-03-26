@@ -31,6 +31,7 @@
     align-items: center;
     position: relative;
     margin-right: 50px; /* 검색창과 오른쪽 여백 사이의 거리 조정 */
+    margin-left: 84px; /* 왼쪽에 자동 마진을 주어 오른쪽으로 밀어냄 */
   }
   .search-bar input[type="text"] {
     padding: 10px;
@@ -70,6 +71,59 @@
   .footer .nav-links i {
     margin-right: 10px;
   }
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Adjust width as needed */
+  border-radius: 5px;
+  text-align: center; /* Centering the content */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+.modal-options {
+  display: flex;
+  justify-content: space-around; /* Distribute space evenly */
+}
+
+.modal-option {
+  text-align: center; /* Centering text */
+  margin: 10px;
+}
+
+.modal-option img {
+  width: 100%; /* Adjust the width as needed */
+  margin-bottom: 10px;
+}
+
+.modal-option p {
+  margin-bottom: 10px;
+}
+
 </style>
 </head>
 <body>
@@ -79,20 +133,61 @@
   <div class="search-bar">
     <input type="text" placeholder="인재, 등록하신 공고를 검색해보세요.">
     <img src="${pageContext.request.contextPath}/img/fi_search.png" alt="Search Icon">
-
   </div>
   <div class="nav-links">
-    <a href="/login">공고등록</a>
+    <a href="#" id="openModal">공고등록</a>
     <a href="/signup">로그아웃</a>
     <a href="/corporate-services">마이페이지</a>
   </div>
 </header>
 
 <footer class="footer">
-  <div class="nav-links">
-
-  </div>
+  <div class="nav-links"></div>
 </footer>
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>어떤 채용을 진행하시나요?</h2>
+    <div class="modal-options">
+      <!-- Option 1 -->
+      <div class="modal-option">
+        <img src="path_to_blind_recruitment_image" alt="블라인드 채용 이미지" />
+        <p>블라인드 채용</p>
+        <button onclick="chooseJobType('blind')">선택하기</button>
+      </div>
+      <!-- Option 2 -->
+      <div class="modal-option">
+        <img src="path_to_own_form_recruitment_image" alt="자사양식 채용 이미지" />
+        <p>자사양식 채용</p>
+        <button onclick="chooseJobType('own-form')">등록하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+//Open the modal
+document.getElementById('openModal').addEventListener('click', function() {
+  document.getElementById('myModal').style.display = 'block';
+});
+
+// Close the modal
+document.getElementsByClassName('close')[0].addEventListener('click', function() {
+  document.getElementById('myModal').style.display = 'none';
+});
+
+// Function to handle job type selection
+function chooseJobType(type) {
+  console.log('Chosen job type:', type);
+  document.getElementById('myModal').style.display = 'none';
+  // Additional logic based on job type
+}
+
+</script>
 
 </body>
 </html>
