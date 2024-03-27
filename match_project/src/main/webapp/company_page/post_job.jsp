@@ -45,7 +45,6 @@
         font-size: 22px; /* 라벨 텍스트 크기 조정 */
         margin-bottom: 10px; /* 라벨 아래 여백 조정 */
         font-weight: bolder;
-
         margin-left: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
     }
 	
@@ -107,20 +106,21 @@
     
         /* 드롭다운 버튼의 배경색과 글자색 변경 */
     .dropdown-toggle {
-        background-color: #007bff; /* 배경색을 파란색으로 변경 */
-        color: #fff; /* 글자색을 흰색으로 변경 */
+        width: 745px;
+        height: 60px;
+        border-radius: 5px;
+        background-color: white; /* 배경색을 파란색으로 변경 */
+        color: black; /* 글자색을 흰색으로 변경 */
+        margin-right: 30px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
     }
 
     /* 드롭다운 메뉴 아이템의 배경색과 글자색 변경 */
     .dropdown-item {
-        background-color: #007bff; /* 배경색을 파란색으로 변경 */
-        color: #fff; /* 글자색을 흰색으로 변경 */
+        background-color: #white; /* 배경색을 파란색으로 변경 */
+        color: #black; /* 글자색을 흰색으로 변경 */
+        font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
     }
 
-    /* 드롭다운 메뉴 아이템 호버시 배경색 변경 */
-    .dropdown-item:hover {
-        background-color: #0056b3; /* 호버시 배경색을 진한 파란색으로 변경 */
-    }
 </style>
 <!-- 추가: 사용자 정의 스타일 시트 -->
 </head>
@@ -236,15 +236,19 @@
             <div class="col">
                 <label for="companyName" class="q1-label1">지원자 학력</label>
             </div>
-            <span class="q1-required">[필수]</span> <!-- 필수 문구 추가 -->
+            <span class="q1-required">[필수]&nbsp;&nbsp;&nbsp;</span> <!-- 필수 문구 추가 -->
 <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        선택하세요
+        학력을 선택해주세요.
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">옵션 1</a>
-        <a class="dropdown-item" href="#">옵션 2</a>
-        <a class="dropdown-item" href="#">옵션 3</a>
+        <a class="dropdown-item" href="#">학력 무관</a>
+        <a class="dropdown-item" href="#">검정고시</a>
+        <a class="dropdown-item" href="#">고등학교 졸업</a>
+        <a class="dropdown-item" href="#">대학졸업(2,3년)</a>
+        <a class="dropdown-item" href="#">대학졸업(4년)</a>
+        <a class="dropdown-item" href="#">석사졸업</a>
+        <a class="dropdown-item" href="#">박사졸업</a>
     </div>
 </div>
 
@@ -296,6 +300,25 @@
             fieldInput.setAttribute('readonly', 'readonly');
         }
     }
+    
+    function updateDropdownButton(text) {
+        // 드롭다운 버튼의 텍스트를 변경하여 선택된 항목으로 업데이트
+        document.getElementById('dropdownMenuButton').innerText = text;
+        // 선택된 항목의 폰트 크기를 키웁니다.
+        document.getElementById('dropdownMenuButton').style.fontSize = '18px'; // 폰트 크기를 조절할 수 있습니다.
+    }
+
+    // 드롭다운 메뉴 아이템을 클릭했을 때 이벤트 핸들러 추가
+    var dropdownItems = document.getElementsByClassName('dropdown-item');
+    for (var i = 0; i < dropdownItems.length; i++) {
+        dropdownItems[i].addEventListener('click', function() {
+            // 클릭된 드롭다운 아이템의 텍스트 가져오기
+            var selectedText = this.innerText;
+            // 선택된 항목을 드롭다운 버튼 텍스트로 설정하고 폰트 크기를 키우는 함수 호출
+            updateDropdownButton(selectedText);
+        });
+    }
+
     
 </script>
 
