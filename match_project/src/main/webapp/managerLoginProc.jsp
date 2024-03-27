@@ -1,22 +1,22 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="mMgr" class="match.ManagerMgr"/>
-<jsp:useBean id="login" class="match.ManagerBean"/>
-<jsp:setProperty property="*" name="login"/>
+<jsp:useBean id="mlogin" class="match.ManagerBean"/>
+<jsp:setProperty property="*" name="mlogin"/>
 <%
 	String url = "login.jsp";
-	if(request.getParameter("url") != null && !request.getParameter("url").equals("null")){
-		url = request.getParameter("url");
+	if(request.getParameter("murl") != null && !request.getParameter("murl").equals("null")){
+		url = request.getParameter("murl");
 	}
 	
 	out.println(url);
 	
-	boolean result = mMgr.loginManager(login.getManager_id(), login.getManager_pwd());;
+	boolean result = mMgr.loginManager(mlogin.getManager_id(), mlogin.getManager_pwd());;
 	String msg = "로그인 실패";
 	if(result){
 		msg = "로그인 성공";
-		login = mMgr.getManager(login.getManager_id());
-		session.setAttribute("idKey", login.getManager_id());
-		session.setAttribute("login", login);
+		mlogin = mMgr.getManager(mlogin.getManager_id());
+		session.setAttribute("idKey", mlogin.getManager_id());
+		session.setAttribute("login", mlogin);
 		url = "company_page/company_home.jsp";
 	}
 %>

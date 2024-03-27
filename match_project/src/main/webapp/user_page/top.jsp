@@ -81,6 +81,7 @@
   </div>
   <div class="nav-links">
     <a href="../login.jsp">로그인</a>
+    <a href="../logout.jsp">로그아웃</a>
     <a href="../signup.jsp">회원가입</a>
     <a href="/corporate-services">기업 서비스</a>
   </div>

@@ -30,6 +30,7 @@ public class UserMgr {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
+		System.out.println("유저 로그인 " + flag);
 		return flag;
 	}
 	
@@ -55,6 +56,7 @@ public class UserMgr {
 				bean.setUser_gender(rs.getBoolean(7));
 				bean.setPostal_code(rs.getString(8));
 				bean.setUser_address(rs.getString(9));
+				bean.setSns(rs.getString(10));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +66,7 @@ public class UserMgr {
 		return bean;
 	}
 	
-	public boolean singUpUser(UserBean bean){
+	public boolean signUpUser(UserBean bean){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;

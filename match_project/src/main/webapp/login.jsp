@@ -2,12 +2,9 @@
 <jsp:useBean id="ulogin" class="match.UserBean"/>
 <jsp:useBean id="mlogin" class="match.ManagerBean"/>
 <%
-	String uid = (String)session.getAttribute("idKey");
-	String uurl = request.getParameter("url");
-	
-	String mid = (String)session.getAttribute("idKey");
-	String murl = request.getParameter("url");
-%>
+	String id = (String)session.getAttribute("idKey");
+	String url = request.getParameter("url");
+%>	
 <html>
 <head>
     <meta charset="utf-8">
@@ -15,7 +12,7 @@
     <title>LogIn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="css/loginstyle.css" rel="stylesheet" type="text/css">
-  </head>
+</head>
 <body class="main-tab">
 	<div class="logo">
 		<button type="button" onclick="redirectTo('user_page/user_home.jsp')">
@@ -39,16 +36,15 @@
     	<div class="tab-content" id="myTabContent">
 	        <div class="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 	        	<div class="main-container">
-	        		
 	        		<%
-	        			if(uid != null){
+	        			if(id != null){
 	        		%>
 	        				<script>
-	        					windows.location.href("user_page/user_home.jsp")
+	        					window.location.replace("user_page/user_home.jsp");
 	        				</script>
 	        		<%
 	        			}
-	        			else if(uid == null){
+	        			else if(id == null){
         			%>
 		        	<form class="login-form" action="userLoginProc.jsp" method="post" name="loginFrm">
 		            	<div class="form-container">
@@ -56,7 +52,7 @@
 		                    	<input type="text" id="user_id" name="user_id" placeholder="아이디">
 		                	</div>
 		                	<div class="form-group input-text">
-		                    	<input type="password" id="user_password" name="user_password" placeholder="비밀번호">
+		                    	<input type="password" id="user_pwd" name="user_pwd" placeholder="비밀번호">
 		                	</div>
 					        <div class="form-group keep">
                                 <div class="checkbox-container">
@@ -75,13 +71,13 @@
 
 	        <div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 	        	<div class="main-container">
-		        	<form class="login-form" action="managerLoginProc.jsp" method="post" name="loginFrm">
+		        	<form class="login-form" action="managerLoginProc.jsp" method="post" name="loginFrm2">
 		            	<div class="form-container">
 		                	<div class="form-group input-text">
 		                    	<input type="text" id="manager_id" name="manager_id" placeholder="기업회원 아이디">
 		                	</div>
 		                	<div class="form-group input-text">
-		                    	<input type="password" id="manager_password" name="manager_password" placeholder="비밀번호">
+		                    	<input type="password" id="manager_pwd" name="manager_pwd" placeholder="비밀번호">
 		                	</div>
 		            	</div>
 		            	<button type="submit" class="login-button">로그인</button>

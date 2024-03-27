@@ -88,6 +88,6 @@ main {
 	border: none; /* 버튼의 테두리를 없앰 */
 }
 
-#user_id, #user_password, #manager_id, #manager_password {
+#user_id, #user_pwd, #manager_id, #manager_pwd {
 	border: none;
 }

@@ -4,13 +4,13 @@
 <jsp:setProperty property="*" name="login"/>
 <%
 	String url = "login.jsp";
-	if(request.getParameter("uurl") != null && !request.getParameter("uurl").equals("null")){
-		url = request.getParameter("uurl");
+	if(request.getParameter("url") != null && !request.getParameter("url").equals("null")){
+		url = request.getParameter("url");
 	}
 	
 	out.println(url);
 	
-	boolean result = uMgr.loginUser(login.getUser_id(), login.getUser_pwd());;
+	boolean result = uMgr.loginUser(login.getUser_id(), login.getUser_pwd());
 	String msg = "로그인 실패";
 	if(result){
 		msg = "로그인 성공";
@@ -18,7 +18,7 @@
 		session.setAttribute("idKey", login.getUser_id());
 		session.setAttribute("login", login);
 		url = "user_page/user_home.jsp";
-	}
+	}	
 %>
 <script>
 	alert("<%=msg%>");

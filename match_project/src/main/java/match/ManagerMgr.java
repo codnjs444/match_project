@@ -30,6 +30,7 @@ public class ManagerMgr {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
+		System.out.println("매니저 로그인 " + flag);
 		return flag;
 	}
 	
