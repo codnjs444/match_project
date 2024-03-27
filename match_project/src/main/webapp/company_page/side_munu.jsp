@@ -41,11 +41,7 @@
  	margin-right: 10px;
   	font-size: 20px; /* 아이콘 크기를 증가 */
   }
-  .content {
-    margin-left: 250px;
-     	top:80px;
-    padding: 20px;
-  }
+
   .company-info h2 {
     margin-top: 0;
   }
@@ -90,18 +86,6 @@
     <li><a href="#" onclick="loadPage('member.jsp')"><i class="fas fa-user-cog icon"></i><span>회원정보 관리</span></a></li>
     <li><a href="#" onclick="loadPage('support.jsp')"><i class="fas fa-headset icon"></i><span>고객지원</span></a></li>
   </ul>
-</div>
-
-
-<div class="content" id="content">
-  <!-- 초기 페이지 내용을 여기에 로드합니다. -->
-  <!-- 예시로 기본적인 내용을 넣어줍니다. -->
-  <div class="company-info">
-    <h2>회사 정보</h2>
-    <p><strong>회사 주소:</strong> 서울특별시 강남구 삼성로 1234번지</p>
-    <p><strong>대표자:</strong> 홍길동</p>
-    <p><strong>회사 설명:</strong> Match Job Portal은 채용 정보를 제공하는 플랫폼으로, 구직자와 기업을 연결하여 채용 프로세스를 효율화합니다.</p>
-  </div>
 </div>
 
 <script>
