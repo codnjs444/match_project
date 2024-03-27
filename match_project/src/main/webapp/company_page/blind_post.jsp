@@ -15,7 +15,7 @@
 
 <%@ include file="top.jsp" %>
 
-<%@ include file="middle2.jsp" %>
+<%@ include file="middle.jsp" %>
 
 <%@ include file="bottom.jsp" %>
 

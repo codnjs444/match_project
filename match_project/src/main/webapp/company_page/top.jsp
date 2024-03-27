@@ -12,14 +12,16 @@
     margin: 0;
     font-family: Arial, sans-serif;
   }
-  .header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 50px;
-   background-color: #333333; /* 배경색을 #333333 (검정색)으로 변경 */
-    color: #fff; /* 텍스트 색상을 흰색으로 변경 */
-  }
+    background-color: #333333;
+    color: #fff;
+    margin-bottom: 0; /* 여백 제거 */
+}
+
   .logo {
     font-size: 24px;
     font-weight: bold;
@@ -87,10 +89,22 @@
   margin: auto; /* 수직 가운데 정렬을 위해 margin: auto; 사용 */
   padding: 20px;
   border: 1px solid #888;
+<<<<<<< HEAD
   width: 60%; /* 모달의 가로 크기 조정 */
+=======
+  width: 80%; /* 모달의 가로 크기 조정 */
+>>>>>>> branch 'master' of https://github.com/codnjs444/match_project
   max-width: 600px; /* 최대 가로 크기 설정 */
   border-radius: 5px;
   text-align: center; /* 모달 내용 가운데 정렬 */
+<<<<<<< HEAD
+=======
+    /* 추가된 스타일 */
+  position: absolute; /* 부모 요소를 상대적으로 설정하기 위해 */
+  top: 50%; /* 화면 상단에서 50% 위치로 이동 */
+  left: 50%; /* 화면 왼쪽에서 50% 위치로 이동 */
+  transform: translate(-50%, -50%); /* 수직 및 수평으로 이동하여 화면 중앙에 정렬 */
+>>>>>>> branch 'master' of https://github.com/codnjs444/match_project
 }
 
 .close {
@@ -144,7 +158,11 @@ v
   margin-bottom: 10px; /* 이미지와 버튼 사이의 간격 조정 */
 }
 .image-with-button img:hover {
+<<<<<<< HEAD
   border: 2px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
+=======
+  border: 4px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
+>>>>>>> branch 'master' of https://github.com/codnjs444/match_project
   border-radius: 5px; /* 테두리 둥글게 만들기 */
 }
 .image-with-button button:hover {

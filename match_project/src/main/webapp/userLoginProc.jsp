@@ -10,7 +10,7 @@
 	
 	out.println(url);
 	
-	boolean result = uMgr.loginUser(login.getUser_id(), login.getUser_password());;
+	boolean result = uMgr.loginUser(login.getUser_id(), login.getUser_pwd());
 	String msg = "로그인 실패";
 	if(result){
 		msg = "로그인 성공";
@@ -18,7 +18,7 @@
 		session.setAttribute("idKey", login.getUser_id());
 		session.setAttribute("login", login);
 		url = "user_page/user_home.jsp";
-	}
+	}	
 %>
 <script>
 	alert("<%=msg%>");

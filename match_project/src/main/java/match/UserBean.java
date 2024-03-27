@@ -3,13 +3,14 @@ package match;
 public class UserBean {
 	private String user_name;
 	private String user_id;
-	private String user_password;
+	private String user_pwd;
 	private String user_email;
 	private String user_phonenum;
 	private String birthday;
 	private boolean user_gender;
 	private String postal_code;
 	private String user_address;
+	private String sns;
 	
 	public String getUser_name() {
 		return user_name;
@@ -23,11 +24,11 @@ public class UserBean {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	public String getUser_password() {
-		return user_password;
+	public String getUser_pwd() {
+		return user_pwd;
 	}
-	public void setUser_password(String user_password) {
-		this.user_password = user_password;
+	public void setUser_pwd(String user_pwd) {
+		this.user_pwd = user_pwd;
 	}
 	public String getUser_email() {
 		return user_email;
@@ -64,5 +65,11 @@ public class UserBean {
 	}
 	public void setUser_address(String user_address) {
 		this.user_address = user_address;
+	}
+	public String getSns() {
+		return sns;
+	}
+	public void setSns(String sns) {
+		this.sns = sns;
 	}
 }
