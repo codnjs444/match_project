@@ -48,7 +48,7 @@ public class UserMgr {
 			if(rs.next()) {
 				bean.setUser_name(rs.getString(1));
 				bean.setUser_id(rs.getString(2));
-				bean.setUser_password(rs.getString(3));
+				bean.setUser_pwd(rs.getString(3));
 				bean.setUser_email(rs.getString(4));
 				bean.setUser_phonenum(rs.getString(5));
 				bean.setBirthday(rs.getString(6));
@@ -62,5 +62,34 @@ public class UserMgr {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return bean;
+	}
+	
+	public boolean singUpUser(UserBean bean){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert user values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getUser_name());
+			pstmt.setString(2, bean.getUser_id());
+			pstmt.setString(3, bean.getUser_pwd());
+			pstmt.setString(4, bean.getUser_email());
+			pstmt.setString(5, bean.getUser_phonenum());
+			pstmt.setString(6, bean.getBirthday());
+			pstmt.setBoolean(7, bean.getUser_gender());
+			pstmt.setString(8, bean.getPostal_code());
+			pstmt.setString(9, bean.getUser_address());
+			pstmt.setString(10, bean.getSns());
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
 	}
 }
