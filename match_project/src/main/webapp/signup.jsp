@@ -7,7 +7,7 @@
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	    <link href="css/signupstyle.css" rel="stylesheet" type="text/css">
 	</head>
-	<body class="main-tab">
+	<body class="main-tab" onload="regFrm.id.focus()">
 		<div class="logo">
 			<button type="button" onclick="redirectTo('user_page/user_home.jsp')">
 				<img src="img/logo.png" width="210" height="50">
@@ -27,11 +27,11 @@
 		            </ul>
 		        </div>
 		    </div>
-	
+	<form class="join-form" name="regFrm" method="post" action="userSignupProc.jsp">
 	    	<div class="tab-content" id="myTabContent">
 		        <div class="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 		        	<div class="main-container">
-			        	<form class="join-form" action="joinAction.jsp" method="post">
+			        	
 			            	<div class="form-container">
 			            		<div class="row">
 			            			<h6 class="col-9">회원가입하고 다양한 혜택을 누리세요!</h6>
@@ -113,7 +113,7 @@
 			                    	<input type="text" id="user_sns" class="user" name="user_sns" placeholder="SNS" style="width: 400px">
 			                	</div>
 			            	</div>
-			        	</form>
+			        	
 		   			</div>
 		   			<div class="keep">
 					    <div class="check-text">
@@ -186,10 +186,10 @@
 					    </div>
 					</div>
                     <div>
-                    	<button type="submit" class="join-button">가입하기</button>
+                    	<button type="submit" class="join-button" onclick="inputCheck()">가입하기</button>
                     </div>
 		        </div>
-	
+	</form>
 		        <div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 		        	<div class="main-container">
 			        	<form class="join-form" action="joinAction.jsp" method="post">

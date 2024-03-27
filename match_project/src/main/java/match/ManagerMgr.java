@@ -61,4 +61,29 @@ public class ManagerMgr {
 		}
 		return bean;
 	}
+	
+	public boolean signUpManager(ManagerBean bean){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert user values(?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getManager_id());
+			pstmt.setInt(2, bean.getCompany_idx());
+			pstmt.setString(3, bean.getManager_name());
+			pstmt.setString(4, bean.getManager_pwd());
+			pstmt.setString(5, bean.getManager_email());
+			pstmt.setString(6, bean.getManager_phonenum());
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
