@@ -12,14 +12,16 @@
     margin: 0;
     font-family: Arial, sans-serif;
   }
-  .header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 50px;
-   background-color: #333333; /* 배경색을 #333333 (검정색)으로 변경 */
-    color: #fff; /* 텍스트 색상을 흰색으로 변경 */
-  }
+    background-color: #333333;
+    color: #fff;
+    margin-bottom: 0; /* 여백 제거 */
+}
+
   .logo {
     font-size: 24px;
     font-weight: bold;

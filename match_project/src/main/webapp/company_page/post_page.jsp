@@ -15,7 +15,9 @@
 
 <%@ include file="top.jsp" %>
 
-<%@ include file="middle2.jsp" %>
+<%@ include file="side_munu.jsp" %>
+
+<%@ include file="post_job.jsp" %>
 
 <%@ include file="bottom.jsp" %>
 
