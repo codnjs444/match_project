@@ -1,8 +1,37 @@
+<!-- userSignupProc.jsp -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
 <jsp:useBean id="uBean" class="match.UserBean"/>
 <jsp:setProperty property="*" name="uBean"/>
 <%
+	//폼 데이터 추출
+	String name = request.getParameter("user_name");
+	String id = request.getParameter("user_id");
+	String pwd = request.getParameter("user_pwd");
+	String email = request.getParameter("user_email");
+	String phonenum = request.getParameter("user_phonenum");
+	String birthday = request.getParameter("year");
+	// 성별 값 가져오기
+	String genderStr = request.getParameter("user_gender");
+	boolean gender = "male".equals(genderStr); // 남성인 경우 true, 그렇지 않으면 false
+	String postal = request.getParameter("postal_code");
+	String address = request.getParameter("user_address");
+	String sns = request.getParameter("user_sns");
+	// 다른 사용자 정보도 필요한 경우 이와 같이 추출
+	
+	// UserBean 객체에 사용자 정보 설정
+	uBean.setUser_name(name);
+	uBean.setUser_id(id);
+	uBean.setUser_pwd(pwd);
+	uBean.setUser_email(email);
+	uBean.setUser_phonenum(phonenum);
+	uBean.setBirthday(birthday);
+	uBean.setUser_gender(gender);
+	uBean.setUser_pwd(pwd);
+	uBean.setPostal_code(postal);
+	uBean.setUser_address(address);
+	uBean.setSns(sns);
+
 	boolean result = uMgr.signUpUser(uBean);
 	String msg = "가입실패";
 	String location = "signup.jsp";

@@ -1,3 +1,4 @@
+<!-- signup.jsp -->
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
@@ -31,9 +32,10 @@
 				</ul>
 			</div>
 		</div>
-		<form class="join-form" name="regFrm" method="post" action="userSignupProc.jsp">
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+		
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+				<form class="join-form" name="regFrm" method="post" action="userSignupProc.jsp">
 					<div class="main-container">
 						<div class="form-container">
 							<div class="row">
@@ -96,12 +98,12 @@
 							<div class="row">
 								<div class="col">
 									<div class="form-group input-text required">
-										<input type="text" class="address1" id="postcode" placeholder="우편번호" readonly> <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+										<input type="text" class="address1" id="postcode" name="postal_code" placeholder="우편번호" readonly> <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 									</div>
 								</div>
 							</div>
 							<div class="form-group input-text required">
-								<input type="text" class="address2" id="address" placeholder="주소" readonly><br>
+								<input type="text" class="address2" id="address" name="user_address" placeholder="주소" readonly><br>
 							</div>
 							<div class="form-group input-text required">
 								<input type="text" class="address2" id="detailAddress" placeholder="상세주소">
@@ -184,140 +186,136 @@
 					<div>
 						<button type="submit" class="join-button" onclick="inputCheck()">가입하기</button>
 					</div>
-				</div>
-			</div>
-		</form>
-		<div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel"
-			aria-labelledby="profile-tab" tabindex="0">
-			<div class="main-container">
-				<form class="join-form" action="joinAction.jsp" method="post">
-					<div class="form-container">
-						<div class="row">
-							<h5 class="col-9">기업 정보</h5>
-							<p class="col-3" style="font-size: 10px; color: #ff0000">* 필수입력 정보입니다.</p>
-						</div>
-						<div class="form-group input-text required">
-							<input type="text" class="company" id="company_rnum" name="company_rnum" placeholder="사업자 등록 번호">
-						</div>
-						<div class="form-group input-text required">
-							<input type="text" class="company" id="company_name" name="company_name" placeholder="회사명">
-						</div>
-						<div class="form-group input-text required">
-							<input type="text" class="company" id="company_head" name="company_head" placeholder="대표자명">
-						</div>
-						<p style="font-size: 12px;">회사명, 대표자명 수정이 필요한 경우, 가입 후 고객센터로 문의 해 주세요.</p>
-						<div class="row">
-							<div class="col">
-								<div class="form-group input-text required">
-									<input type="text" class="address1" id="postcode" placeholder="우편번호" readonly> <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
-								</div>
-							</div>
-						</div>
-						<div class="form-group input-text required">
-							<input type="text" class="address2" id="address" placeholder="회사주소" readonly>
-						</div>
-						<div class="form-group input-text required">
-							<input type="text" class="address2" id="detailAddress" placeholder="상세주소">
-						</div>
-					</div>
-					<div style="height: 20px; margin-bottom: 10px"></div>
-					<h5>인사담당자 정보</h5>
-					<div>
-						<div class="row">
-							<div class="col" style="padding-left: 12px; padding-right: 7px;">
-								<div class="form-group2 input-text2">
-									<input type="text" class="company2" id="manager_id" name="manager_id" placeholder="아이디">
-								</div>
-							</div>
-							<div class="col" style="padding: 0px;">
-								<div class="form-group2 input-text2">
-									<input type="password" class="company2" id="manager_pwd" name="manager_pwd" placeholder="비밀번호">
-								</div>
-							</div>
-						</div>
-						<div>
-							<div class="form-group input-text">
-								<input type="text" class="company" id="manager_name" name="manager_name" placeholder="가입자명">
-							</div>
-							<div class="form-group input-text">
-								<input type="text" class="company" id="manager_phonenum" name="manager_phonenum" placeholder="전화번호">
-							</div>
-							<div class="form-group input-text">
-								<input type="text" class="company" id="manager_email" name="manager_email" placeholder="이메일">
-							</div>
-						</div>
-					</div>
 				</form>
-				<div class="keep2">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 160px;">
-							<span>필수동의 항목 및 개인정보 수집 및 이용 동의(선택), 광고성 정보 수신(선택)에 모두 동의합니다.</span>
-						</div>
-						<div class="checkbox-container" style="margin-left: auto;">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 40px; height: 40px;">
-						</div>
-					</div>
-				</div>
-				<div class="keep-small3">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 20px;">
-							<span>[필수]이용약관 동의</span>
-						</div>
-						<div class="checkbox-container" style="margin-left: auto;">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
-						</div>
-					</div>
-				</div>
-				<div class="keep-small3">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 20px;">
-							<span>[필수]개인정보 수집 및 이용 동의</span>
-						</div>
-						<div class="checkbox-container" style="margin-left: auto;">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
-						</div>
-					</div>
-				</div>
-				<div class="keep-small3">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 20px;">
-							<span>[필수]문자서비스 이용약관 동의</span>
-						</div>
-						<div class="checkbox-container" style="margin-left: auto;">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
-						</div>
-					</div>
-				</div>
-				<div class="keep-small4">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 20px;">
-							<span>[선택]개인정보 수집 및 이용 동의</span>
-						</div>
-						<div class="checkbox-container">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
-						</div>
-					</div>
-				</div>
-				<div class="keep-small4">
-					<div class="check-text">
-						<div style="flex-grow: 1; margin-right: 20px;">
-							<span>[선택]광고성 정보 이메일 수신 동의</span>
-						</div>
-						<div class="checkbox-container" style="margin-left: auto;">
-							<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
-						</div>
-					</div>
-				</div>
-				<button type="submit" class="join-button">가입하기</button>
 			</div>
-		</div>
+			<div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+				<div class="main-container">
+					<form class="join-form" action="joinAction.jsp" method="post">
+						<div class="form-container">
+							<div class="row">
+								<h5 class="col-9">기업 정보</h5>
+								<p class="col-3" style="font-size: 10px; color: #ff0000">* 필수입력 정보입니다.</p>
+							</div>
+							<div class="form-group input-text required">
+								<input type="text" class="company" id="company_rnum" name="company_rnum" placeholder="사업자 등록 번호">
+							</div>
+							<div class="form-group input-text required">
+								<input type="text" class="company" id="company_name" name="company_name" placeholder="회사명">
+							</div>
+							<div class="form-group input-text required">
+								<input type="text" class="company" id="company_head" name="company_head" placeholder="대표자명">
+							</div>
+							<p style="font-size: 12px;">회사명, 대표자명 수정이 필요한 경우, 가입 후 고객센터로 문의 해 주세요.</p>
+							<div class="row">
+								<div class="col">
+									<div class="form-group input-text required">
+										<input type="text" class="address1" id="postcode" placeholder="우편번호" readonly> <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+									</div>
+								</div>
+							</div>
+							<div class="form-group input-text required">
+								<input type="text" class="address2" id="address" placeholder="회사주소" readonly>
+							</div>
+							<div class="form-group input-text required">
+								<input type="text" class="address2" id="detailAddress" placeholder="상세주소">
+							</div>
+						</div>
+						<div style="height: 20px; margin-bottom: 10px"></div>
+						<h5>인사담당자 정보</h5>
+						<div>
+							<div class="row">
+								<div class="col" style="padding-left: 12px; padding-right: 7px;">
+									<div class="form-group2 input-text2">
+										<input type="text" class="company2" id="manager_id" name="manager_id" placeholder="아이디">
+									</div>
+								</div>
+								<div class="col" style="padding: 0px;">
+									<div class="form-group2 input-text2">
+										<input type="password" class="company2" id="manager_pwd" name="manager_pwd" placeholder="비밀번호">
+									</div>
+								</div>
+							</div>
+							<div>
+								<div class="form-group input-text">
+									<input type="text" class="company" id="manager_name" name="manager_name" placeholder="가입자명">
+								</div>
+								<div class="form-group input-text">
+									<input type="text" class="company" id="manager_phonenum" name="manager_phonenum" placeholder="전화번호">
+								</div>
+								<div class="form-group input-text">
+									<input type="text" class="company" id="manager_email" name="manager_email" placeholder="이메일">
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="keep2">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 160px;">
+								<span>필수동의 항목 및 개인정보 수집 및 이용 동의(선택), 광고성 정보 수신(선택)에 모두 동의합니다.</span>
+							</div>
+							<div class="checkbox-container" style="margin-left: auto;">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 40px; height: 40px;">
+							</div>
+						</div>
+					</div>
+					<div class="keep-small3">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 20px;">
+								<span>[필수]이용약관 동의</span>
+							</div>
+							<div class="checkbox-container" style="margin-left: auto;">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+					<div class="keep-small3">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 20px;">
+								<span>[필수]개인정보 수집 및 이용 동의</span>
+							</div>
+							<div class="checkbox-container" style="margin-left: auto;">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+					<div class="keep-small3">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 20px;">
+								<span>[필수]문자서비스 이용약관 동의</span>
+							</div>
+							<div class="checkbox-container" style="margin-left: auto;">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+					<div class="keep-small4">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 20px;">
+								<span>[선택]개인정보 수집 및 이용 동의</span>
+							</div>
+							<div class="checkbox-container">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+					<div class="keep-small4">
+						<div class="check-text">
+							<div style="flex-grow: 1; margin-right: 20px;">
+								<span>[선택]광고성 정보 이메일 수신 동의</span>
+							</div>
+							<div class="checkbox-container" style="margin-left: auto;">
+								<input type="checkbox" id="join-keep" name="join-keep" style="width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+					<button type="submit" class="join-button">가입하기</button>
+				</div>
+			</div>
 		</div>
 	</main>
 
-	<script
-		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script>
 		function redirectTo(page) {
 			window.location.href = page;
