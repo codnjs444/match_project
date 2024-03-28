@@ -94,22 +94,15 @@
   margin: auto; /* 수직 가운데 정렬을 위해 margin: auto; 사용 */
   padding: 20px;
   border: 1px solid #888;
-<<<<<<< HEAD
-  width: 60%; /* 모달의 가로 크기 조정 */
-=======
   width: 80%; /* 모달의 가로 크기 조정 */
->>>>>>> branch 'master' of https://github.com/codnjs444/match_project
   max-width: 600px; /* 최대 가로 크기 설정 */
   border-radius: 5px;
   text-align: center; /* 모달 내용 가운데 정렬 */
-<<<<<<< HEAD
-=======
-    /* 추가된 스타일 */
+  /* 추가된 스타일 */
   position: absolute; /* 부모 요소를 상대적으로 설정하기 위해 */
   top: 50%; /* 화면 상단에서 50% 위치로 이동 */
   left: 50%; /* 화면 왼쪽에서 50% 위치로 이동 */
   transform: translate(-50%, -50%); /* 수직 및 수평으로 이동하여 화면 중앙에 정렬 */
->>>>>>> branch 'master' of https://github.com/codnjs444/match_project
 }
 
 .close {
@@ -157,27 +150,20 @@
   flex-direction: column; /* 자식 요소를 세로 방향으로 배치 */
   align-items: center; /* 가로 방향 가운데 정렬 */
 }
-v
+
 .image-with-button img {
   width: 100%; /* 이미지 가로 폭을 100%로 설정하여 부모 요소에 맞춤 */
-  margin-bottom: 10px; /* 이미지와 버튼 사이의 간격 조정 */
-}
-.image-with-button img:hover {
-<<<<<<< HEAD
-  border: 2px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
-=======
-  border: 4px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
->>>>>>> branch 'master' of https://github.com/codnjs444/match_project
-  border-radius: 5px; /* 테두리 둥글게 만들기 */
-}
-.image-with-button button:hover {
-  cursor: pointer; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
+  margin-bottom: 20px; /* 이미지와 버튼 사이의 간격 조정 */
 }
 
+.image-with-button img:hover {
+  border: 4px solid #007bff; /* 마우스를 올렸을 때 테두리 색상 변경 */
+  border-radius: 5px; /* 테두리 둥글게 만들기 */
+}
 
 .image-with-button button {
   position: absolute; /* 버튼을 이미지 내에서 절대 위치로 설정 */
-  bottom: 20px; /* 이미지의 아래로부터 10px 만큼 띄움 */
+  bottom: 10px; /* 이미지의 아래로부터 10px 만큼 띄움 */
   left: 50%; /* 이미지의 가운데에 버튼을 배치 */
   transform: translateX(-50%); /* 가운데 정렬을 위해 왼쪽으로 이동 */
   width: 160px; /* 버튼 가로 폭 조정 */
@@ -188,7 +174,6 @@ v
   border: none; /* 버튼 테두리 없애기 */
   border-radius: 5px; /* 버튼 모서리 둥글게 만들기 */
 }
-
 
 </style>
 </head>
@@ -221,15 +206,15 @@ v
       <!-- Option 1 -->
        <div class="modal-option">
         <div class="image-with-button">
-          <img src="${pageContext.request.contextPath}/img/employment1.png" alt="블라인드 채용 이미지" />
-          <button onclick="redirectTo('blind_post.jsp')">등록하기</button>
+          <img src="${pageContext.request.contextPath}/img/employment2.png" alt="자사양식 채용 이미지" />
+          <button id="registerOwnPost">등록하기</button>
         </div>
       </div>
       <!-- Option 2 -->
       <div class="modal-option">
         <div class="image-with-button">
-          <img src="${pageContext.request.contextPath}/img/employment2.png" alt="자사양식 채용 이미지" />
-          <button onclick="redirectTo('own_post.jsp')">등록하기</button>
+          <img src="${pageContext.request.contextPath}/img/employment1.png" alt="블라인드 채용 이미지" />
+          <button id="registerBlindPost">등록하기</button>
         </div>
       </div>
     </div>
@@ -237,28 +222,37 @@ v
 </div>
 
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-  	document.getElementById('openModal').addEventListener('click', function() {
-    document.getElementById('myModal').style.display = 'block';
-  });
-  
-  // Close the modal
-  	document.getElementsByClassName('close')[0].addEventListener('click', function() {
-    document.getElementById('myModal').style.display = 'none';
-  });
 
-  // Function to handle job type selection
-  function chooseJobType(type) {
-    console.log('Chosen job type:', type);
-    document.getElementById('myModal').style.display = 'none';
-    // Additional logic based on job type
-  }
+document.addEventListener('DOMContentLoaded', function() {
+	  document.getElementById('myModal').style.display = 'none';
+	  // 공고등록 버튼 클릭 시 모달 띄우기
+	  document.getElementById('openModal').addEventListener('click', function() {
+	    document.getElementById('myModal').style.display = 'block';
+	  });
 
-  //Function to redirect to the specified page
-  function redirectTo(page) {
-    window.location.href = page;
-  }
-});
+	  // 모달 닫기 버튼 클릭 시 모달 닫기
+	  document.getElementsByClassName('close')[0].addEventListener('click', function() {
+	    document.getElementById('myModal').style.display = 'none';
+	  });
+
+	  // 자사양식 채용 등록하기 버튼 클릭 이벤트
+	  document.getElementById('registerOwnPost').addEventListener('click', function() {
+	    document.getElementById('myModal').style.display = 'none'; // 모달 닫기
+	    redirectTo('own_post.jsp'); // 페이지 이동
+	  });
+
+	  // 블라인드 채용 등록하기 버튼 클릭 이벤트
+	  document.getElementById('registerBlindPost').addEventListener('click', function() {
+	    document.getElementById('myModal').style.display = 'none'; // 모달 닫기
+	    redirectTo('blind_post.jsp'); // 페이지 이동
+	  });
+	});
+
+	function redirectTo(page) {
+	  // 페이지 이동을 위한 로직
+	  window.location.href = page;
+	}
+
 </script>
 
 

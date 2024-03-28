@@ -19,17 +19,17 @@
     left: 0;
     bottom: 0;
     width: 250px;
-     background-color: #4D4D4D; /* 사이드바 배경색을 #4D4D4D로 변경 */
+    background-color: #4D4D4D; /* 사이드바 배경색을 #4D4D4D로 변경 */
     color: white;
     padding: 10px;
   }
-.sidebar a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  padding: 10px;
-  font-size: 18px; /* 텍스트 크기를 증가 */
-}
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    font-size: 18px; /* 텍스트 크기를 증가 */
+  }
   .sidebar a:hover {
     background-color: #ddd;
     color: black;
@@ -38,10 +38,9 @@
     color: #E4D233; /* 현재 선택된 메뉴의 텍스트 색을 노란색으로 변경 */
   }
   .sidebar a .icon {
- 	margin-right: 10px;
-  	font-size: 20px; /* 아이콘 크기를 증가 */
+    margin-right: 10px;
+    font-size: 20px; /* 아이콘 크기를 증가 */
   }
-
   .company-info h2 {
     margin-top: 0;
   }
@@ -52,8 +51,8 @@
   }
   .sidebar li {
     padding-left: 5px; /* 아이콘과 텍스트 사이의 간격 조정 */
-  	margin-top: 20px; /* 위쪽 마진 추가 */
-  	margin-bottom: 10px; /* 아래쪽 마진 추가 */
+    margin-top: 20px; /* 위쪽 마진 추가 */
+    margin-bottom: 10px; /* 아래쪽 마진 추가 */
   }
   .submenu {
     display: none;
@@ -62,7 +61,7 @@
   .submenu.active {
     display: block;
   }
-    .sidebar ul ul {
+  .sidebar ul ul {
     padding-left: 35px; /* 우측으로 이동시키기 위해 padding-left 값을 증가시킵니다. */
   }
 </style>
@@ -86,6 +85,10 @@
     <li><a href="#" onclick="loadPage('member.jsp')"><i class="fas fa-user-cog icon"></i><span>회원정보 관리</span></a></li>
     <li><a href="#" onclick="loadPage('support.jsp')"><i class="fas fa-headset icon"></i><span>고객지원</span></a></li>
   </ul>
+</div>
+
+<div id="content" style="margin-left: 250px; padding: 20px;"> <!-- 내용을 표시할 공간 -->
+  <!-- 페이지 로드를 통해 여기에 동적으로 내용이 채워집니다. -->
 </div>
 
 <script>
@@ -119,7 +122,27 @@
     var subMenu = document.getElementById(subMenuId);
     subMenu.classList.toggle('active');
   }
+
+  // 페이지 상단으로 자연스럽게 스크롤하는 함수
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth" // 자연스러운 스크롤
+    });
+  }
+
+  window.addEventListener('scroll', function() {
+	    var sidebar = document.querySelector('.sidebar');
+	    if (window.scrollY > 100) { // 스크롤 위치가 100 이상이면 사이드 메뉴를 위로 올립니다.
+	      sidebar.style.top = '0';
+	    } else { // 스크롤 위치가 100 미만이면 사이드 메뉴를 아래로 내립니다.
+	      sidebar.style.top = '61px'; // 이 값은 초기 위치인 61px로 설정해야 합니다.
+	    }
+	  });
 </script>
+
+<!-- 상단으로 스크롤 버튼 -->
+<button id="scrollTopBtn" onclick="scrollToTop()" style="position: fixed; bottom: 20px; right: 20px; display: none;">상단으로</button>
 
 </body>
 </html>

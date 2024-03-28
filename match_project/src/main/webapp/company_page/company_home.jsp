@@ -13,11 +13,11 @@
 </head>
 <body>
 
-<%@ include file="top2.jsp" %>
+<%@ include file="menu/top.jsp" %>
+<%@ include file="menu/side_menu.jsp" %>
+<%@ include file="menu/middle.jsp" %>
+<%@ include file="menu/bottom.jsp" %>
 
-<%@ include file="side_munu.jsp" %>
-<%@ include file="middle.jsp" %>
-<%@ include file="bottom.jsp" %>
 
 </body>
 </html>

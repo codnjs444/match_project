@@ -23,11 +23,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 부트스트랩 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-        <link href="../css/post_job.css" rel="stylesheet" type="text/css">
+    <link href="../css/post_job.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<!----------------------------------------- 기업 정보 컨테이너 --------------------------------------------->
 <div class="container">
     <!-- 기업 정보 확인 텍스트 -->
     <div class="q1_1">기업 정보</div>
@@ -36,7 +34,7 @@
     <!-- 흰색 박스 -->
     <div class="q1-box">
         <!-- 기업명 텍스트와 텍스트 필드 -->
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+        <div class="row align-items-center">
             <div class="col">
                 <label for="companyName" class="q1-label1">기업명</label>
             </div>
@@ -45,8 +43,8 @@
                 <input type="text" class="form-control q1-input1" id="companyName" name="companyName">
             </div>
         </div>
-		 <!-- 기업명 텍스트와 텍스트 필드 -->
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+        <!-- 기업명 텍스트와 텍스트 필드 -->
+        <div class="row align-items-center">
             <div class="col">
                 <label for="companyName" class="q1-label1">대표 근무지역</label>
             </div>
@@ -60,20 +58,18 @@
             <input type="text" class="form-control q1-input2" id="address" placeholder="회사주소" readonly>
         </div>
         <div class="col">
-            <input type="text" class="form-control q1-input2" id="detailAddress" placeholder="상세주소">	
+            <input type="text" class="form-control q1-input2" id="detailAddress" placeholder="상세주소">    
         </div>
     </div>
-</div>
-<!----------------------------------------- 모집 분야 컨테이너 --------------------------------------------->
-<div class="container">
-    <!-- 기업 정보 확인 텍스트 -->
+
+    <!-- 모집 분야 -->
     <div class="q1_1">모집 분야</div>
     <div class="q1">어떤 일을 담당할 직원을 찾으시나요?</div>
 
     <!-- 흰색 박스 -->
     <div class="q1-box">
         <!-- 기업명 텍스트와 텍스트 필드 -->
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+        <div class="row align-items-center">
             <div class="col">
                 <label for="companyName" class="q1-label1">모집분야명</label>
             </div>
@@ -82,8 +78,8 @@
                 <input type="text" class="form-control q1-input1" id="companyName" name="companyName">
             </div>
         </div>
-        
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+
+        <div class="row align-items-center">
             <div class="col">
                 <label for="companyName" class="q1-label1">담당 업무</label>
             </div>           
@@ -91,8 +87,8 @@
                 <input type="text" class="form-control q1-input1" id="companyName" name="companyName">
             </div>
         </div>
-        
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+
+        <div class="row align-items-center">
             <div class="col">
                 <label for="companyName" class="q1-label1">모집 인원</label>
             </div>           
@@ -100,8 +96,8 @@
                 <input type="text" class="form-control q1-input1" id="companyName" name="companyName" placeholder="인원 수를 입력해주세요.">
             </div>
         </div>
-        
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+
+        <div class="row align-items-center">
             <div class="col">
                 <label class="q1-label1">근무 부서</label>
             </div>           
@@ -112,7 +108,7 @@
                 <input type="text" class="form-control q1-input1" id="department" name="department" placeholder="근무 부서를 입력하세요." readonly>
             </div>
         </div>
-        <div class="row align-items-center"> <!-- align-items-center 클래스 추가 -->
+        <div class="row align-items-center">
             <div class="col">
                 <label class="q1-label1">직급 직책</label>
             </div>           
@@ -124,10 +120,8 @@
             </div>
         </div>  
     </div>
-</div>
-<!----------------------------------------- 지원 자격 컨테이너 --------------------------------------------->
-<div class="container">
-    <!-- 지원 자격 확인 텍스트 -->
+
+    <!-- 지원 자격 -->
     <div class="q1_1">지원 자격</div>
     <div class="q1">지원 자격은 어떻게 되나요?</div>
 
@@ -188,7 +182,7 @@
                 <label for="anyExperience" id="anyExperienceText">경력 무관</label>
             </div>
         </div>
-        
+
         <div class="row align-items-center mb-30">
             <div class="col">
                 <label for="companyName" class="q1-label1">필수 스킬</label>
@@ -362,128 +356,60 @@ function deselectItem(item) {
     }
 }
 
-// 선택된 항목들이 추가될 때마다 selectedItemsContainer의 높이를 조정하는 함수
-function adjustContainerHeight() {
-    var selectedItemsContainer = document.getElementById('selectedItemsContainer');
-    var selectedItemsHeight = selectedItemsContainer.scrollHeight;
-    selectedItemsContainer.style.height = selectedItemsHeight + 'px';
-}
-
-// 회색 상자 안의 항목을 선택하는 함수
-function selectGreyBoxItem(event) {
-    var clickedItem = event.target.textContent;
-    if (!isSelected(clickedItem)) {
-        selectItem(clickedItem);
-    } else {
-        deselectItem(clickedItem);
-    }
-}
-
-// 직접 입력 버튼 클릭 시 호출되는 함수
-function addCustomItem() {
-    var searchField = document.getElementById('searchField');
-    var searchFieldValue = searchField.value; // searchField의 값 가져오기
-
-    if (searchFieldValue) { // 검색 필드에 값이 있는 경우
-        if (!selectedItemsArray.includes(searchFieldValue)) {
-            selectItem(searchFieldValue); // 선택된 아이템 목록에 추가
-            renderSelectedItems(); // 선택된 아이템을 화면에 다시 렌더링
-            searchField.value = ''; // 입력 필드 초기화
-            document.getElementById('greyBox').style.display = 'none'; // 검색 결과 박스 숨기기
-        }
-    }
-}
-
+// 선택된 항목들이 추가되거나 제거될 때마다 화면을 다시 그리는 함수
 function renderSelectedItems() {
-    var selectedItemsDiv = document.getElementById('selectedItems');
-    selectedItemsDiv.innerHTML = ''; // 기존 항목들을 지우고 시작
+    var selectedItemsContainer = document.getElementById('selectedItems');
+    selectedItemsContainer.innerHTML = '';
     selectedItemsArray.forEach(function(item) {
-        var div = document.createElement('div');
         var span = document.createElement('span');
         span.textContent = item;
-        div.className = 'selected-item';
-        div.appendChild(span);
-
-        var removeBtn = document.createElement('button');
-        removeBtn.textContent = 'X';
-        removeBtn.className = 'remove-btn';
-        removeBtn.onclick = function() {
-            deselectItem(item);
-            // 선택된 아이템을 제거하고 UI를 업데이트합니다.
-        };
-
-        div.appendChild(removeBtn);
-        selectedItemsDiv.appendChild(div);
+        span.classList.add('selected-item');
+        span.setAttribute('onclick', 'deselectItem("' + item + '")'); // 선택된 항목을 클릭하면 취소되도록 설정
+        selectedItemsContainer.appendChild(span);
     });
-
-    // 선택된 아이템이 변경될 때마다 selectedItemsContainer의 높이를 조정합니다.
-    adjustSelectedItemsContainerHeight();
 }
 
-function adjustSelectedItemsContainerHeight() {
+// 컨테이너의 높이를 조정하는 함수
+function adjustContainerHeight() {
     var selectedItemsContainer = document.getElementById('selectedItemsContainer');
-    var selectedItems = document.querySelectorAll('.selected-item');
-    var totalHeight = 0;
-    selectedItems.forEach(function(item) {
-        // item.offsetHeight는 개별 아이템의 높이입니다. 이 값을 사용하여 총 높이를 계산합니다.
-        // 여기서는 단순화를 위해 고정된 높이(예: 40px)를 가정할 수도 있습니다.
-        totalHeight += item.offsetHeight + 10; // 예시로 각 아이템 사이의 여백(10px)을 추가합니다.
-    });
-
-    // 선택된 아이템이 없을 경우 최소 높이를 설정할 수 있습니다.
-    if (selectedItems.length === 0) {
-        totalHeight = 50; // 예를 들어, 선택된 아이템이 없을 경우의 기본 높이입니다.
-    }
-
+    var selectedItemsHeight = selectedItemsContainer.offsetHeight;
+    var greyBoxHeight = document.getElementById('greyBox').offsetHeight;
+    var totalHeight = selectedItemsHeight + greyBoxHeight;
     selectedItemsContainer.style.height = totalHeight + 'px';
 }
 
-// 선택된 아이템인지 확인하는 함수
-function isSelected(item) {
-    return selectedItemsArray.includes(item);
-}
-
-// 검색 필드 지우는 함수
+// 검색 필드를 지우는 함수
 function clearSearchField() {
-    document.getElementById('searchField').value = ''; // 검색 필드 내용을 지움
-    document.getElementById('greyBox').style.display = 'none'; // 회색 상자 숨김
-    document.getElementById('searchFieldValue').textContent = ''; // 검색 필드 값 영역 초기화
+    document.getElementById('searchField').value = '';
+    searchData(); // 검색창이 비워졌을 때의 동작 수행
 }
 
-// 마우스를 올렸을 때 회색 상자 안의 항목의 배경색을 변경하는 함수
-function highlightItem(event) {
-    if (event.target.tagName === 'DIV') {
-        event.target.style.backgroundColor = 'lightgray';
+// 직접 입력 버튼 클릭 시 선택된 항목에 직접 입력한 값을 추가하는 함수
+function addCustomItem() {
+    var customItem = document.getElementById('searchField').value;
+    if (customItem.trim() !== '') {
+        selectedItemsArray.push(customItem);
+        renderSelectedItems();
+        adjustContainerHeight(); // 직접 입력한 항목 추가 후 컨테이너 높이 조정
+        document.getElementById('searchField').value = ''; // 입력 필드 초기화
+        document.getElementById('greyBox').style.display = 'none'; // 회색 박스 숨김
     }
 }
 
-// 마우스를 내렸을 때 회색 상자 안의 항목의 배경색을 원래대로 변경하는 함수
-function unhighlightItem(event) {
-    if (event.target.tagName === 'DIV') {
-        event.target.style.backgroundColor = '';
-    }
+// 회색 상자에서 항목을 선택하면 선택된 항목에 추가되는 함수
+function selectGreyBoxItem(event) {
+    var selectedItem = event.target.textContent;
+    selectItem(selectedItem);
+    document.getElementById('searchField').value = ''; // 검색 필드 초기화
+    document.getElementById('greyBox').style.display = 'none'; // 회색 박스 숨김
 }
 
-// 회색 상자에 마우스 이벤트 핸들러 등록
-document.getElementById('greyBox').addEventListener('mouseover', highlightItem);
-document.getElementById('greyBox').addEventListener('mouseout', unhighlightItem);
-//엔터 키 입력 시 직접 입력 버튼 클릭
-document.getElementById('searchField').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        document.getElementById('directInputBtn').click(); // 직접 입력 버튼 클릭
+// 이 함수를 사용하면 텍스트 필드에서 Enter 키를 눌렀을 때도 '직접 입력' 버튼이 클릭된 효과가 발생합니다.
+document.getElementById('searchField').addEventListener('keyup', function(event) {
+    if (event.keyCode === 13) {
+        document.getElementById('directInputBtn').click();
     }
 });
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 첫 번째 드롭다운 메뉴 아이템 클릭 이벤트 핸들러 등록
-var educationDropdownItems = document.querySelectorAll('#educationDropdownButton + .dropdown-menu .dropdown-item');
-registerDropdownItemClickEvent('educationDropdownButton', educationDropdownItems);
-
-// 두 번째 드롭다운 메뉴 아이템 클릭 이벤트 핸들러 등록
-var genderDropdownItems = document.querySelectorAll('#genderDropdownButton + .dropdown-menu .dropdown-item');
-registerDropdownItemClickEvent('genderDropdownButton', genderDropdownItems);
-
 </script>
-
 </body>
 </html>
