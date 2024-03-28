@@ -10,12 +10,12 @@ public class CompanyMgr {
 		pool = DBConnectionMgr.getInstance();
 	}
 	
-	public boolean checkCompany(int company_rnum, String company_name, String company_head) {
+	public int getCompanyIdx(int company_rnum, String company_name, String company_head) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		boolean flag = false;
+		int company_idx = 0;
 		try {
 			con = pool.getConnection();
 			sql = "select company_idx from company where company_rnum = ? and company_name = ? and company_head = ?";
@@ -25,12 +25,12 @@ public class CompanyMgr {
 			pstmt.setString(3, company_head);
 			rs = pstmt.executeQuery();
 			if(rs.next())
-				flag = true;
+				company_idx = rs.getInt(1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return flag;
+		return company_idx;
 	}
 }

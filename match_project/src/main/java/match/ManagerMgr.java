@@ -69,7 +69,7 @@ public class ManagerMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert user values(?, ?, ?, ?, ?, ?)";
+			sql = "insert manager values(?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getManager_id());
 			pstmt.setInt(2, bean.getCompany_idx());

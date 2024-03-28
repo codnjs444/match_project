@@ -50,7 +50,7 @@
 		msg = "가입성공";
 		location = "login.jsp";
 		//가입과 동시에 로그인 처리
-		session.setAttribute("idKey", uBean.getUser_id());
+		//session.setAttribute("idKey", uBean.getUser_id());
 	}	
 %>
 <script type="text/javascript">

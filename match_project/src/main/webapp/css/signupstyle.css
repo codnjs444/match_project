@@ -52,7 +52,6 @@ color: #000000; /* 선택되지 않은 탭의 글자색 */
     margin-bottom: 10px; /* 입력 필드 사이의 여백 */
     font-size: 14px; /* 입력 필드의 글꼴 크기를 조정 */
     border: 1px solid #ccc; /* 입력 필드의 테두리를 연하게 */
-    padding: 0px;
 }
 .check-text{
 	display: flex;
@@ -142,10 +141,6 @@ color: #000000; /* 선택되지 않은 탭의 글자색 */
 	width: 520px;
 }
 .company{
-	border: none;
-	width: 520px;
-}
-.manager{
 	border: none;
 	width: 520px;
 }
