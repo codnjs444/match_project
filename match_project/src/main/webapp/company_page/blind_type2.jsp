@@ -70,7 +70,7 @@
                     <div class="col">
                         <label for="companyName" class="question">기업명</label>
                     </div>
-                    <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+                    <span class="essential">[필수dd]</span> <!-- 필수 문구 추가 -->
                     <div class="col">
                         <input type="text" class="input1" id="posting_company" name="posting_company">
                     </div>
