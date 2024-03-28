@@ -3,6 +3,7 @@
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
 <jsp:useBean id="uBean" class="match.UserBean"/>
 <jsp:setProperty property="*" name="uBean"/>
+<!DOCTYPE html>
 <%
 	//폼 데이터 추출
 	String name = request.getParameter("user_name");
@@ -10,7 +11,10 @@
 	String pwd = request.getParameter("user_pwd");
 	String email = request.getParameter("user_email");
 	String phonenum = request.getParameter("user_phonenum");
-	String birthday = request.getParameter("year");
+	String year = request.getParameter("year");
+	String month = request.getParameter("month");
+	String day = request.getParameter("day");
+	String birthday = year + month + day;
 	// 성별 값 가져오기
 	String genderStr = request.getParameter("user_gender");
 	boolean gender = "male".equals(genderStr); // 남성인 경우 true, 그렇지 않으면 false
