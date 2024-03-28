@@ -145,6 +145,10 @@ color: #000000; /* 선택되지 않은 탭의 글자색 */
 	border: none;
 	width: 520px;
 }
+.manager{
+	border: none;
+	width: 520px;
+}
 .company2{
 	border: none;
 	width: 240px;

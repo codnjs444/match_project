@@ -12,9 +12,13 @@
 	String email = request.getParameter("user_email");
 	String phonenum = request.getParameter("user_phonenum");
 	String year = request.getParameter("year");
-	String month = request.getParameter("month");
-	String day = request.getParameter("day");
-	String birthday = year + month + day;
+	int month = Integer.parseInt(request.getParameter("month"));
+	String formatMonth = String.format("%02d", month);
+	
+	int day = Integer.parseInt(request.getParameter("day"));
+	String formatDay = String.format("%02d", day);
+	
+	String birthday = year + formatMonth + formatDay;
 	// 성별 값 가져오기
 	String genderStr = request.getParameter("user_gender");
 	boolean gender = "male".equals(genderStr); // 남성인 경우 true, 그렇지 않으면 false
@@ -22,6 +26,9 @@
 	String address = request.getParameter("user_address");
 	String sns = request.getParameter("user_sns");
 	// 다른 사용자 정보도 필요한 경우 이와 같이 추출
+	
+	
+	
 	
 	// UserBean 객체에 사용자 정보 설정
 	uBean.setUser_name(name);

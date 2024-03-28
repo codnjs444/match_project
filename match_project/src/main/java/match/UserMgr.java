@@ -10,7 +10,7 @@ public class UserMgr {
 		pool = DBConnectionMgr.getInstance();
 	}
 	
-	public boolean loginUser(String id, String pwd) {
+	public boolean loginUser(String user_id, String user_pwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -20,8 +20,8 @@ public class UserMgr {
 			con = pool.getConnection();
 			sql = "select user_id from user where user_id = ? and user_pwd = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, pwd);
+			pstmt.setString(1, user_id);
+			pstmt.setString(2, user_pwd);
 			rs = pstmt.executeQuery();
 			if(rs.next())
 				flag = true;
@@ -34,7 +34,7 @@ public class UserMgr {
 		return flag;
 	}
 	
-	public UserBean getUser(String id) {
+	public UserBean getUser(String user_id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -44,7 +44,7 @@ public class UserMgr {
 			con = pool.getConnection();
 			sql = "select * from user where user_id = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
+			pstmt.setString(1, user_id);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				bean.setUser_name(rs.getString(1));
