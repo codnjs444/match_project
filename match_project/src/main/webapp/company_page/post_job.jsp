@@ -1,214 +1,30 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.Vector" %>
+<%@page import="match.skillBean"%>
+<%@page import="match.categoryMgr"%>
+<jsp:useBean id="skill_category" class="match.skillBean"></jsp:useBean>
+<%
+    // categoryMgr 객체 생성
+    categoryMgr mgr = new categoryMgr();
+    // 스킬 이름 리스트 가져오기
+    Vector<skillBean> skillList = mgr.skillList();
+
+    // 스킬 이름을 저장할 배열 생성
+    String[] data = new String[skillList.size()];
+    for (int i = 0; i < skillList.size(); i++) {
+        data[i] = skillList.get(i).getSkill_sname().toLowerCase();
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropdown Border Color Change</title>
     <!-- 부트스트랩 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <!-- 추가: Poppins 폰트 -->
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* 기업 정보 확인 텍스트 스타일 */
-        .q1 {
-            font-size: 26px;
-            font-weight: bolder;
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
-
-        .q1_1 {
-            font-size: 19px;
-            font-weight: bold;
-            color: blue; /* 파란색으로 설정 */
-            margin-bottom: 20px; /* 아래 여백 설정 */
-            margin-top: 40px; /* 위 여백 설정 */
-        }
-
-        /* 흰색 박스 스타일 */
-        .q1-box {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        /* (기업명)라벨과 입력 필드 크기 및 간격 수정 */
-
-        .q1-label1 {
-            font-size: 22px; /* 라벨 텍스트 크기 조정 */
-            margin-bottom: 10px; /* 라벨 아래 여백 조정 */
-            font-weight: bolder;
-            margin-left: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        .q1-input1 {
-            font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-            padding: 10px; /* 입력 필드 내부 여백 조정 */
-            margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-            width: 750px;
-            height: 60px;
-            margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        .q1-input2 {
-            font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-            padding: 10px; /* 입력 필드 내부 여백 조정 */
-            margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-            width: 750px;
-            height: 60px;
-            margin-left: 292px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        .address2 {
-            font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-            padding: 10px; /* 입력 필드 내부 여백 조정 */
-            margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-            width: 400px;
-            height: 60px;
-            margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        .q2-input1 {
-            font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-            padding: 10px; /* 입력 필드 내부 여백 조정 */
-            margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-            width: 250px;
-            height: 60px;
-            margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        /* 필수 */
-        .q1-required {
-            font-size: 16px; /* 필수 문구 텍스트 크기 조정 */
-            color: red; /* 빨간색으로 설정 */
-        }
-
-        /* q1_1과 q1 사이의 간격 조절 */
-        .q1_1 + .q1 {
-            margin-top: -20px; /* q1_1 아래 여백을 줄여 q1-box 위로 이동 */
-        }
-
-        #toggleDepartment {
-            transform: scale(6.5); /* 체크 박스 크기를 1.2배로 키웁니다. */
-        }
-
-        .checkbox-container {
-            margin-right: 6px; /* 체크 박스와 텍스트 필드 사이의 간격 조절 */
-        }
-
-		
-		
-        /* 드롭다운 버튼의 배경색과 글자색 변경 */
-        .dropdown-toggle {
-            width: 745px;
-            height: 50px;
-            border-radius: 5px;
-            background-color: white; /* 배경색을 파란색으로 변경 */
-            color: black; /* 글자색을 흰색으로 변경 */
-            margin-right: 30px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-        }
-
-        /* 드롭다운 메뉴 아이템의 배경색과 글자색 변경 */
-        .dropdown-item {
-            background-color: #white; /* 배경색을 파란색으로 변경 */
-            color: #black; /* 글자색을 흰색으로 변경 */
-            font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-        }
-
-        /* 추가된 CSS */
-        .align-self-center {
-            align-self: center;
-        }
-
-        .align-items-center {
-            display: flex;
-            align-items: center;
-        }
-
-
-        /* 추가된 CSS */
-        .align-self-center {
-            align-self: center;
-        }
-
-        .align-items-center {
-            display: flex;
-            align-items: center;
-        }
-
-        .q1-label1,
-        .q1-required {
-            margin-bottom: 0;
-        }
-        
-.custom-checkbox-container {
-    border: 1px solid grey;
-    padding: 10px;
-    border-radius: 4px;
-    width: 217px;
-    height: 40px;
-    display: flex;
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center; /* 수직 가운데 정렬 */
-    cursor: pointer;
-    margin-left: 17px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    margin-right: 30px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-
-.custom-checkbox-container input[type="checkbox"] {
-    display: none;
-}
-
-.custom-checkbox-container label {
-    cursor: pointer;
-}
-
-.custom-checkbox-container:hover {
-	background-color: #5A6268;
-}
-.custom-checkbox-container:hover label {
-    color: white; /* 마우스 호버 시 텍스트 색상을 흰색으로 변경 */
-}
-
-.custom-checkbox-container input[type="checkbox"]:checked + label {
-    border-color: blue; /* 체크되었을 때 테두리 색상 변경 */
-}
-
-.custom-checkbox-container input[type="checkbox"]:not(:checked) + label:hover {
-    border-color: grey; /* 체크되지 않았을 때 마우스를 올렸을 때 테두리 색상 변경 */
-}
-
-.custom-checkbox-container input[type="checkbox"]:checked + label:before {
-    content: '\2713'; /* 체크 표시 추가 */
-    display: inline-block;
-    font-size: 16px;
-    color: blue; /* 체크된 상태일 때 색상 변경 */
-    text-align: center;
-    vertical-align: middle;
-    width: 20px;
-    height: 20px;
-    border: 1px solid blue; /* 체크된 상태일 때 테두리 색상 변경 */
-    border-radius: 2px;
-    margin-right: 5px;
-}
-
-.custom-checkbox-container input[type="checkbox"]:not(:checked) + label:before {
-    content: ''; /* 체크 표시 없음 */
-}
-    .mb-30 {
-        margin-top: 20px;
-    }
-
-        
-    </style>
-    <!-- 추가: 사용자 정의 스타일 시트 -->
+        <link href="../css/post_job.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <!----------------------------------------- 기업 정보 컨테이너 --------------------------------------------->
@@ -377,18 +193,35 @@
             <div class="col">
                 <label for="companyName" class="q1-label1">필수 스킬</label>
             </div>
-
             <div class="col">
-                <input type="text" class="form-control q1-input1" id="companyName" name="companyName">
-            </div>
+    <div class="input-group">
+        <input type="text" class="form-control q1-input7" id="searchField" onkeyup="searchData()" placeholder="초성으로 검색">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onclick="clearSearchField()">X</button>
         </div>
     </div>
 </div>
+</div>
+		<div class="row align-items-center">
+  		  <div class="col">
+    		    <div class="form-control q1-input10" id="greyBox" onclick="selectGreyBoxItem(event)">
+            	<button id="boxbtn" class="btn btn-primary position-absolute end-0 bottom-0" onclick="addCustomItem()">직접입력</button> 
+        	</div>
+    	</div>
+	</div>
+		
+		
+	<div class="row align-items-center mb-30"> <!-- align-items-center 클래스 추가 -->
+            <div class="col">
+                <label for="companyName" class="q1-label2">선택 된 스킬</label>
+            </div>           
+            <div class="col">
+                <div class="form-control q1-input11" id="selectedItems"></div>
+            </div>
+        </div>
 
-    
 
 
-        
 
 <!-- 부트스트랩 JS -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -396,6 +229,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
+// 선택된 아이템을 저장하는 배열
+var selectedItemsArray = [];
+
+// 스킬 데이터
+var data = [
+    <% 
+        for (int i = 0; i < data.length; i++) {
+            out.println("'" + data[i] + "'");
+            if (i < data.length - 1) {
+                out.println(",");
+            }
+        }
+    %>
+];
+
+
+
+
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -463,8 +314,112 @@
         var checkbox = document.getElementById(checkboxId);
         checkbox.checked = !checkbox.checked;
     }
+    
+    // 스킬 자동완선 관련 function///////////////////////////////////////////////////////////////////////////////////
+ // 초기에는 회색 상자가 비어있음
+    document.getElementById('greyBox').style.display = 'none';
+
+    // 검색 함수
+    function searchData() {
+        var searchField = document.getElementById('searchField');
+        var searchText = searchField.value.toLowerCase();
+
+        // 검색창이 비어있을 때
+        if (searchText === '') {
+            document.getElementById('greyBox').style.display = 'none'; // 회색 상자 숨기기
+            document.getElementById('searchFieldValue').textContent = ''; // 검색 필드 값 영역 초기화
+            return;
+        }
+
+        document.getElementById('greyBox').style.display = 'block'; // 회색 상자 보이기
+
+        var filteredData = data.filter(function(item) {
+            return item.startsWith(searchText);
+        });
+
+        // 회색 상자에 데이터 출력
+        var greyBox = document.getElementById('greyBox');
+        greyBox.innerHTML = '';
+        filteredData.forEach(function(item) {
+            var div = document.createElement('div');
+            div.textContent = item;
+            greyBox.appendChild(div);
+        });
+
+        // 검색 필드 값 출력
+        document.getElementById('searchFieldValue').textContent = searchText;
+    }
+
+    // 선택된 아이템을 배열에 추가하고 화면에 표시하는 함수
+    function selectItem(item) {
+        selectedItemsArray.push(item);
+        renderSelectedItems();
+    }
+
+    // 선택된 항목을 취소하는 함수
+    function deselectItem(item) {
+        var index = selectedItemsArray.indexOf(item);
+        if (index > -1) {
+            selectedItemsArray.splice(index, 1);
+            renderSelectedItems();
+        }
+    }
+
+    // 회색 상자 안의 항목을 선택하는 함수
+    function selectGreyBoxItem(event) {
+        var clickedItem = event.target.textContent;
+        if (!isSelected(clickedItem)) {
+            selectItem(clickedItem);
+        } else {
+            deselectItem(clickedItem);
+        }
+    }
+
+    // 직접입력 버튼 클릭 시 호출되는 함수
+    function addCustomItem() {
+        var searchFieldValue = document.getElementById('searchFieldValue').textContent;
+        if (searchFieldValue) { // 검색 필드에 값이 있는 경우
+            if (!selectedItemsArray.includes(searchFieldValue)) {
+                selectItem(searchFieldValue); // 선택된 아이템 목록에 추가
+            }
+        }
+    }
+
+    function renderSelectedItems() {
+        var selectedItemsDiv = document.getElementById('selectedItems');
+        selectedItemsDiv.innerHTML = '';
+        selectedItemsArray.forEach(function(item) {
+            var div = document.createElement('div');
+            var span = document.createElement('span');
+            span.textContent = item;
+            div.className = 'selected-item';
+            
+            var removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.className = 'remove-btn';
+            removeBtn.onclick = function() {
+                deselectItem(item);
+            };
+
+            div.appendChild(span);
+            div.appendChild(removeBtn);
+            selectedItemsDiv.appendChild(div);
+        });
+    }
 
 
+    // 선택된 아이템인지 확인하는 함수
+    function isSelected(item) {
+        return selectedItemsArray.includes(item);
+    }
+    
+ // 검색 필드 지우는 함수
+    function clearSearchField() {
+        document.getElementById('searchField').value = ''; // 검색 필드 내용을 지움
+        document.getElementById('greyBox').style.display = 'none'; // 회색 상자 숨김
+        document.getElementById('searchFieldValue').textContent = ''; // 검색 필드 값 영역 초기화
+    }
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // 첫 번째 드롭다운 메뉴 아이템 클릭 이벤트 핸들러 등록
     var educationDropdownItems = document.querySelectorAll('#educationDropdownButton + .dropdown-menu .dropdown-item');
     registerDropdownItemClickEvent('educationDropdownButton', educationDropdownItems);
