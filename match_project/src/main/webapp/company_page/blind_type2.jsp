@@ -61,22 +61,22 @@
 <div class="container mt-10">
     <!-- 좌측 레이아웃 -->
     <div class="row">
-        <div class="col-md-8 offset-md-1"> <!-- 왼쪽 컨테이너 -->
-            <div class="title1">기업 정보</div>
-            <div class="stitle1">기업 정보를 확인해주세요.</div>
+        <div class="col-md-8 offset-md-1"> <!-- 오른쪽으로 옮길 컨테이너 -->
+            <div class="title">기업 정보</div>
+            <div class="stitle">기업 정보를 확인해주세요.</div>
             <div class="box">
-                <!-- 첫 번째 항목 폼 -->
-                <form action="submit_company1_action" method="POST">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <label for="companyName1" class="question">기업명</label>
-                        </div>
-                        <span class="essential">[필수]</span>
-                        <div class="col">
-                            <input type="text" class="input1" id="companyName1" name="companyName1">
-                        </div>
+                <!-- 기업명 텍스트와 텍스트 필드 -->
+                <div class="row align-items-center">
+                    <div class="col">
+                        <label for="companyName" class="question">기업명</label>
                     </div>
-                </form>       
+                    <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+                    <div class="col">
+                        <input type="text" class="input1" id="posting_company" name="posting_company">
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 우측 레이아웃 -->
         <div class="col-md-3 d-flex flex-column align-items-center justify-content-center"> <!-- 버튼을 상하 중앙에 배치하기 위해 align-items-center 및 justify-content-center 클래스 추가 -->
             <button type="button" class="btn btn-primary mb-2 btn-sm">등록완료</button>
@@ -84,7 +84,6 @@
         </div>
     </div>
 </div>
-
 
 
 
