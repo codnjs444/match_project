@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<%@ include file="top.jsp" %>
+<%@ include file="top2.jsp" %>
 
 <%@ include file="side_munu.jsp" %>
 <%@ include file="middle.jsp" %>

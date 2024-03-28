@@ -76,13 +76,18 @@
 .modal {
   display: none;
   position: fixed;
-  z-index: 1000; 
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
+  /* 중앙에 위치하도록 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 .modal-content {
   background-color: #fefefe;
@@ -232,29 +237,30 @@ v
 </div>
 
 <script>
-//Open the modal
-document.getElementById('openModal').addEventListener('click', function() {
-  document.getElementById('myModal').style.display = 'block';
+	document.addEventListener('DOMContentLoaded', function() {
+  	document.getElementById('openModal').addEventListener('click', function() {
+    document.getElementById('myModal').style.display = 'block';
+  });
+  
+  // Close the modal
+  	document.getElementsByClassName('close')[0].addEventListener('click', function() {
+    document.getElementById('myModal').style.display = 'none';
+  });
+
+  // Function to handle job type selection
+  function chooseJobType(type) {
+    console.log('Chosen job type:', type);
+    document.getElementById('myModal').style.display = 'none';
+    // Additional logic based on job type
+  }
+
+  //Function to redirect to the specified page
+  function redirectTo(page) {
+    window.location.href = page;
+  }
 });
-
-// Close the modal
-document.getElementsByClassName('close')[0].addEventListener('click', function() {
-  document.getElementById('myModal').style.display = 'none';
-});
-
-// Function to handle job type selection
-function chooseJobType(type) {
-  console.log('Chosen job type:', type);
-  document.getElementById('myModal').style.display = 'none';
-  // Additional logic based on job type
-}
-
-//Function to redirect to the specified page
-function redirectTo(page) {
-  window.location.href = page;
-}
-
 </script>
+
 
 </body>
 </html>
