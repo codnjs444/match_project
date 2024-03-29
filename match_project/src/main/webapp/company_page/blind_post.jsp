@@ -15,8 +15,7 @@
 
 <%@ include file="menu/top.jsp" %>
 <%@ include file="menu/side_menu.jsp" %>
-<%@ include file="blind_type2.jsp" %>
-
+<%@ include file="post_job.jsp" %>
 <%@ include file="menu/bottom.jsp" %>
 
 
