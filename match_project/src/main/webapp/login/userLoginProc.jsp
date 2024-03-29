@@ -17,7 +17,7 @@
 		login = uMgr.getUser(login.getUser_id());
 		session.setAttribute("idKey", login.getUser_id());
 		session.setAttribute("login", login);
-		url = "user_page/user_home.jsp";
+		url = "../user_page/user_home.jsp";
 	}	
 %>
 <script>

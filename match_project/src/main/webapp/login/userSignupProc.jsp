@@ -22,7 +22,7 @@
 	// 성별 값 가져오기
 	String genderStr = request.getParameter("user_gender");
 	boolean gender = "male".equals(genderStr); // 남성인 경우 true, 그렇지 않으면 false
-	String postal = request.getParameter("postal_code");
+	String postal = request.getParameter("user_postcode");
 	String address = request.getParameter("user_address");
 	String sns = request.getParameter("user_sns");
 	// 다른 사용자 정보도 필요한 경우 이와 같이 추출

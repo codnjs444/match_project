@@ -17,7 +17,7 @@
 		mlogin = mMgr.getManager(mlogin.getManager_id());
 		session.setAttribute("idKey", mlogin.getManager_id());
 		session.setAttribute("login", mlogin);
-		url = "company_page/company_home.jsp";
+		url = "../company_page/company_home.jsp";
 	}
 %>
 <script>
