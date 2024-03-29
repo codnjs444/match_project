@@ -113,7 +113,7 @@
             <!-- 등록 완료 버튼 -->
 			<button id="registerButton" type="button" class="btn btn-primary mb-2 btn-sm">등록완료</button>
 
-            <button type="button" class="btn btn-secondary btn-sm">임시저장</button>
+            <button type="button" class="btn btn-secondary btn-sm">임시s저장</button>
         </div>
     </div>
 </div>
