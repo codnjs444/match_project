@@ -80,9 +80,9 @@
     <img src="${pageContext.request.contextPath}/img/fi_search.png" alt="Search Icon">
   </div>
   <div class="nav-links">
-    <a href="../login.jsp">로그인</a>
-    <a href="../logout.jsp">로그아웃</a>
-    <a href="../signup.jsp">회원가입</a>
+    <a href="../login/login.jsp">로그인</a>
+    <a href="../login/logout.jsp">로그아웃</a>
+    <a href="../login/signup.jsp">회원가입</a>
     <a href="/corporate-services">기업 서비스</a>
   </div>
 </header>

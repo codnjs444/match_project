@@ -11,7 +11,7 @@
     </head>
 	<body class="main-tab">
 		<div class="logo" align="center">
-			<button type="button" onclick="redirectTo('user_page/user_home.jsp')">
+			<button type="button" onclick="redirectTo('../user_page/user_home.jsp')">
 				<img src="../img/logo.png" width="210" height="50">
 			</button>
 		</div>
