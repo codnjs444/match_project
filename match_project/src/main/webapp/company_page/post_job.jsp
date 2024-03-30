@@ -132,20 +132,23 @@
                 <label for="education" class="q1-label1 align-self-center">지원자 학력</label>
             </div>
             <span class="q1-required align-self-center">[필수]&nbsp;&nbsp;&nbsp;</span>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="educationDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    학력을 선택해주세요.
-                </button>
-                <div class="dropdown-menu" aria-labelledby="educationDropdownButton">
-                    <a class="dropdown-item" href="#">학력 무관</a>
-                    <a class="dropdown-item" href="#">검정고시</a>
-                    <a class="dropdown-item" href="#">고등학교 졸업</a>
-                    <a class="dropdown-item" href="#">대학졸업(2,3년)</a>
-                    <a class="dropdown-item" href="#">대학졸업(4년)</a>
-                    <a class="dropdown-item" href="#">석사졸업</a>
-                    <a class="dropdown-item" href="#">박사졸업</a>
-                </div>
-            </div>
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="educationDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        학력을 선택해주세요.
+    </button>
+    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="educationDropdownButton">
+        <a class="dropdown-item" href="#">학력 무관</a>
+        <a class="dropdown-item" href="#">검정고시</a>
+        <a class="dropdown-item" href="#">고등학교 졸업</a>
+        <a class="dropdown-item" href="#">대학졸업(2,3년)</a>
+        <div class="dropdown-divider dropdown-menu-right"></div>
+        <a class="dropdown-item" href="#">대학졸업(4년)</a>
+        <a class="dropdown-item" href="#">석사졸업</a>
+        <a class="dropdown-item" href="#">박사졸업</a>
+    </div>
+</div>
+
         </div>
         <!-- 두 번째 드롭다운 -->
         <div class="row align-items-center mb-3">
@@ -226,6 +229,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
+
 //선택된 아이템을 저장하는 배열
 var selectedItemsArray = [];
 

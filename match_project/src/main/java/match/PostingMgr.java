@@ -16,7 +16,7 @@ public class PostingMgr {
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "insert posting values(null,?,?,?,?,?,?,?,?)";
+			sql = "INSERT INTO posting VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getManager_id());
 			pstmt.setString(2, bean.getPosting_type());

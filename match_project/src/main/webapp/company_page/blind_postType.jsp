@@ -1,4 +1,4 @@
- <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -61,6 +61,10 @@
     font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
     color: red; /* 빨간색으로 설정 */
 }
+
+.modal-dialog {
+    margin-top: 400px; /* 원하는 위치로 조절 */
+}
 </style>
 </head>
 <body>
@@ -107,24 +111,67 @@
                     </div>
                 </form>
             </div>
+            <!-- 모집 정보 -->
+            <div class="title">모집 정보</div>
+            <div class="stitle">어떤 일을 담당할 직원을 찾으시나요</div>
+            <div class="box">
+                <!-- 기업명 텍스트와 텍스트 필드 -->
+                <form name="openpositionForm" action="post_proc.jsp" method="GET">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">모집분야명</label>
+                        </div>
+                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+                        <div class="col">
+                            <select class="input" id="recruitment_pcode" name="recruitment_pcode">
+    							<option value="" selected disabled>우편번호 선택</option>
+							</select>
+                        </div>
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                    <!-- 대표 근무지역 입력 -->
+                    <div class="row align-items-center"  style="margin-bottom: 10px;">
+                        <div class="col ">
+                            <label for="companyAdress" class="question">담당 업무</label>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="input" id="recruitment_pcode" name="recruitment_pcode" placeholder="우편번호" >
+                           
+                        </div>
+                    </div>
+                    
+                    <!-- 회사주소와 상세주소 입력 -->
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="input_noq" id="recruitment_address" name="recruitment_address" placeholder="회사주소" readonly >
+                        </div>
+                        <div class="col">
+                            <input type="text" class="input_noq" id="recruitment_dcode" name="recruitment_dcode" placeholder="상세주소" >    
+                            <input type="hidden" name="recruitment_name">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <!-- 우측 레이아웃 -->
         <div class="col-md-3 d-flex flex-column align-items-center justify-content-center"> <!-- 버튼을 상하 중앙에 배치하기 위해 align-items-center 및 justify-content-center 클래스 추가 -->
             <!-- 등록 완료 버튼 -->
-			<button id="registerButton" type="button" class="btn btn-primary mb-2 btn-sm">등록완료</button>
-
+            <button id="registerButton" type="button" class="btn btn-primary mb-2 btn-sm">등록완료</button>
             <button type="button" class="btn btn-secondary btn-sm">임시저장</button>
         </div>
     </div>
 </div>
-
 
 <!-- 등록 완료 모달 -->
 <div class="modal fade" id="titleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">제목 입력</h5>
+        <h5 class="modal-title" id="exampleModalLabel">공고 제목 입력</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -142,6 +189,7 @@
   </div>
 </div>
 
+
 <!-- 부트스트랩 JS, Popper.js, and jQuery -->
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -151,7 +199,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	window.onbeforeunload = function() {
+    return "정말 나가시겠습니까? 아직 공고가 작성중입니다..";
+};
 	// 주소 찾기 기능
 	function execDaumPostcode() {
 	    new daum.Postcode({
