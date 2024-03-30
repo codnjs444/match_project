@@ -86,4 +86,29 @@ public class ManagerMgr {
 		}
 		return flag;
 	}
+	
+	public String getCompany_idx(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String company_idx = null;
+		try {
+			con = pool.getConnection();
+			sql = "select company_idx from manager where manager_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+	        // ResultSet이 결과를 가지고 있는 경우에만 처리
+	        if (rs.next()) {
+	            company_idx = rs.getString("company_idx");
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return company_idx;
+	}
+	
 }

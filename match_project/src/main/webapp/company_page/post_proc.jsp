@@ -1,35 +1,41 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<jsp:useBean id="mMgr" class="match.ManagerMgr"/>
+<jsp:useBean id="mBean" class="match.ManagerBean"/>
+
+<jsp:useBean id="pMgr" class="match.PostingMgr"/>
+<jsp:useBean id="pBean" class="match.PostingBean"/>
+
+<jsp:setProperty property="*" name="pBean"/>
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>전송 결과 확인</title>
-</head>
-<body>
 
-<h2>제출된 기업 정보</h2>
-<table border="1">
-    <tr>
-        <td>기업명</td>
-        <td><%= request.getParameter("posting_cname") %></td>
-    </tr>
-    <tr>
-        <td>우편번호</td>
-        <td><%= request.getParameter("posting_pcode") %></td>
-    </tr>
-    <tr>
-        <td>회사주소</td>
-        <td><%= request.getParameter("posting_address") %></td>
-    </tr>
-    <tr>
-        <td>상세주소</td>
-        <td><%= request.getParameter("posting_dcode") %></td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td><%= request.getParameter("posting_name") %></td>
-    </tr>
-</table>
+<%
+	String manager_id = (String)session.getAttribute("idKey");
+	String company_idx = mMgr.getCompany_idx(manager_id);
+	String posting_type = "블라인드";
+	String posting_cname = request.getParameter("posting_cname");
+	String posting_name = request.getParameter("posting_name");
+	String posting_pcode = request.getParameter("posting_pcode");
+	String posting_address = request.getParameter("posting_address");
+	String posting_status = "진행중";
+	int posting_view = 0;
+	
+	pBean.setManager_id(manager_id);
+	pBean.setPosting_type(posting_type);
+	pBean.setPosting_cname(posting_cname);
+	pBean.setPosting_name(posting_name);
+	pBean.setPosting_pcode(posting_pcode);
+	pBean.setPosting_address(posting_address);
+	pBean.setPosting_view(posting_view);
+	pBean.setPosting_status(posting_status);
+	
+	pMgr.insertBpost(pBean);
+	
+	String msg = "공고 등록이 완료 되었습니다.";
+	String location = "company_home.jsp";
+	
+%>
 
-</body>
-</html>
+<script type="text/javascript">
+	alert("<%=msg%>");
+	location.href="<%=location%>";
+</script>
