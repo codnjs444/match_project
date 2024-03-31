@@ -86,7 +86,7 @@ function changeRightMenu(menu, event) {
     div.style.display = 'none';
   });
   // 해당 메뉴 보여주기
-  document.getElementById(menu).style.display = 'block';
+  document.getElementById(menu).style.display = 'blockd';
 }
 
 function selectRightMenuItem(menuItemText) {
