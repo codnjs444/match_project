@@ -56,6 +56,15 @@
     margin-left: 180px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
     margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
 }
+.input_subbox {
+    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
+    padding: 10px; /* 입력 필드 내부 여백 조정 */
+    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
+    width: 500px;
+    height: 180px;
+    margin-left: 180px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+}
 /* 필수 */
 .essential {
     font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
@@ -65,6 +74,32 @@
 .modal-dialog {
     margin-top: 400px; /* 원하는 위치로 조절 */
 }
+
+
+
+.input-box {
+    border: 2px solid #000; /* 검정색 테두리로 설정 */
+    height: 100px; /* 세로 높이 지정 */
+    weight: 200px;
+    padding: 10px; /* 내부 여백 지정 */
+    position: relative; /* 부모 요소에 상대적인 위치 지정 */
+}
+
+.first-input {
+    position: absolute;
+    top: 10px; /* 원하는 위치로 조절 */
+    left: 10px; /* 원하는 위치로 조절 */
+}
+
+.second-input {
+    position: absolute;
+    top: 10px; /* 원하는 위치로 조절 */
+    right: 10px; /* 원하는 위치로 조절 */
+}
+
+
+
+
 </style>
 </head>
 <body>
@@ -119,20 +154,27 @@
                 <form name="openpositionForm" action="post_proc.jsp" method="GET">
                     <div class="row align-items-center">
                         <div class="col">
-                            <label for="companyName" class="question">모집분야명</label>
+                            <label for="companyName" class="question">모집분야</label>
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <select class="input" id="recruitment_pcode" name="recruitment_pcode">
-    							<option value="" selected disabled>우편번호 선택</option>
-							</select>
+                            <input type="text" class="input" id="posting_pcode" name="posting_pcode" placeholder="모집분야" >
                         </div>
-                        
-                        
-                        
-                        
                     </div>
                     
+                     <div class="row align-items-center">
+                        <div class="col">
+                            <input type="text" class="input_subbox" id="openposition_names" name="openposition_name" >
+                        </div>
+                        
+                        <div class="input-box">
+						    <!-- 첫 번째 입력 요소 -->
+						    <input type="text" class="first-input" placeholder="첫 번째 입력 요소">
+						    <!-- 두 번째 입력 요소 -->
+						    <input type="text" class="second-input" placeholder="두 번째 입력 요소">
+						</div>
+                        
+                    </div>                   
                    
                 </form>
             </div>
@@ -180,9 +222,10 @@
 
 	<script>
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
-	window.onbeforeunload = function() {
+	// 알람뜨는 스크립트
+/* 	window.onbeforeunload = function() {
     return "정말 나가시겠습니까? 아직 공고가 작성중입니다..";
-};
+}; */
 	// 주소 찾기 기능
 	function execDaumPostcode() {
 	    new daum.Postcode({

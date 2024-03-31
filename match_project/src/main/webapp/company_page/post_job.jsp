@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.Vector" %>
-<%@page import="match.skillBean"%>
-<%@page import="match.categoryMgr"%>
-<jsp:useBean id="skill_category" class="match.skillBean"></jsp:useBean>
+<%@page import="match.category.skillBean"%>
+<%@page import="match.category.categoryMgr"%>
+<jsp:useBean id="skill_category" class="match.category.skillBean"></jsp:useBean>
 <%
     // categoryMgr 객체 생성
     categoryMgr mgr = new categoryMgr();
@@ -24,6 +24,8 @@
     <!-- 부트스트랩 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="../css/post_job.css" rel="stylesheet" type="text/css">
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -75,7 +77,66 @@
             </div>
             <span class="q1-required">[필수]</span> <!-- 필수 문구 추가 -->
             <div class="col">
-                <input type="text" class="form-control q1-input1" id="companyName" name="companyName">
+                <input type="text" class="form-control q1-input1 bg-white" id="companyName01" name="companyName" readonly>
+                <input type="hidden" name="companyName01" id="hidden_companyName01" value="">
+                <script>
+                	$(document).ready(function() {
+                		// DB에서 가지고 오는 데이터
+                		var category_list = [
+                			{"code":"01", "name":"기획,전략", "slist":
+                				[
+                					{"code":"0101", "name":"경영관리"},
+                					{"code":"0102", "name":"기획"},
+                					{"code":"0103", "name":"게임기획"},
+                					{"code":"0104", "name":"경영분석"}
+                				]
+                			},
+               				{"code":"02", "name":"마케팅,홍보,조사", "slist":
+	            				[
+	            					{"code":"0201", "name":"마케팅"},
+	            					{"code":"0202", "name":"홍보"},
+	            					{"code":"0203", "name":"조사"}
+	            				]
+               				}
+                		];
+                		// 문서가 로딩이 되면 처리되는 내용 
+                		var _mainCategory_html = "";
+                		category_list.forEach(function(_row){
+                			_mainCategory_html += "<li class='list-group-item'>" + _row.name + "</li>";
+                		});
+                		// 모집분야명을 클릭할 때, 이벤트 발생
+                		$("#mainCategory").append(_mainCategory_html);
+                		$("#companyName01").on("click", function() {
+                			$("#companyNameCategory").show();
+                		});
+                		// 메인카테고리를 선택할 경우 서브카테고리 보여주기 
+                		$("#mainCategory li").on("click", function() {
+                			var _this_idx = $(this).index();
+                			var _subCategoryHtml = "";
+                			category_list[_this_idx].slist.forEach(function(_row) {
+                				_subCategoryHtml += "<li class='list-group-item'> " + _row.name + " </li>";
+                			});
+                			$("#subCategory").html("").append(_subCategoryHtml);
+                		});
+                	});
+                	// 서브카테고리를 선택할 경우의 이벤트
+                	$(document).on("click", "ul#subCategory > li", function() {
+            			var _this_val = $(this).text().trim();
+            			var _origin_val = $("#companyName01").val().trim();
+            			// todo. 카테고리 코드를 저장하는 스크립트 추가
+            			// .... 
+            			$("#companyName01").val( _origin_val + " " + _this_val );
+            			$("#companyNameCategory").hide();
+                	});
+                </script>
+                <div class="row" id="companyNameCategory" style="display: none;">
+                	<div class="col-5">
+                		<ul id="mainCategory" class="list-group"></ul>
+                	</div>
+                	<div class="col-5">
+                		<ul class="list-group" id="subCategory"></ul>
+                	</div>
+                </div>
             </div>
         </div>
 
@@ -225,7 +286,7 @@
 
 <!-- 부트스트랩 JS -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>

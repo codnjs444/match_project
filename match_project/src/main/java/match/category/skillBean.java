@@ -1,4 +1,4 @@
-package match;
+package match.category;
 
 public class skillBean {
 	private String skill_code;
