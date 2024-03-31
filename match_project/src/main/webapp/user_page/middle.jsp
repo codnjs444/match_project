@@ -4,7 +4,7 @@
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	<style>
+    <style>
 		.row-cols-4{
 			padding-left: 65px;
 		}
@@ -39,7 +39,6 @@
 		    right: 220px; /* 오른쪽에서 20px 거리 */
 		    width: 300px;
 		    height: 80px;
-		    border: 1px solid lightgrey;
 		    display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -52,17 +51,110 @@
 		    height: 160px;
 		    border: 1px solid lightgrey;
 	  	}
-	  	.fixed-div2 button {
-            width: calc(100% / 3); /* Equal width for 3 columns */
-            height: calc(100% / 2); /* Equal height for 2 rows */
-        }
-        .circle{
-        	margin-left: 5px;
-        	margin-top: 5px;
-        	width: 70px;
-	        height: 70px;
+        .id-picture{
+        	margin-left: 10px;
+        	margin-top: 10px;
+        	width: 60px;
+	        height: 60px;
 	        border-radius: 50%; /* 반지름이 너비와 높이의 절반 */
 	        border: 1px solid
+        }
+        .name{
+        	width: 70px;
+        }
+        .my-btn-div{
+        	width: 100px;
+        	height: 79px;
+        	display: flex;
+    		justify-content: center;
+    		align-items: center;
+    		flex-direction: column;
+        }
+        .info {
+	        border: 1px solid lightgrey;
+	        font-size: 11px;
+	        width: 90px;
+	    }
+	    .my-btn-text{
+	    	font-size: 11px;
+	    }
+	    .my-btn-icon1 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn1.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon2 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn2.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon3 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn3.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon4 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn4.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon5 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn5.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon6 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn6.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
         }
     </style>
 </head>
@@ -234,33 +326,53 @@
 	    <div class="col second">
 		    <div class="row">
 		        <div class="col">
-		            <div class="fixed-div1">
-		            	<div class="row">
+		            <div class="fixed-div1 border border-light-subtitle">
+		            	<div class="row" style="width:300px;">
 		            		<div class="col">
-		            			<div class="circle"></div>
+		            			<div class="id-picture px-0"></div>
 		            		</div>
-		            		<div class="col">
-		            			<input type="text" disabled>
+		            		<div class="col name border-0 bg-body px-0">
+		            			<input class="name border-0 bg-body" type="text" disabled placeholder="한우진">
 		            		</div>
-		            		<div class="col">
-		            			<button>
-		            				asd
+		            		<div class="col px-0">
+		            			<button class="info border-light-subtitle bg-body">
+		            				로그 아웃
+		            			</button>
+		            			<button class="info border-light-subtitle bg-body">
+		            				회원 정보 수정
+		            			</button>
+		            			<button class="info border-light-subtitle bg-body">
+		            				채용 공고 설정
 		            			</button>
 		            		</div>
 		            	</div>
 		            </div>
 		            <div class="fixed-div2">
-		            	<div class="row">
-		            		<div class="col">
-				                <button class="btn btn-secondary">Button 1</button>
-				                <button class="btn btn-secondary">Button 2</button>
-				                <button class="btn btn-secondary">Button 3</button>
-				            </div>
-		            		<div class="col">
-				                <button class="btn btn-secondary">Button 4</button>
-				                <button class="btn btn-secondary">Button 5</button>
-				                <button class="btn btn-secondary">Button 6</button>
-			                </div>
+		            	<div class="row justify-content-center align-items-center">
+	            			<div class="my-btn-div px-0 border-end border-light-subtitle">
+            					<button class="my-btn-icon1"></button>
+            					<p class="my-btn-text">이력서 관리</p>
+	            			</div>
+	            			<div class="my-btn-div px-0 border-end border-light-subtitle">
+	            				<button class="my-btn-icon2"></button>
+            					<p class="my-btn-text">이력서 열람</p>
+	            			</div>
+	            			<div class="my-btn-div px-0">
+	            				<button class="my-btn-icon3"></button>
+            					<p class="my-btn-text">입사지원 현황</p>
+	            			</div>
+	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
+	            				<button class="my-btn-icon4"></button>
+            					<p class="my-btn-text">최근 본 공고</p>
+	            			</div>
+	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
+	            				<button class="my-btn-icon5"></button>
+            					<p class="my-btn-text">스크랩 공고</p>
+	            			</div>
+	            			<div class="my-btn-div px-0 border-top border-light-subtitle">
+	            				<button class="my-btn-icon6"></button>
+            					<p class="my-btn-text">문의</p>
+	            			</div>
 		                </div>
 		            </div>
 		        </div>
@@ -270,5 +382,6 @@
 	    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </body>
 </html>
