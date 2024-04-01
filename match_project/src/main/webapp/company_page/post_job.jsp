@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.Vector" %>
-<%@page import="match.category.skillBean"%>
-<%@page import="match.category.categoryMgr"%>
-<jsp:useBean id="skill_category" class="match.category.skillBean"></jsp:useBean>
+<%@page import="match.category.skill_categoryBean"%>
+<%@page import="match.category.skill_categoryMgr"%>
+<jsp:useBean id="skill_category" class="match.category.skill_categoryBean"></jsp:useBean>
 <%
-    // categoryMgr 객체 생성
-    categoryMgr mgr = new categoryMgr();
+// categoryMgr 객체 생성
+    skill_categoryMgr mgr = new skill_categoryMgr();
     // 스킬 이름 리스트 가져오기
-    Vector<skillBean> skillList = mgr.skillList();
+    Vector<skill_categoryBean> skillList = mgr.skillList();
 
     // 스킬 이름을 저장할 배열 생성
     String[] data = new String[skillList.size()];

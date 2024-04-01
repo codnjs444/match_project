@@ -5,7 +5,10 @@
 <jsp:useBean id="pMgr" class="match.PostingMgr"/>
 <jsp:useBean id="pBean" class="match.PostingBean"/>
 
+<jsp:useBean id="opBean" class="match.posting.OpenPositionBean"/>
+
 <jsp:setProperty property="*" name="pBean"/>
+<jsp:setProperty property="*" name="opBean"/>
 <!DOCTYPE html>
 
 <%
@@ -28,7 +31,26 @@
 	pBean.setPosting_view(posting_view);
 	pBean.setPosting_status(posting_status);
 	
-	pMgr.insertBpost(pBean);
+	int generatedKey = pMgr.insertBpost(pBean);
+	String openposition_name = request.getParameter("openposition_name");
+	String openposition_duty = request.getParameter("openposition_duty");
+	
+	String openposition_num_str = request.getParameter("openposition_num");
+	int openposition_num = Integer.parseInt(openposition_num_str);
+
+	String openposition_sname = request.getParameter("openposition_sname");
+	String openposition_position = request.getParameter("openposition_position");
+
+	opBean.setPosting_idx(generatedKey);
+	opBean.setOpenposition_name(openposition_name);
+	opBean.setOpenposition_duty(openposition_duty);
+	opBean.setOpenposition_num(openposition_num);
+	opBean.setOpenposition_sname(openposition_sname);
+	opBean.setOpenposition_position(openposition_position);
+	
+	pMgr.insertOpenposition(opBean);
+	
+
 	
 	String msg = "공고 등록이 완료 되었습니다.";
 	String location = "company_home.jsp";

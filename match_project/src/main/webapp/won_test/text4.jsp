@@ -1,97 +1,208 @@
-<%@ page contentType="text/html; charset=EUC-KR"%>
+<%@page import="java.util.Vector"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
+<%@ page import="match.job_categoryBean" %>
+<%@ page import="match.job_categoryMgr" %>
+
+<jsp:useBean id="jMgr" class="match.job_categoryMgr"/>
+<jsp:useBean id="jBean" class="match.job_categoryBean"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dropdown Menu</title>
-  <!-- ºÎÆ®½ºÆ®·¦ CSS -->
+  <!-- ë¶€íŠ¸ìŠ¤íŠ¸ë© CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Dropdown ¹öÆ°
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="max-width: 1000px;">
-      <div class="row">
-        <!-- ÁÂÃø ¸Ş´º -->
-        <div class="col-md-6 pr-0 border-right">
-          <h6 class="dropdown-header">ÁÂÃø ¸Ş´º</h6>
-          <div class="row">
-            <div class="col-md-6">
-              <a class="dropdown-item" href="#" onclick="changeRightMenu('menu1', event)">ÁÂÃø ¸Ş´º Ç×¸ñ 1</a>
-            </div>
-            <div class="col-md-6">
-              <a class="dropdown-item" href="#" onclick="changeRightMenu('menu2', event)">ÁÂÃø ¸Ş´º Ç×¸ñ 2</a>
-            </div>
-            <div class="col-md-6">
-              <a class="dropdown-item" href="#" onclick="changeRightMenu('menu3', event)">ÁÂÃø ¸Ş´º Ç×¸ñ 3</a>
-            </div>
-            <div class="col-md-6">
-              <a class="dropdown-item" href="#" onclick="changeRightMenu('menu4', event)">ÁÂÃø ¸Ş´º Ç×¸ñ 4</a>
-            </div>
-            <div class="col-md-6">
-              <a class="dropdown-item" href="#" onclick="changeRightMenu('menu5', event)">ÁÂÃø ¸Ş´º Ç×¸ñ 5</a>
+  <form id="menuForm" action="myshow.jsp" method="post">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown ë²„íŠ¼
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="max-width: 900px;">
+        <div class="row">
+          <!-- ì¢Œì¸¡ ë©”ë‰´ -->
+          <div class="col-md-6 pr-0 border-right">
+            <h6 class="dropdown-header">ì¢Œì¸¡ ë©”ë‰´</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu1', event)">ê¸°íšÂ·ì „ëµ</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu2', event)">ë§ˆì¼€íŒ…Â·í™ë³´Â·ì¡°ì‚¬</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu3', event)">íšŒê³„Â·ì„¸ë¬´Â·ì¬ë¬´</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu4', event)">ì¸ì‚¬Â·ë…¸ë¬´Â·HRD</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu5', event)">ì´ë¬´Â·ë²•ë¬´Â·ì‚¬ë¬´</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu6', event)">ITê°œë°œÂ·ë°ì´í„°</a>
+              </div>
+              <div class="col-md-6">
+                <a class="dropdown-item" href="#" onclick="changeRightMenu('menu7', event)">ë””ìì¸</a>
+              </div>                      
             </div>
           </div>
-        </div>
-        <!-- ¿ìÃø ¸Ş´º -->
-        <div class="col-md-6" id="right-menu">
-          <h6 class="dropdown-header">¿ìÃø ¸Ş´º</h6>
-          <!-- ¿ìÃø ¸Ş´ºÀÇ ³»¿ëÀ» ¹Ì¸® Á¤ÀÇ -->
-          <div id="menu1" style="display: none;">
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ A')">¿ìÃø ¸Ş´º Ç×¸ñ A</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ B')">¿ìÃø ¸Ş´º Ç×¸ñ B</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ C')">¿ìÃø ¸Ş´º Ç×¸ñ C</a>
-          </div>
-          <div id="menu2" style="display: none;">
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ D')">¿ìÃø ¸Ş´º Ç×¸ñ D</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ E')">¿ìÃø ¸Ş´º Ç×¸ñ E</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ F')">¿ìÃø ¸Ş´º Ç×¸ñ F</a>
-          </div>
-          <div id="menu3" style="display: none;">
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ G')">¿ìÃø ¸Ş´º Ç×¸ñ G</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ H')">¿ìÃø ¸Ş´º Ç×¸ñ H</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ I')">¿ìÃø ¸Ş´º Ç×¸ñ I</a>
-          </div>
-          <div id="menu4" style="display: none;">
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ J')">¿ìÃø ¸Ş´º Ç×¸ñ J</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ K')">¿ìÃø ¸Ş´º Ç×¸ñ K</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ L')">¿ìÃø ¸Ş´º Ç×¸ñ L</a>
-          </div>
-          <div id="menu5" style="display: none;">
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ M')">¿ìÃø ¸Ş´º Ç×¸ñ M</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ N')">¿ìÃø ¸Ş´º Ç×¸ñ N</a>
-            <a class="dropdown-item" href="#" onclick="selectRightMenuItem('¿ìÃø ¸Ş´º Ç×¸ñ O')">¿ìÃø ¸Ş´º Ç×¸ñ O</a>
+          
+		<!-- ìš°ì¸¡ ë©”ë‰´ -->
+		<div class="col-md-6" id="right-menu" style="max-height: 300px; overflow-y: auto;">
+		    <h6 class="dropdown-header">ìš°ì¸¡ ë©”ë‰´</h6>
+		    <!-- ìš°ì¸¡ ë©”ë‰´ì˜ ë‚´ìš©ì„ ë¯¸ë¦¬ ì •ì˜ -->
+		    <div id="menu1" style="display: none;">
+		        <div class="row">
+		            <% 
+		                String name = "ê¸°íšÂ·ì „ëµ";
+		                Vector<job_categoryBean> vlist = jMgr.jobsnameList(name);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+		    </div>
+            <div id="menu2" style="display: none;">
+             <div class="row">
+		            <% 
+		                String name1 = "ë§ˆì¼€íŒ…Â·í™ë³´Â·ì¡°ì‚¬";
+		                Vector<job_categoryBean> vlist1 = jMgr.jobsnameList(name1);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist1) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+            </div>
+            <div id="menu3" style="display: none;">
+                 <div class="row">
+		            <% 
+		                String name3 = "íšŒê³„Â·ì„¸ë¬´Â·ì¬ë¬´";
+		                Vector<job_categoryBean> vlist3 = jMgr.jobsnameList(name3);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist3) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+            </div>
+            <div id="menu4" style="display: none;">
+                   <div class="row">
+		            <% 
+		                String name4 = "ì¸ì‚¬Â·ë…¸ë¬´Â·HRD";
+		                Vector<job_categoryBean> vlist4 = jMgr.jobsnameList(name4);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist4) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+            </div>
+            <div id="menu5" style="display: none;">
+                   <div class="row">
+		            <% 
+		                String name5 = "ì´ë¬´Â·ë²•ë¬´Â·ì‚¬ë¬´";
+		                Vector<job_categoryBean> vlist5 = jMgr.jobsnameList(name5);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist5) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+            </div>
+            <div id="menu6" style="display: none;">
+                   <div class="row">
+		            <% 
+		                String name6 = "ITê°œë°œÂ·ë°ì´í„°";
+		                Vector<job_categoryBean> vlist6 = jMgr.jobsnameList(name6);
+		                
+		                // Vectorì—ì„œ í•­ëª©ë“¤ì„ ê°€ì ¸ì™€ ë™ì ìœ¼ë¡œ ìš°ì¸¡ ë©”ë‰´ í•­ëª© ìƒì„±
+		                for (job_categoryBean menuItem : vlist6) {
+		            %>
+		            <div class="col-md-6">
+		                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+		            </div>
+		            <% 
+		                }
+		            %>
+		        </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <!-- ì œì¶œ ë²„íŠ¼ -->
+    <div class="mt-3">
+      <button type="button" class="btn btn-primary" onclick="submitForm()">ì„ íƒ í•­ëª© ì œì¶œ</button>
+    </div>
+    <!-- ì„ íƒëœ ìš°ì¸¡ ë©”ë‰´ì˜ ê°’ ì¶œë ¥ -->
+    <div class="mt-3">
+      <p>ì„ íƒëœ ìš°ì¸¡ ë©”ë‰´ í•­ëª©: <span id="selectedMenu"></span></p>
+    </div>
+    <!-- ì„ íƒëœ ìš°ì¸¡ ë©”ë‰´ì˜ ê°’ì„ ì „ì†¡í•  ìˆ¨ì€ ì…ë ¥ í•„ë“œ -->
+    <input type="hidden" name="selectedMenuItem" id="selectedMenuItem">
+  </form>
 </div>
 
-<!-- ºÎÆ®½ºÆ®·¦ ÀÚ¹Ù½ºÅ©¸³Æ® -->
+<!-- ë¶€íŠ¸ìŠ¤íŠ¸ë© ìë°”ìŠ¤í¬ë¦½íŠ¸ -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
 function changeRightMenu(menu, event) {
-  event.stopPropagation(); // ÀÌº¥Æ® ÀüÆÄ ÁßÁö
-  // ¸ğµç ¿ìÃø ¸Ş´º ¼û±â±â
+  event.stopPropagation(); // ì´ë²¤íŠ¸ ì „íŒŒ ì¤‘ì§€
+  // ëª¨ë“  ìš°ì¸¡ ë©”ë‰´ ìˆ¨ê¸°ê¸°
   document.querySelectorAll('#right-menu > div').forEach(function(div) {
     div.style.display = 'none';
   });
-  // ÇØ´ç ¸Ş´º º¸¿©ÁÖ±â
-  document.getElementById(menu).style.display = 'blockd';
+  // í•´ë‹¹ ë©”ë‰´ ë³´ì—¬ì£¼ê¸°
+  document.getElementById(menu).style.display = 'block';
 }
 
 function selectRightMenuItem(menuItemText) {
-  document.getElementById('dropdownMenuButton').textContent = menuItemText; // Dropdown ¹öÆ° ÅØ½ºÆ® º¯°æ
-  $('.dropdown-toggle').dropdown('toggle'); // µå·Ó´Ù¿î ´İ±â
+  document.getElementById('dropdownMenuButton').textContent = menuItemText; // Dropdown ë²„íŠ¼ í…ìŠ¤íŠ¸ ë³€ê²½
+  $('.dropdown-toggle').dropdown('toggle'); // ë“œë¡­ë‹¤ìš´ ë‹«ê¸°
+}
+
+function submitForm() {
+  var selectedItemText = document.getElementById('dropdownMenuButton').textContent;
+  document.getElementById('selectedMenu').textContent = selectedItemText;
+  document.getElementById('selectedMenuItem').value = selectedItemText; // ìˆ¨ì€ ì…ë ¥ í•„ë“œì— ì„ íƒëœ ê°’ ì„¤ì •
+  document.getElementById('menuForm').submit(); // í¼ ì œì¶œ
 }
 </script>
 

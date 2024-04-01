@@ -38,7 +38,7 @@ public class job_categoryMgr {
 	}
 	
 	// job_category의 sname가져오는 mgr 
-	public Vector<job_categoryBean> jobsnameList(){
+	public Vector<job_categoryBean> jobsnameList(String name){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -46,8 +46,9 @@ public class job_categoryMgr {
 		Vector<job_categoryBean> vlist = new Vector<job_categoryBean>();
 		try {
 			con = pool.getConnection();
-			sql = "SELECT job_sname FROM job_category;";
+			sql = "SELECT job_sname FROM job_category where job_name = ?;";
 			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();
 			while(rs.next()){
 				job_categoryBean bean = new job_categoryBean();
