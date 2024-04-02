@@ -5,8 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import match.posting.OpenPositionBean;
-
+import match.posting.*;
 
 public class PostingMgr {
 	private DBConnectionMgr pool;
@@ -68,6 +67,30 @@ public class PostingMgr {
 			pstmt.setInt(4, bean.getOpenposition_num());
 			pstmt.setString(5, bean.getOpenposition_sname());
 			pstmt.setString(6, bean.getOpenposition_position());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return;
+	}
+	
+	public void insertQualification(QualificationBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+	        sql = "INSERT INTO qualification (posting_idx, qualification_edutype, qualification_gender, qualification_experience, qualification_skill, qualification_certificate) " +
+	                "VALUES (?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getPosting_idx());
+			pstmt.setString(2, bean.getQualification_edutype());
+			pstmt.setString(3, bean.getQualification_gender());
+			pstmt.setString(4, bean.getQualification_experience());
+			pstmt.setString(5, bean.getQualification_skill());
+			pstmt.setString(6, bean.getQualification_certificate());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

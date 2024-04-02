@@ -4,15 +4,41 @@
 <%@page import="java.util.Vector"%>
 <%@ page import="match.category.job_categoryBean" %>
 <%@ page import="match.category.job_categoryMgr" %>
-
+<%@ page import="match.category.skill_categoryBean" %>
+<%@ page import="match.category.skill_categoryMgr" %>
+<%@ page import="match.category.certificate_categoryBean" %>
+<%@ page import="match.category.certificate_categoryMgr" %>
+<jsp:useBean id="cMgr" class="match.category.certificate_categoryMgr"/>
+<jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
 <jsp:useBean id="jMgr" class="match.category.job_categoryMgr"/>
 <jsp:useBean id="jBean" class="match.category.job_categoryBean"/>
+<jsp:useBean id="sMgr" class="match.category.skill_categoryMgr"/>
+<jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%
+String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
+String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
+
+Vector<certificate_categoryBean> certificateList = cMgr.certificatenameList();
+
+//스킬 이름을 저장할 배열 생성
+String[] data = new String[certificateList.size()];
+for (int i = 0; i < certificateList.size(); i++) {
+ data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
+}
+
+%>
+
 <title>Announcement Form with Bootstrap</title>
 <!-- 최신 버전의 부트스트랩 CSS 추가 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <style>
+.custom-bte {
+        background-color: #606060; /* 버튼의 배경색을 파란색으로 지정 */
+        color: white; /* 버튼 텍스트 색상을 흰색으로 지정 */
+}
+    
 .title {
     font-size: 16px;
     font-weight: bold;
@@ -44,6 +70,14 @@
     font-weight: bolder;
     margin-left: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
 }
+.questionsub {
+    font-size: 16px; /* 라벨 텍스트 크기 조정 */
+    margin-bottom: 10px; /* 라벨 아래 여백 조정 */
+    font-weight: bolder;
+    margin-left: 60px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+    color: gray; /* 폰트 색상 변경 */
+}
+
 .input {
     font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
     padding: 10px; /* 입력 필드 내부 여백 조정 */
@@ -52,6 +86,21 @@
     height: 40px;
     margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
 }
+.inputplus {
+    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
+    padding: 10px; /* 입력 필드 내부 여백 조정 */
+    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
+    width: 500px;
+    height: auto; /* 높이 자동 조절 */
+    max-height: 200px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+    border: 1px solid black; /* 경계선 표시 */
+    margin-right: 10px; /* 오른쪽 여백 */
+    display: flex; /* flexbox 모델 적용 */
+    flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄로 */
+    align-items: flex-start; /* 내용 상단 정렬 */
+}
+
 .input_num {
     font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
     padding: 10px; /* 입력 필드 내부 여백 조정 */
@@ -74,6 +123,22 @@
     font-size: 17px;
     text-align: left;
 }
+
+.toggle_btn_skill {
+    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
+    padding: 10px; /* 입력 필드 내부 여백 조정 */
+    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
+    background-color: white;
+    border-color: grey;
+    width: 500px;
+    height: 40px;
+    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+    color: grey;
+    font-size: 17px;
+    text-align: left;
+    margin-top: 10px;
+}
+
 .input_noq {
     font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
     padding: 10px; /* 입력 필드 내부 여백 조정 */
@@ -93,7 +158,68 @@
 .modal-dialog {
     margin-top: 400px; /* 원하는 위치로 조절 */
 }
+/* ------------------------------------------------------------------------------ */
+/* [지원자 자격 요건_경력 여부 버튼] */
+.btn-group {
+  width: 500px;
+  height: 40px;
+  align-items: center;
+  margin-right: 10px; /* 오른쪽 여백 줄이기 */
+}
+.btn-group .btn {
+  flex: 1;
+  background-color: white; /* 버튼 배경색 */
+  color: grey; /* 버튼 텍스트 색상 */
+}
 
+.btn-group .btn.active {
+  background-color: #606060; /* 눌렸을 때의 배경색 */
+}
+
+.btn-group .btn.active:hover {
+  background-color: #0056b3; /* 마우스 호버 또는 포커스 시 배경색 */
+}
+/* ------------------------------------------------------------------------------ */
+.direct-input {
+    display: flex; /* flexbox 모델 적용 */
+    justify-content: space-between; /* 컨테이너 내부 요소들 사이에 공간을 균등하게 배분 */
+    margin-top: 10px; /* 상단 여백 추가 */
+    margin-bottom: 10px; /* 하단 여백 추가 */
+}
+.selfbtn {
+    padding: 10px 15px; /* 버튼 내부 여백 조정 */
+    font-size: 14px; /* 폰트 크기 조정 */
+    border-radius: 5px; /* 버튼의 모서리 둥글기 조정 */
+}
+.direct-input input {
+            flex: 1;
+            margin-right: 10px;
+            margin-left: 10px;
+            width: 85%; /* 입력 필드의 너비 조정 */
+}
+
+.direct-input button {
+            width: 15%; /* 버튼의 너비 조정 */
+            background-color: 606060;
+                        margin-right: 10px;
+            border-color: 606060;
+}
+
+#qualification_skill {
+    width: 500px; /* 필요에 따라 조절 */
+    height: 80px; /* 자동 높이 조절 */
+    overflow-y: auto; /* 세로 스크롤바가 필요할 때만 나타남 */
+    resize: none; /* 사용자가 크기 조절 못하도록 함 */
+    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
+    padding: 10px; /* 입력 필드 내부 여백 조정 */
+    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
+    margin-left: 180px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+}
+.dropdown-menu {
+    max-height: 270px; /* 드롭다운 메뉴의 최대 높이 */
+    overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤바 표시 */
+}
 
 </style>
 </head>
@@ -193,181 +319,33 @@
 						              </div>	                                 
 						            </div>
 						          </div>
-						          
-								<!-- 우측 메뉴 -->
-								<div class="col-md-6" id="right-menu" style="max-height: 300px; overflow-y: auto;">
-								    <h6 class="dropdown-header">우측 메뉴</h6>
-								    <!-- 우측 메뉴의 내용을 미리 정의 -->
-								    <div id="menu1" style="display: none;">
-								        <div class="row">
-								            <% 
-								                String name = "기획·전략";
-								                Vector<job_categoryBean> vlist = jMgr.jobsnameList(name);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-								    </div>
-						            <div id="menu2" style="display: none;">
-						             <div class="row">
-								            <% 
-								                String name1 = "마케팅·홍보·조사";
-								                Vector<job_categoryBean> vlist1 = jMgr.jobsnameList(name1);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist1) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu3" style="display: none;">
-						                 <div class="row">
-								            <% 
-								                String name3 = "회계·세무·재무";
-								                Vector<job_categoryBean> vlist3 = jMgr.jobsnameList(name3);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist3) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu4" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name4 = "인사·노무·HRD";
-								                Vector<job_categoryBean> vlist4 = jMgr.jobsnameList(name4);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist4) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu5" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name5 = "총무·법무·사무";
-								                Vector<job_categoryBean> vlist5 = jMgr.jobsnameList(name5);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist5) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu6" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name6 = "IT개발·데이터";
-								                Vector<job_categoryBean> vlist6 = jMgr.jobsnameList(name6);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist6) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu7" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name7 = "디자인";
-								                Vector<job_categoryBean> vlist7 = jMgr.jobsnameList(name7);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist7) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu8" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name8 = "영업·판매·무역";
-								                Vector<job_categoryBean> vlist8 = jMgr.jobsnameList(name8);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist8) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu9" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name9 = "고객상담·TM";
-								                Vector<job_categoryBean> vlist9 = jMgr.jobsnameList(name9);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist9) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
-						            <div id="menu10" style="display: none;">
-						                   <div class="row">
-								            <% 
-								                String name10 = "구매·자재·물류";
-								                Vector<job_categoryBean> vlist10 = jMgr.jobsnameList(name10);
-								                
-								                // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
-								                for (job_categoryBean menuItem : vlist10) {
-								            %>
-								            <div class="col-md-6">
-								                <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
-								            </div>
-								            <% 
-								                }
-								            %>
-								        </div>
-						            </div>
+                        <!-- 우측 메뉴 -->
+                        <div class="col-md-6" id="right-menu" style="max-height: 300px; overflow-y: auto;">
+                            <h6 class="dropdown-header">우측 메뉴</h6>
+                            <!-- 우측 메뉴의 내용을 미리 정의 -->
+                            <%
+                               for(int i = 1; i < 11; i++){
+                            %>
+                                  <div id="menu<%=i%>" style="display: none;">
+                                      <div class="row">
+                                          <% 
+                                              Vector<job_categoryBean> vlist = jMgr.jobsnameList(jobname[i-1]);
+                                              
+                                              // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
+                                              for (job_categoryBean menuItem : vlist) {
+                                          %>
+                                          <div class="col-md-6">
+                                              <a class="dropdown-item" href="#" onclick="selectRightMenuItem('<%=menuItem.getJob_sname()%>')"><%=menuItem.getJob_sname()%></a>
+                                          </div>
+                                          <% 
+                                              }
+                                          %>
+                                      </div>
+                                  </div>
+                            <%
+                               }
+                            %>      
+								
 						             <input type="hidden" name="selectedMenuItem" id="selectedMenuItem">
 						          </div>
 						        <input type="hidden" id="openposition_name" name="openposition_name">
@@ -473,7 +451,8 @@
 						            성별을 선택하세요.
 						        </button>
 						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
-						        	<a class="dropdown-item" href="#" onclick="selectGender('남성')">남성</a>
+						        	<a class="dropdown-item" href="#" onclick="selectGender('남성')">성별무관</a>
+						            <a class="dropdown-item" href="#" onclick="selectGender('여성')">남성</a>	         
 						            <a class="dropdown-item" href="#" onclick="selectGender('여성')">여성</a>	         
 						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
 									<input type="hidden" id="qualification_gender" name="qualification_gender" value="">
@@ -482,40 +461,235 @@
                         </div>  
                     </div>
                     
+					<div class="row align-items-center">
+					    <div class="col">
+					        <label for="companyName" class="question">경력 여부</label>
+					    </div>
+					    <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+					    <div class="col">
+					        <!-- 버튼 그룹을 좌측으로 정렬하는 부분 -->
+					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
+					            <label class="btn btn-secondary active">
+					                <input type="radio" name="qualification_experience" id="noExperience" value="경력 무관" checked> 경력 무관
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="qualification_experience" id="newcomer" value="신입"> 신입
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="qualification_experience" id="experienced" value="경력"> 경력
+					            </label>
+					        </div>
+					    </div>
+					</div>
+					
+					<div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">요구 스킬</label>
+                        </div>
+                        <div class="col">
+							<div class="dropdown">
+						      <button class="toggle_btn_skill" type="button" id="skilldrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						       요구하는 스킬 사항을 선택해주세요.
+						      </button>
+						      <div class="dropdown-menu" aria-labelledby="skilldrop" style="width: 1100px; weight: 600px;">
+						        <div class="row">
+						  
+							<!-- 좌측 메뉴 -->
+							<div class="col-md-6 pr-0 border-right" style="max-height: 600px; overflow-y: auto;">
+							    <h6 class="dropdown-header">좌측 메뉴</h6>
+						    <div class="row">
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill1', event)">개발자 언어</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill2', event)">개발자 기술</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill3', event)">그래픽 디자인</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill4', event)">편집</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill5', event)">음악 및 사운드 편집</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill6', event)">애니메이션</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill7', event)">UI/UX 디자인</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill8', event)">3D 모델링 및 디자인</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill9', event)">일러스트레이션</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill10', event)">사진 편집</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill11', event)">비디오 및 영상 제작</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill12', event)">음악 제작 및 오디오 엔지니어링</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill13', event)">글쓰기 및 편집</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill14', event)">디지털 마케팅</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill15', event)">사업 관리 및 프로젝트 관리</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill16', event)">사진 및 비주얼 콘텐츠 제작</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill17', event)">사회 연결망 및 네트워킹</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill18', event)">온라인 교육 및 교육 기술</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill19', event)">헬스 및 피트니스</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill20', event)">온라인 쇼핑 및 전자상거래</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill21', event)">어학 및 언어 학습</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill22', event)">요리 및 조리</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill23', event)">여행 및 여행 계획</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill24', event)">자기 계발 및 심리학</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill25', event)">음악 감상 및 스트리밍</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill26', event)">온라인 커뮤니티 및 포럼</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill27', event)">자동화 및 생산성 도구</a>
+						        </div>
+						        <div class="col-md-6">
+						            <a class="dropdown-item" href="#" onclick="changeRightSkill('skill28', event)">환경 및 지속 가능성</a>
+						        </div>
+						    </div>
+						</div>
+
+                        <!-- 우측 메뉴 -->
+                        <div class="col-md-6" id="right-skill" style="max-height: 600px; overflow-y: auto;">
+                            <h6 class="dropdown-header">우측 메뉴</h6>
+                            <!-- 우측 메뉴의 내용을 미리 정의 -->
+                            <%
+                               for(int i = 1; i < 11; i++){
+                            %>
+                                  <div id="skill<%=i%>" style="display: none;">
+                                      <div class="row">
+                                          <% 
+                                              Vector<skill_categoryBean> vlist = sMgr.skillsnameList(skillname[i-1]);
+                                              
+                                              // Vector에서 항목들을 가져와 동적으로 우측 메뉴 항목 생성
+                                              for (skill_categoryBean menuItem : vlist) {
+                                          %>
+                                          <div class="col-md-6">
+												<a class="dropdown-item" href="#" onclick="selectRightSkillItem('<%=menuItem.getSkill_sname()%>', event)"><%=menuItem.getSkill_sname()%></a>
+                                          </div>
+                                          <% 
+                                              }
+                                          %>
+                                      </div>
+                                  </div>
+                            <%
+                               }
+                            %>      
+						          </div>
+<!-- 						        <input type="hidden" id="qualification_skill" name="qualification_skill"> -->				        
+						        </div>
+						      </div>
+						    </div>
+                        </div>           
+                    </div>
+                    
                     <div class="row align-items-center">
                         <div class="col">
-                            <label for="companyName" class="question">경력 여부</label>
+                            <label for="companyName" class="questionsub">선택 된 스킬</label>
+                        </div>
+						<div class="col">
+						    <div class="inputplus" id="selectedSkillsDisplay" style="border: 1px solid black;"></div>
+						    <input type="hidden" id="qualification_skill" name="selectedSkills">
+						</div>
+                    </div>
+                    <hr>
+					<!-- 지원자격 학력 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">요구 자격증</label>
+                        </div>
+                        <div class="col">
+							<div class="dropdown">
+							    <button class="toggle_btn" type="button" id="certificatedropBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							        직급/직책을 선택하세요.
+							    </button>
+							    <div class="dropdown-menu" aria-labelledby="certificatedropBtn">
+							        <input type="text" class="form-control" id="certificateSearch" placeholder="검색...">
+							        <div id="certificateList">
+							            <!-- 드롭다운 항목들이 여기에 동적으로 삽입됩니다. -->
+							        </div>
+							    </div>
+							</div>
+							<input type="hidden" id="qualification_certificate" name="qualification_certificate" value="">
+                        </div>  
+					<div class="row align-items-center">
+					    <div class="col">
+					        <label for="companyName" class="questionsub">선택 된 자격증</label>
+					    </div>
+					    <div class="col">
+					        <div class="inputplus" id="selectedCertificatesDisplay" style="border: 1px solid black;"></div>
+					        <input type="hidden" id="qualification_certificate" name="qualification_certificate">
+					    </div>
+					</div>
+
+                    </div>
+
+           </div>      
+           
+           
+           <div class="title">근무 환경</div>
+            <div class="stitle">근무환경은 어떻게 되나요?</div>
+            <div class="box">
+                <!-- 기업명 텍스트와 텍스트 필드 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">연봉/급여</label>
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <!-- 경력 여부 버튼 그룹 -->
-					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					  	<label class="btn btn-secondary active">
-					    	<input type="radio" name="qualification_experience" id="noExperience" value="경력 무관" checked> 경력 무관
-					  	</label>
-					  	<label class="btn btn-secondary">
-					    	<input type="radio" name="qualification_experience" id="newcomer" value="신입"> 신입
-					  	</label>
-					  	<label class="btn btn-secondary">
-					  	  <input type="radio" name="qualification_experience" id="experienced" value="경력"> 경력
-					  	</label>
-					</div>
-
+                            <input type="text" class="input" id="posting_cname" name="posting_cname">
                         </div>
                     </div>
-           </div>      
-        </div>
+                       
+
+            </div> <!-- 박스 -->
+              
+        </div> <!-- 왼쪽 컨테이너 -->
         <!-- 우측 레이아웃 -->
-        <div class="col-md-3 d-flex flex-column align-items-center justify-content-center"> <!-- 버튼을 상하 중앙에 배치하기 위해 align-items-center 및 justify-content-center 클래스 추가 -->
-            <!-- 등록 완료 버튼 -->
-            <button id="registerButton" type="button" class="btn btn-primary mb-2 btn-sm">등록완료</button>
-            <button type="button" class="btn btn-secondary btn-sm">임시저장</button>
-        </div>
+			<div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
+			    <!-- 등록 완료 버튼 -->
+			    <button id="registerButton" type="button" class="btn btn-secondary btn-lg">등록완료</button>
+			    <button type="button" class="btn btn-secondary btn-lg">임시저장</button>
+			</div>
         </div>
 		</form>
 </div>
-
-
 
 <!-- 등록 완료 모달 -->
 <div class="modal fade" id="titleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -541,11 +715,9 @@
 </div>
 
 
-<!-- 부트스트랩 JS, Popper.js, and jQuery -->
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.5/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -588,7 +760,6 @@
 	            } else { // 사용자가 지번 주소를 선택했을 경우(J)
 	                addr = data.jibunAddress;
 	            }
-
 	            // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	            document.getElementById('posting_pcode').value = data.zonecode;
 	            document.getElementById("posting_address").value = addr;
@@ -643,8 +814,8 @@
 	function selectRightMenuItem(menuItemText) {
 		  var dropdownButton = document.getElementById('dropdownMenuButton');
 		  dropdownButton.textContent = menuItemText; // Dropdown 버튼 텍스트 변경
-		  dropdownButton.style.backgroundColor = '#D9D9D9'; // 버튼의 배경색을 회색(#D9D9D9)으로 변경
-		  dropdownButton.style.color = 'black'; // 텍스트 색상을 검정으로 변경	  
+		  dropdownButton.style.backgroundColor = '#606060'; // 버튼의 배경색을 회색(#D9D9D9)으로 변경
+		  dropdownButton.style.color = 'white'; // 텍스트 색상을 검정으로 변경	  
 		  dropdownButton.style.textAlign = 'left'; // 텍스트를 좌측으로 정렬
 		  $('.dropdown-toggle').dropdown('toggle'); // 드롭다운 닫기
 		  
@@ -656,8 +827,8 @@
 	function selectPosition(position) {
 	    var dropdownButton = document.getElementById('dropdownMenuButton2');
 	    dropdownButton.textContent = position;
-	    dropdownButton.style.backgroundColor = '#D9D9D9';
-	    dropdownButton.style.color = 'black';
+	    dropdownButton.style.backgroundColor = '#606060';
+	    dropdownButton.style.color = 'white';
 	    // 선택된 직급/직책을 숨겨진 입력 필드에 저장
 	    document.getElementById('openposition_position').value = position;
 	}
@@ -676,8 +847,8 @@
     function selectEdutype(edutype) {
         var dropdownButton = document.getElementById('dropdownMenuButton3');
         dropdownButton.textContent = edutype;
-        dropdownButton.style.backgroundColor = '#D9D9D9';
-        dropdownButton.style.color = 'black';
+        dropdownButton.style.backgroundColor = '#606060';
+        dropdownButton.style.color = 'white';
         // 선택한 지원 자격을 양식 데이터에 저장하기 위한 숨겨진 입력 필드 값 설정
         document.getElementById('qualification_edutype').value = edutype;
     }
@@ -685,12 +856,171 @@
     function selectGender(gender) {
         var dropdownButton = document.getElementById('dropdownMenuButton4');
         dropdownButton.textContent = gender;
-        dropdownButton.style.backgroundColor = '#D9D9D9';
-        dropdownButton.style.color = 'black';
+        dropdownButton.style.backgroundColor = '#606060';
+        dropdownButton.style.color = 'white';
         // 선택한 지원 자격을 양식 데이터에 저장하기 위한 숨겨진 입력 필드 값 설정
         document.getElementById('qualification_gender').value = gender;
     }
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// [모집 정보_모집분야 명 드롭다운 관련 기능]
+	function changeRightSkill(skill, event) {
+	  event.stopPropagation(); // 이벤트 전파 중지
+	  // 모든 우측 메뉴 숨기기
+	  document.querySelectorAll('#right-skill > div').forEach(function(div) {
+	    div.style.display = 'none';
+	  });
+	  // 해당 메뉴 보여주기
+	  document.getElementById(skill).style.display = 'block';
+	}
+	// 선택한 스킬을 관리하기 위한 배열
+    var selectedSkills = [];
+
+    function selectRightSkillItem(skillName, event) {
+        event.stopPropagation(); // 이벤트 전파 중단
+
+        // 스킬이 이미 선택되었는지 확인하고, 선택되지 않았다면 배열에 추가
+        if (selectedSkills.indexOf(skillName) === -1) {
+            selectedSkills.push(skillName); // 배열에 스킬 추가
+            updateSelectedSkillsDisplay(); // 선택된 스킬 표시 업데이트
+        } else {
+            // 이미 선택된 스킬이면 배열에서 제거
+            selectedSkills = selectedSkills.filter(function(skill) {
+                return skill !== skillName;
+            });
+            updateSelectedSkillsDisplay(); // 선택된 스킬 표시 업데이트
+        }
+    }
+
+
+ 	// 선택된 스킬을 화면에 표시하는 함수
+    function updateSelectedSkillsDisplay() {  
+        var displayArea = document.getElementById('selectedSkillsDisplay');
+        displayArea.innerHTML = ''; // 화면 초기화
+        var selectedSkillsValue = selectedSkills.join(','); // 배열을 쉼표로 구분된 문자열로 변환
+        document.getElementById('qualification_skill').value = selectedSkillsValue; // Hidden input 업데이트
+       
+        
+        selectedSkills.forEach(function(skill) {
+            var skillElement = document.createElement('span');
+            skillElement.textContent = skill;
+            skillElement.style.marginRight = '10px';
+            skillElement.style.marginBottom = '10px';
+            skillElement.style.display = 'inline-block';
+            skillElement.style.padding = '5px 10px';
+            skillElement.style.borderRadius = '20px'; // 타원 모양으로 만들기 위한 둥근 모서리
+            skillElement.style.backgroundColor = '#606060'; // 배경색
+            skillElement.style.color = 'white'; // 글자색
+            skillElement.style.cursor = 'pointer';
+            skillElement.style.fontSize = '14px';
+            skillElement.onclick = function() { removeSkill(skill); }; // 스킬 클릭 시 제거
+            displayArea.appendChild(skillElement);
+        });
+    }
+
+    // 스킬 클릭 시 제거하는 함수
+    function removeSkill(skillName) {
+        selectedSkills = selectedSkills.filter(function(skill) {
+            return skill !== skillName;
+        });
+        updateSelectedSkillsDisplay(); // 선택된 스킬 표시 업데이트
+    }
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// [지원자 자격 요건_ 요구 자격증 관련]
+	// 예시 데이터 배열
+	const certificates = [
+	    <% for (int i = 0; i < certificateList.size(); i++) { %>
+	        "<%= certificateList.get(i).getCertificate_name() %>"<%= i < certificateList.size() - 1 ? "," : "" %>
+	    <% } %>
+	];
+	
+	// 드롭다운 리스트를 초기화하고 전체 항목을 표시하는 함수
+	function initDropdownList() {
+	    const list = document.getElementById('certificateList');
+	    list.innerHTML = ''; // 리스트 초기화
+	    certificates.forEach(certificate => {
+	        const item = document.createElement('a');
+	        item.classList.add('dropdown-item');
+	        item.href = "#";
+	        item.textContent = certificate;
+	        item.onclick = function() { selectCertificate(certificate); };
+	        list.appendChild(item);
+	    });
+	}
+	
+	// 사용자의 입력에 따라 리스트를 필터링하는 함수
+	function filterList() {
+	    const searchValue = document.getElementById('certificateSearch').value.toLowerCase();
+	    const filteredCertificates = certificates.filter(certificate => certificate.toLowerCase().includes(searchValue));
+	    const list = document.getElementById('certificateList');
+	    list.innerHTML = ''; // 리스트 초기화
+	    filteredCertificates.forEach(certificate => {
+	        const item = document.createElement('a');
+	        item.classList.add('dropdown-item');
+	        item.href = "#";
+	        item.textContent = certificate;
+	        item.onclick = function() { selectCertificate(certificate); };
+	        list.appendChild(item);
+	    });
+	}
+	
+	// 선택된 항목을 처리하는 함수
+	function selectCertificate(certificate) {
+	    document.getElementById('certificatedropBtn').textContent = certificate;
+	    document.getElementById('qualification_certificate').value = certificate;
+	    // 드롭다운 닫기 (옵션)
+	}
+	
+	// 이벤트 리스너 추가
+	document.getElementById('certificateSearch').addEventListener('input', filterList);
+	
+	// 페이지 로드 시 드롭다운 리스트 초기화
+	window.onload = initDropdownList;
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+		// 선택한 자격증을 관리하기 위한 배열
+	var selectedCertificates = [];
+	
+	// 선택된 자격증을 화면에 표시하는 함수
+	function updateSelectedCertificatesDisplay() {
+	    var displayArea = document.getElementById('selectedCertificatesDisplay');
+	    displayArea.innerHTML = ''; // 화면 초기화
+	    var selectedCertificatesValue = selectedCertificates.join(', '); // 배열을 쉼표로 구분된 문자열로 변환
+	    document.getElementById('qualification_certificate').value = selectedCertificatesValue; // Hidden input 업데이트
+	    
+	    selectedCertificates.forEach(function(certificate) {
+	        var certificateElement = document.createElement('span');
+	        certificateElement.textContent = certificate;
+	        certificateElement.style.marginRight = '10px';
+	        certificateElement.style.marginBottom = '10px';
+	        certificateElement.style.display = 'inline-block';
+	        certificateElement.style.padding = '5px 10px';
+	        certificateElement.style.borderRadius = '20px'; // 타원 모양으로 만들기 위한 둥근 모서리
+	        certificateElement.style.backgroundColor = '#606060'; // 배경색
+	        certificateElement.style.color = 'white'; // 글자색
+	        certificateElement.style.cursor = 'pointer';
+	        certificateElement.style.fontSize = '14px';
+	        certificateElement.onclick = function() { removeCertificate(certificate); }; // 자격증 클릭 시 제거
+	        displayArea.appendChild(certificateElement);
+	    });
+	}
+	
+	// 자격증 클릭 시 제거하는 함수
+	function removeCertificate(certificateName) {
+	    selectedCertificates = selectedCertificates.filter(function(certificate) {
+	        return certificate !== certificateName;
+	    });
+	    updateSelectedCertificatesDisplay(); // 선택된 자격증 표시 업데이트
+	}
+	
+	// 드롭다운에서 자격증 선택 시 처리하는 함수
+	function selectCertificate(certificate) {
+	    if (selectedCertificates.indexOf(certificate) === -1) {
+	        selectedCertificates.push(certificate); // 배열에 자격증 추가
+	        updateSelectedCertificatesDisplay(); // 선택된 자격증 표시 업데이트
+	        event.stopPropagation()
+	    }
+	    // 드롭다운 닫기 (부트스트랩 사용 시 적절한 방법으로 구현)
+	}
 
 	</script>
 
