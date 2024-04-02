@@ -109,6 +109,30 @@ for (int i = 0; i < certificateList.size(); i++) {
     height: 40px;
     margin-right: 210px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
 }
+.input_all {
+    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
+    padding: 10px; /* 입력 필드 내부 여백 조정 */
+    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
+    width: 670px;
+    height: 40px;
+    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
+    margin-left: 10px;
+}
+.addbtn {
+    /* 원하는 스타일 속성을 여기에 추가하세요 */
+    background-color: #606060; /* 배경색을 파란색으로 변경 */
+    color: white; /* 글꼴 색상을 흰색으로 변경 */
+    border: 2px solid black; /* 테두리 스타일을 추가 */
+    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
+    padding: 7px 20px; /* 내부 여백을 추가하여 버튼 크기 조정 */
+    font-size: 16px; /* 글꼴 크기를 변경 */
+    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
+}
+
+/* 선택한 버튼이 마우스로 클릭되었을 때의 스타일 */
+.addbtn:active {
+    background-color: darkblue; /* 클릭시 배경색을 진한 파란색으로 변경 */
+}
 
 .toggle_btn {
     font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
@@ -154,7 +178,10 @@ for (int i = 0; i < certificateList.size(); i++) {
     font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
     color: red; /* 빨간색으로 설정 */
 }
-
+.essential_money {
+    font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
+    color: black; /* 빨간색으로 설정 */
+}
 .modal-dialog {
     margin-top: 400px; /* 원하는 위치로 조절 */
 }
@@ -171,6 +198,7 @@ for (int i = 0; i < certificateList.size(); i++) {
   background-color: white; /* 버튼 배경색 */
   color: grey; /* 버튼 텍스트 색상 */
 }
+
 
 .btn-group .btn.active {
   background-color: #606060; /* 눌렸을 때의 배경색 */
@@ -369,7 +397,7 @@ for (int i = 0; i < certificateList.size(); i++) {
                         </div>
                         <div class="col">
                            <!-- 숫자 입력을 위한 필드 (type을 "text"로 유지) -->
-							<input type="text" class="input_num" id="openposition_num" name="openposition_num" placeholder="인원 수를 입력해주세요.">
+							<input type="text" class="input_num" id="openposition_num" name="openposition_num" placeholder="모집하는 인원 수를 입력해주세요.">
                         </div>
                     </div> 
                     
@@ -392,7 +420,7 @@ for (int i = 0; i < certificateList.size(); i++) {
 			            <div class="col">
 						    <div class="dropdown">
 						        <button class="toggle_btn" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						            직급/직책을 선택하세요.
+						            귀사의 직급/직책을 선택해주세요.
 						        </button>
 						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
 						        	<a class="dropdown-item" href="#" onclick="selectPosition('무관')">무관</a>
@@ -422,7 +450,7 @@ for (int i = 0; i < certificateList.size(); i++) {
                         <div class="col">
                           <div class="dropdown">
 						        <button class="toggle_btn" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						            직급/직책을 선택하세요.
+						            요구하는 지원자의 학력을 선택해주세요.
 						        </button>
 						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
 						        	<a class="dropdown-item" href="#" onclick="selectEdutype('학력 무관')">학력 무관</a>
@@ -481,7 +509,7 @@ for (int i = 0; i < certificateList.size(); i++) {
 					        </div>
 					    </div>
 					</div>
-					
+					                    <hr>
 					<div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">요구 스킬</label>
@@ -637,7 +665,7 @@ for (int i = 0; i < certificateList.size(); i++) {
                         <div class="col">
 							<div class="dropdown">
 							    <button class="toggle_btn" type="button" id="certificatedropBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							        직급/직책을 선택하세요.
+							        요구하는 스킬 사항을 선택해주세요.
 							    </button>
 							    <div class="dropdown-menu" aria-labelledby="certificatedropBtn">
 							        <input type="text" class="form-control" id="certificateSearch" placeholder="검색...">
@@ -659,26 +687,119 @@ for (int i = 0; i < certificateList.size(); i++) {
 					</div>
 
                     </div>
-
            </div>      
-           
-           
+       
            <div class="title">근무 환경</div>
             <div class="stitle">근무환경은 어떻게 되나요?</div>
             <div class="box">
-                <!-- 기업명 텍스트와 텍스트 필드 -->
+                <!-- 연봉 받기 -->
                     <div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">연봉/급여</label>
                         </div>
-                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+                        <span class="essential_money">[최소 금액]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="text" class="input" id="posting_cname" name="posting_cname">
+                            <input type="number" class="input" id="environment_minsalary" name="environment_minsalary" placeholder="만원">               
                         </div>
                     </div>
-                       
-
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">     </label>
+                        </div>
+                        <span class="essential_money">[최대 금액]</span> <!-- 필수 문구 추가 -->
+                        <div class="col">
+                            <input type="number" class="input" id="environment_maxsalary" name="environment_maxsalary" placeholder="만원">
+                        </div>
+                    </div>                       
+                    <div class="row align-items-center">
+					    <div class="col">
+					        <label for="companyName" class="question">고용 형태</label>
+					    </div>
+					    <span class="essential">필수</span> <!-- 필수 문구 추가 -->
+					    <div class="col">
+					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
+					            <label class="btn btn-secondary active">
+					                <input type="radio" name="environment_type" id="noExperience" value="정규직" checked> 정규직
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="environment_type" id="newcomer" value="계약직"> 계약직
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="environment_type" id="experienced" value="알바"> 알바
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="environment_type" id="go1" value="파견직"> 파견직
+					            </label>
+					            <label class="btn btn-secondary">
+					                <input type="radio" name="environment_type" id="go12" value="인턴"> 인턴
+					            </label>
+					        </div>  
+					    </div>
+					</div>
+					<div class="row align-items-center">
+					    <div class="col">
+					        <label for="companyName" class="question">근무 요일</label>
+					    </div>
+					    <div class="col">
+                          	<div class="dropdown">
+						        <button class="toggle_btn_skill" type="button" id=dropworkingdayBtn data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            귀사의 근무 요일을 입력해주세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropworkingdayBtn">
+						        	<a class="dropdown-item" href="#" onclick="selectDay('주말')">주말</a>
+						        	<a class="dropdown-item" href="#" onclick="selectDay('주 3일')">주 3일</a>	 	
+						        	<a class="dropdown-item" href="#" onclick="selectDay('주 4일')">주 4일</a>	      
+						        	<a class="dropdown-item" href="#" onclick="selectDay('주 5일(월~금)')">주 5일(월~금)</a>      
+						            <a class="dropdown-item" href="#" onclick="selectDay('주 5일(재택근무)')">주 5일(재택근무)</a>	         
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="working_day" name="working_day" value="">
+						        </div>
+                        	</div>  					        
+					    </div>
+					</div>
+					<div class="row align-items-center">
+					    <div class="col">
+					        <label for="companyName" class="question">근무 시간</label>
+					    </div>
+					    <div class="col">
+                          	<div class="dropdown">
+						        <button class="toggle_btn_skill" type="button" id=dropworkinghourBtn data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            귀사의 근무 시간을 입력해주세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropworkinghourBtn">
+						        	<a class="dropdown-item" href="#" onclick="selectHour('오전')">오전</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('오후')">오후</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('저녁')">저녁</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('새벽')">새벽</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('오전~오후')">오전~오후</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('오후~저녁')">오후~저녁</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('저녁~새벽')">저녁~새벽</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('새벽~오전')">새벽~오전</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('종일')">종일</a>
+						        	<a class="dropdown-item" href="#" onclick="selectHour('시간협의')">시간협의</a>
+         
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="working_hour" name="working_hour" value="">
+						        </div>
+                        	</div>  					        
+					    </div>
+					</div>
             </div> <!-- 박스 -->
+            <div class="title">복리후생</div>
+            <div class="stitle">복지 및 혜택은 어떻게 되나요?</div>
+			<div class="box">
+			    <div class="row align-items-center welfare" id="welfareFields">
+			        <div class="col">
+			            <input type="text" class="input_all" name="Welfare_content[]" placeholder="귀사의 복지, 혜택에 대해 작성해주세요.">
+			        </div>
+			    </div>
+			    <div class="row justify-content-center"> <!-- 여기에 justify-content-center 클래스를 추가 -->
+			        <div class="col-auto"> <!-- col-auto로 변경하여 버튼의 너비에 맞게 컬럼 크기 조정 -->
+			            <button type="button" id="addWelfareField" class="addbtn">추가 작성</button>
+			        </div>
+			    </div>
+			</div> <!-- 복리 후생 박스 -->
+
               
         </div> <!-- 왼쪽 컨테이너 -->
         <!-- 우측 레이아웃 -->
@@ -776,7 +897,6 @@ for (int i = 0; i < certificateList.size(); i++) {
 	    var companyName = document.getElementById("posting_cname").value.trim();
 	    var postalCode = document.getElementById("posting_pcode").value.trim();
 	    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
-	
 	    // 기본 드롭다운 버튼의 텍스트와 비교
 	    if (companyName === "" || postalCode === "" || selectedField === "모집 분야를 선택해주세요.") {
 	        alert("필수 사항들을 모두 입력해주세요.");
@@ -785,8 +905,6 @@ for (int i = 0; i < certificateList.size(); i++) {
 	        $('#titleModal').modal('show');
 	    }
 	});
-
-	
 	function submitAnnouncement() {
 		//var formData = new FormData(document.getElementById("companyForm"));
 		formData = document.companyForm;
@@ -796,9 +914,6 @@ for (int i = 0; i < certificateList.size(); i++) {
 		
 	    $('#titleModal').modal('hide'); // 모달 닫기
 	}
-
-
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// [모집 정보_모집분야 명 드롭다운 관련 기능]
 	function changeRightMenu(menu, event) {
@@ -977,7 +1092,7 @@ for (int i = 0; i < certificateList.size(); i++) {
 	// 페이지 로드 시 드롭다운 리스트 초기화
 	window.onload = initDropdownList;
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-		// 선택한 자격증을 관리하기 위한 배열
+	// 선택한 자격증을 관리하기 위한 배열
 	var selectedCertificates = [];
 	
 	// 선택된 자격증을 화면에 표시하는 함수
@@ -1021,6 +1136,55 @@ for (int i = 0; i < certificateList.size(); i++) {
 	    }
 	    // 드롭다운 닫기 (부트스트랩 사용 시 적절한 방법으로 구현)
 	}
+
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+    // [근무 환경(근무 시간) 드롭다운 기능]
+    function selectDay(Day) {
+        var dropdownButton = document.getElementById('dropworkingdayBtn');
+        dropdownButton.textContent = Day;
+        dropdownButton.style.backgroundColor = '#606060';
+        dropdownButton.style.color = 'white';
+        // 선택한 지원 자격을 양식 데이터에 저장하기 위한 숨겨진 입력 필드 값 설정
+        document.getElementById('working_day').value = Day;
+    }
+ 	// [근무 환경(근무 시간) 드롭다운 기능]
+ 	    function selectHour(Hour) {
+        var dropdownButton = document.getElementById('dropworkinghourBtn');
+        dropdownButton.textContent = Hour;
+        dropdownButton.style.backgroundColor = '#606060';
+        dropdownButton.style.color = 'white';
+        // 선택한 지원 자격을 양식 데이터에 저장하기 위한 숨겨진 입력 필드 값 설정
+        document.getElementById('working_hour').value = Hour;
+    }
+ 		/////////////////////////////////////////////////////////////////////////////////////////////////
+ 	    // [복리 후생(복지 버튼) 드롭다운 기능] 	
+		document.getElementById('addWelfareField').addEventListener('click', function() {
+		    var container = document.getElementById('welfareFields'); // 부모 컨테이너를 가져옵니다.
+		    var newInput = document.createElement('input'); // 새 입력 필드를 생성합니다.
+		    newInput.type = 'text';
+		    newInput.className = 'input_all'; // 기존 입력 필드와 동일한 클래스를 사용합니다.
+		    newInput.name = 'Welfare_content[]';
+		    newInput.placeholder = '귀사의 복지, 혜택에 대해 추가로 작성해주세요.';
+		    // 인라인 스타일 직접 적용
+		    newInput.style.width = '670px';
+		    newInput.style.height = '40px';
+		    newInput.style.marginRight = '10px';
+		    newInput.style.marginLeft = '25px';
+		    newInput.style.padding = '10px';
+		    newInput.style.fontSize = '18px';
+		
+		    var newDiv = document.createElement('div'); // 새 div 요소를 생성합니다.
+		    newDiv.className = 'col'; // 기존과 동일한 클래스를 적용합니다.
+		    newDiv.appendChild(newInput); // 새 입력 필드를 div에 추가합니다.
+		
+		    var newRow = document.createElement('div'); // 새로운 row를 생성합니다.
+		    newRow.className = 'row align-items-center'; // 기존과 동일한 클래스를 적용합니다.
+		    newRow.appendChild(newDiv); // div를 row에 추가합니다.
+		
+		    container.appendChild(newRow); // 새로운 row를 부모 컨테이너에 추가합니다.
+		});
+
 
 	</script>
 

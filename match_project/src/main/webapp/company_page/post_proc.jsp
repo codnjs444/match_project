@@ -1,3 +1,6 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.List"%>
+<%@page import="match.posting.WelfareBean"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="mMgr" class="match.ManagerMgr"/>
 <jsp:useBean id="mBean" class="match.ManagerBean"/>
@@ -7,10 +10,14 @@
 
 <jsp:useBean id="opBean" class="match.posting.OpenPositionBean"/>
 <jsp:useBean id="qBean" class="match.posting.QualificationBean"></jsp:useBean>
+<jsp:useBean id="eBean" class="match.posting.environmentBean"></jsp:useBean>
+<jsp:useBean id="wBean" class="match.posting.WelfareBean"></jsp:useBean>
 
 <jsp:setProperty property="*" name="pBean"/>
 <jsp:setProperty property="*" name="opBean"/>
 <jsp:setProperty property="*" name="qBean"/>
+<jsp:setProperty property="*" name="eBean"/>
+<jsp:setProperty property="*" name="wBean"/>
 <!DOCTYPE html>
 
 <%
@@ -70,6 +77,33 @@
 	qBean.setQualification_certificate(qualification_certificate);
 	
 	pMgr.insertQualification(qBean);
+	/*--------------------------------------------------------------------------------*/
+
+	String environment_minsalary_str = request.getParameter("environment_minsalary");
+	int environment_minsalary = Integer.parseInt(environment_minsalary_str);
+	String environment_maxsalary_str = request.getParameter("environment_maxsalary");
+	int environment_maxsalary = Integer.parseInt(environment_maxsalary_str);
+	String environment_type = request.getParameter("environment_type");
+	String working_day = request.getParameter("working_day");
+	String working_hour = request.getParameter("working_hour");
+	
+	eBean.setPosting_idx(generatedKey);
+	eBean.setEnvironment_minsalary(environment_minsalary);
+	eBean.setEnvironment_maxsalary(environment_maxsalary);
+	eBean.setEnvironment_type(environment_type);
+	eBean.setWorking_day(working_day);
+	eBean.setWorking_hour(working_hour);
+	
+	pMgr.insertEnvironment(eBean);
+	/*--------------------------------------------------------------------------------*/
+	String[] welfareContentArray = request.getParameterValues("Welfare_content[]");
+	    if(welfareContentArray != null) { // null 체크 추가
+	        List<String> welfareContents = Arrays.asList(welfareContentArray);
+	        wBean.setPosting_idx(generatedKey);
+	        wBean.setWelfareContents(welfareContents);
+	        pMgr.insertWelfare(wBean); // 수정된 메서드를 호출해야 합니다. 이 메서드는 List를 처리할 수 있어야 합니다.
+	    }
+
 	
 	String msg = "공고 등록이 완료 되었습니다.";
 	String location = "company_home.jsp";
