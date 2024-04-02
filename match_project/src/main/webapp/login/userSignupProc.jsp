@@ -27,9 +27,6 @@
 	String sns = request.getParameter("user_sns");
 	// 다른 사용자 정보도 필요한 경우 이와 같이 추출
 	
-	
-	
-	
 	// UserBean 객체에 사용자 정보 설정
 	uBean.setUser_name(name);
 	uBean.setUser_id(id);
