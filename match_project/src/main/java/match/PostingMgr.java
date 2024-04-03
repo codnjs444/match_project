@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+import java.sql.Types;
 
 import match.posting.*;
 
@@ -176,7 +177,7 @@ public class PostingMgr {
 	public void insertProcedure(List<procedureBean> procedures) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
-	    String sql = "INSERT INTO procedure (posting_idx, procedure_num, procedure_name, procedure_sdatetime, procedure_edatetime) VALUES (?, ?, ?, ?, ?)";
+	    String sql = "INSERT INTO `procedure` (posting_idx, procedure_num, procedure_name, procedure_sdatetime, procedure_edatetime) VALUES (?, ?, ?, ?, ?)";
 
 	    try {
 	        con = pool.getConnection();
@@ -187,8 +188,20 @@ public class PostingMgr {
 	            pstmt.setInt(1, bean.getPosting_idx());
 	            pstmt.setInt(2, bean.getProcedure_num()); // procedure_num은 클라이언트에서 설정한 값입니다.
 	            pstmt.setString(3, bean.getProcedure_name());
-	            pstmt.setString(4, bean.getProcedure_sdatetime());
-	            pstmt.setString(5, bean.getProcedure_edatetime());
+
+	            // procedure_sdatetime이 비어있는 경우 NULL 처리
+	            if (bean.getProcedure_sdatetime() == null || bean.getProcedure_sdatetime().trim().isEmpty()) {
+	                pstmt.setNull(4, Types.TIMESTAMP);
+	            } else {
+	                pstmt.setString(4, bean.getProcedure_sdatetime());
+	            }
+
+	            // procedure_edatetime이 비어있는 경우 NULL 처리
+	            if (bean.getProcedure_edatetime() == null || bean.getProcedure_edatetime().trim().isEmpty()) {
+	                pstmt.setNull(5, Types.TIMESTAMP);
+	            } else {
+	                pstmt.setString(5, bean.getProcedure_edatetime());
+	            }
 
 	            pstmt.executeUpdate();
 	        }
@@ -198,7 +211,59 @@ public class PostingMgr {
 	        pool.freeConnection(con, pstmt);
 	    }
 	}
+	
+	public void insertadddocument(adddocumentBean bean) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = "INSERT INTO adddocument (posting_idx, adddocument_document) VALUES (?, ?)";
 
+	    try {
+	        con = pool.getConnection();
+	        // PreparedStatement를 미리 준비합니다.
+	        pstmt = con.prepareStatement(sql);
+
+	        // WelfareBean에서 welfareContents 리스트를 가져옵니다.
+	        List<String> adddocument_document = bean.getAdddocument_document();
+	        int postingIdx = bean.getPosting_idx(); // 가정: WelfareBean에 posting_idx 필드가 존재한다고 가정
+
+	        // welfareContents 리스트의 각 항목에 대해 INSERT 작업을 수행합니다.
+	        for (String content : adddocument_document) {
+	            pstmt.setInt(1, postingIdx);
+	            pstmt.setString(2, content);
+	            pstmt.executeUpdate(); // 각 welfareContent 항목에 대해 실행
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+	public void insertaddquestion(addquestionBean bean) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = "INSERT INTO addquestion (posting_idx, addquestion_question) VALUES (?, ?)";
+
+	    try {
+	        con = pool.getConnection();
+	        // PreparedStatement를 미리 준비합니다.
+	        pstmt = con.prepareStatement(sql);
+
+	        // WelfareBean에서 welfareContents 리스트를 가져옵니다.
+	        List<String> addquestion_question = bean.getAddquestion_question();
+	        int postingIdx = bean.getPosting_idx(); // 가정: WelfareBean에 posting_idx 필드가 존재한다고 가정
+
+	        // welfareContents 리스트의 각 항목에 대해 INSERT 작업을 수행합니다.
+	        for (String content : addquestion_question) {
+	            pstmt.setInt(1, postingIdx);
+	            pstmt.setString(2, content);
+	            pstmt.executeUpdate(); // 각 welfareContent 항목에 대해 실행
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
 
 
 	

@@ -314,7 +314,6 @@ body {
     overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤바 표시 */
     z-index: 1050; /* .Postsidebar보다 높은 값을 설정 */
 }
-}
 .procedure-container .row .col {
     padding-left: 46px; /* 오른쪽 패딩을 추가하여 요소들을 우측으로 조금 이동시킵니다. */
 }
@@ -367,7 +366,7 @@ body {
 <body>
 <div class="container mt-10">
     <!-- 좌측 레이아웃 -->
-    <form name="companyForm" action="post_proc.jsp" method="GET">
+    <form name="companyForm" action="own_post_proc.jsp" method="GET">
     <div class="row">
         <div class="col-md-8 offset-md-2"> <!-- 왼쪽으로 옮길 컨테이너 -->
             <div class="title" id="MycompanyInfo">기업 정보</div>
@@ -553,7 +552,55 @@ body {
             
             <div class="title" id="Myqualification">지원 자격 요건</div>
             <div class="stitle">지원자 자격 요건은 어떻게 되나요?</div>
-            <div class="box">            
+            <div class="box">
+                <!-- 지원자격 학력 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">지원자 학력</label>
+                        </div>
+                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
+                        <div class="col">
+                          <div class="dropdown">
+						        <button class="toggle_btn" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            요구하는 지원자의 학력을 선택해주세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+									<a class="dropdown-item" href="#" onclick="selectEdutype('학력 무관', event)">학력 무관</a>
+									<a class="dropdown-item" href="#" onclick="selectEdutype('검정고시', event)">검정고시</a>
+									<a class="dropdown-item" href="#" onclick="selectEdutype('고등학교 졸업', event)">고등학교 졸업</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(2,3년)', event)">대학 졸업(2,3년)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(4년)', event)">대학 졸업(4년)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(4년 예정자)', event)">대학 졸업(4년 예정자)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('석사 졸업', event)">석사 졸업</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('박사 졸업', event)">박사 졸업</a>
+						            <!-- 추가적으로 필요한 직급/직책 항목을 여기에 추가 -->        
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="qualification_edutype" name="qualification_edutype" value="">
+						        </div>
+						    </div>
+                        </div>  
+                    </div>
+                <!-- 지원자격 성별 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">지원자 성별</label>
+                        </div>
+                        <div class="col">
+                          <div class="dropdown">
+						        <button class="toggle_btn" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            성별을 선택하세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+									<a class="dropdown-item" href="#" onclick="selectGender('성별무관', event)">성별무관</a>
+									<a class="dropdown-item" href="#" onclick="selectGender('남성', event)">남성</a>
+									<a class="dropdown-item" href="#" onclick="selectGender('여성', event)">여성</a>
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="qualification_gender" name="qualification_gender" value="">
+						        </div>
+						    </div>
+                        </div>  
+                    </div>
+                    
 					<div class="row align-items-center">
 					    <div class="col">
 					        <label for="companyName" class="question">경력 여부</label>
@@ -1022,7 +1069,7 @@ body {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="titleForm" method="get" action="blind_post_proc.jsp">
+      <form id="titleForm" method="get" action="post_proc.jsp">
         <div class="modal-body">
           <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
         </div>
@@ -1193,6 +1240,30 @@ body {
 	    }
 	});
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+    // [지원 자격(학력) 드롭다운 기능]
+	function selectEdutype(edutype, event) {
+	    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+	    var dropdownButton = document.getElementById('dropdownMenuButton3');
+	    dropdownButton.textContent = edutype;
+	    dropdownButton.style.backgroundColor = '#606060';
+	    dropdownButton.style.color = 'white';
+	    // 선택한 학력을 숨겨진 입력 필드에 저장
+	    document.getElementById('qualification_edutype').value = edutype;
+	}
+
+    // [지원 자격(성별) 드롭다운 기능]
+	// 성별 선택 함수 수정
+	function selectGender(gender, event) {
+	    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+	    var dropdownButton = document.getElementById('dropdownMenuButton4');
+	    dropdownButton.textContent = gender;
+	    dropdownButton.style.backgroundColor = '#606060';
+	    dropdownButton.style.color = 'white';
+	    // 선택한 성별을 숨겨진 입력 필드에 저장
+	    document.getElementById('qualification_gender').value = gender;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// [모집 정보_모집분야 명 드롭다운 관련 기능]
 	function changeRightSkill(skill, event) {

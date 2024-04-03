@@ -180,14 +180,15 @@
 <body>
 
 <header class="header">
-  <div class="logo">Match</div>
+  <a href="../user_page/user_home.jsp" class="logo">Match</a>
+
   <div class="search-bar">
     <input type="text" placeholder="인재, 등록하신 공고를 검색해보세요.">
     <img src="${pageContext.request.contextPath}/img/fi_search.png" alt="Search Icon">
   </div>
   <div class="nav-links">
     <a href="#" id="openModal">공고등록</a>
-    <a href="/signup">로그아웃</a>
+    <a href="../login/logout.jsp">로그아웃</a>
     <a href="/corporate-services">마이페이지</a>
   </div>
 </header>
