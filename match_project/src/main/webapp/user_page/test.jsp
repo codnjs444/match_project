@@ -11,20 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
+    	body{
+    		width: 100%;
+    	}
     	.filter{
     		margin-left: 40px;
     	}
-    	.posting-list{
-    		margin-left: 40px;
-    		width: 1400px;
-    	}
-    	.nav-tabs{
-    		margin-left: 52px;
-    	}
 		.fixed-div1 {
 		    position: fixed; /* 고정 위치 */
-		    top: 129px; /* 위에서 20px 거리 */	
-		    right: 100px; /* 오른쪽에서 20px 거리 */
+		    top: 129px;
+		    right: 100px;
 		    width: 300px;
 		    height: 80px;
 		    display: flex;
@@ -33,8 +29,8 @@
 	  	}
 		.fixed-div2 {
 		    position: fixed; /* 고정 위치 */
-		    top: 208px; /* 위에서 20px 거리 */
-		    right: 100px; /* 오른쪽에서 20px 거리 */
+		    top: 208px;
+		    right: 100px;
 		    width: 300px;
 		    height: 160px;
 		    border: 1px solid lightgrey;
@@ -382,40 +378,11 @@
 	    	border: none;
 	    	color: #fff;
 	    }
-	    .posting-header{
-	    	margin-top: 60px;
-	    	margin-left: 40px;
-	    	padding-bottom: 5px;
-	    	border-bottom: 1px solid lightgrey;
-	    	width: 1400px;
-	    	font-size: 20px;
-	    }
-	    .alignment{
-	    	margin-left: 40px;
-	    	padding-left: 0;
-	    	margin-top: 10px;
-	    	margin-bottom: 10px;
-	    }
-	    .align-btn{
-	    	background-color: #fff;
-	    	border: none;
-	    	border-left: 1px solid lightgrey;
-	    }
     </style>
 </head>
 <body>
 	<div class="row">
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
-		  <li class="nav-item" role="presentation">
-		    <button class="nav-link active" id="my-tab" data-bs-toggle="tab" data-bs-target="#my-tab-pane" type="button" role="tab" aria-controls="my-tab-pane" aria-selected="true">나의 공고</button>
-		  </li>
-		  <li class="nav-item" role="presentation">
-		    <button class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-tab-pane" type="button" role="tab" aria-controls="all-tab-pane" aria-selected="false">상세 공고</button>
-		  </li>
-		</ul>
-		<div class="tab-content" id="myTabContent">
-		  <div class="tab-pane fade show active" id="my-tab-pane" role="tabpanel" aria-labelledby="my-tab" tabindex="0">
-		  	<div class="col filter">
+		<div class="col filter">
 			<div class="container">
 			    <div class="row filter-btn-group" style="width: 1400px">
 			        <div class="col-12" style="padding-left:0px; padding-right:0px;">
@@ -618,15 +585,63 @@
 		            		<button class="form-btn">선택된 조건 검색하기</button>
 		            	</div>
 		            </div>
-	            </div>
-		    </div>
+		            <table>
+		            	<tr class="list-head">
+		            		<th class="check-box-head"></th>
+		            		<th class="company-name-head">기업명</th>
+		            		<th class="posting-name-head">공고제목/업무</th>
+		            		<th class="company-address-head">위치</th>
+		            		<th class="environment-type-head">고용형태</th>
+		            		<th class="environment-salary-head">연봉</th>
+		            		<th class="working-hour-head">근무시간</th>
+		            		<th class="application-edate-head">지원 기간</th>
+		            		<th class="application-sdate-head">등록일</th>
+		            	</tr>
+		            	<tr class="list-body">
+		            		<td class="check-box-body">
+		            			<input class="check-box" type="checkbox">
+		            		</td>
+		            		<td class="company-name-body">
+		            			카카오
+		            		</td>
+		            		<td class="posting-name-body">
+		            			<div class="row testrow">
+		            				<div class="col testcol">
+		            					[카카오] 카카오메이커스 콘텐츠 어시스턴트
+		            				</div>
+		            				<div class="col testcol">
+		            					상품분석
+		            				</div>
+		            				<div class="col testcol">
+		            					<button class="scrab">스크랩</button>
+		            					<div style="width: 10px;"></div>
+		            					<button class="apply">즉시지원</button>
+		            				</div>
+		            			</div>
+		            		</td>
+		            		<td class="company-address-body">
+		            			경기도 성남시
+		            		</td>
+		            		<td class="environment-type-body">
+		            			정규직
+		            		</td>
+		            		<td class="environment-salary-body">
+		            			3000만원
+		            		</td>
+		            		<td class="working-hour-body">
+		            			09:00~18:00
+		            		</td>
+		            		<td class="application-edate-body">
+		            			~2024-04-15
+		            		</td>
+		            		<td class="application-sdate-body">
+		            			2024-04-02
+		            		</td>
+		            	</tr>
+		            </table>
+			    </div>
+			</div>
 		</div>
-		  </div>
-		  <div class="tab-pane fade" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab" tabindex="0">
-		  	
-		  </div>
-		</div>
-		
 	    <!-- New button added here -->
 	    <div class="col">
 		    <div class="row">
@@ -684,69 +699,6 @@
 		    </div>
 	    </div>
 	</div>
-	<div class="posting-header">전체 채용 정보</div>
-	<div class="row alignment">
-		<div class="col ps-0">
-			<span>정렬 조건 </span>
-			<button class="align-btn">조회수 순</button>
-			<button class="align-btn">등록일 순</button>
-			<button class="align-btn">연봉 순</button>
-		</div>
-	</div>
-	<table class="posting-list">
-    	<tr class="list-head">
-    		<th class="check-box-head"></th>
-    		<th class="company-name-head">기업명</th>
-    		<th class="posting-name-head">공고제목/업무</th>
-    		<th class="company-address-head">위치</th>
-    		<th class="environment-type-head">고용형태</th>
-    		<th class="environment-salary-head">연봉</th>
-    		<th class="working-hour-head">근무시간</th>
-    		<th class="application-edate-head">지원 기간</th>
-    		<th class="application-sdate-head">등록일</th>
-    	</tr>
-    	<tr class="list-body">
-    		<td class="check-box-body">
-    			<input class="check-box" type="checkbox">
-    		</td>
-    		<td class="company-name-body">
-    			카카오
-    		</td>
-    		<td class="posting-name-body">
-    			<div class="row testrow">
-    				<div class="col testcol">
-    					[카카오] 카카오메이커스 콘텐츠 어시스턴트
-    				</div>
-    				<div class="col testcol">
-    					상품분석
-    				</div>
-    				<div class="col testcol">
-    					<button class="scrab">스크랩</button>
-    					<div style="width: 10px;"></div>
-    					<button class="apply">즉시지원</button>
-    				</div>
-    			</div>
-    		</td>
-    		<td class="company-address-body">
-    			경기도 성남시
-    		</td>
-    		<td class="environment-type-body">
-    			정규직
-    		</td>
-    		<td class="environment-salary-body">
-    			3000만원
-    		</td>
-    		<td class="working-hour-body">
-    			09:00~18:00
-    		</td>
-    		<td class="application-edate-body">
-    			~2024-04-15
-    		</td>
-    		<td class="application-sdate-body">
-    			2024-04-02
-    		</td>
-    	</tr>
-    </table>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>

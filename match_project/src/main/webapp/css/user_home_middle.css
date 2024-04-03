@@ -1,0 +1,435 @@
+.filter{
+    		margin-left: 52px;
+    	}
+    	.posting-list{
+    		margin-left: 40px;
+    		width: 1400px;
+    	}
+    	.nav-tabs{
+    		margin-left: 52px;
+    		width: 1400px;
+    	}
+		.fixed-div1 {
+		    position: fixed; /* 고정 위치 */
+		    top: 129px; /* 위에서 20px 거리 */	
+		    right: 100px; /* 오른쪽에서 20px 거리 */
+		    width: 300px;
+		    height: 80px;
+		    display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+	  	}
+		.fixed-div2 {
+		    position: fixed; /* 고정 위치 */
+		    top: 208px; /* 위에서 20px 거리 */
+		    right: 100px; /* 오른쪽에서 20px 거리 */
+		    width: 300px;
+		    height: 160px;
+		    border: 1px solid lightgrey;
+	  	}
+        .id-picture{
+        	margin-left: 10px;
+        	margin-top: 10px;
+        	width: 60px;
+	        height: 60px;
+	        border-radius: 50%; /* 반지름이 너비와 높이의 절반 */
+	        border: 1px solid
+        }
+        .name{
+        	width: 70px;
+        }
+        .my-btn-div{
+        	width: 100px;
+        	height: 79px;
+        	display: flex;
+    		justify-content: center;
+    		align-items: center;
+    		flex-direction: column;
+        }
+        .info {
+	        border: 1px solid lightgrey;
+	        font-size: 11px;
+	        width: 90px;
+	    }
+	    .my-btn-text{
+	    	font-size: 11px;
+	    }
+	    
+	    .my-btn-icon1 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn1.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon2 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn2.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon3 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn3.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon4 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn4.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon5 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn5.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+	    .my-btn-icon6 {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/user_btn6.png'); /* 첫 번째 이미지 링크 추가 */
+            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
+            background-position: center; /* 이미지를 가운데 정렬 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+	    	border: none;
+	    	background-color: white;
+        }
+		.box {
+	        padding-left: 20px;
+	        padding-right: 20px;
+	        padding-top: 10px;
+	        padding-bottom: 1px;
+	        border: 1px solid #000;
+	        text-align: center;
+	        display: none;
+	    }
+	    .box.active {
+	        display: block;
+	    }
+	    .filter-btn.active {
+		    background-color: #3d3d3d;
+		    color: #fff;
+		    border-color: #000;
+		}
+	    .filter-btn {
+	        padding: 10px 20px;
+	        cursor: pointer;
+	        background-color: #F9FAFC;
+	        color: #000;
+	        border: 1px solid lightgrey;
+	        margin: 0;
+	        border-radius: 0;
+	        width: 300px;
+	        font-size: 14px;
+	        font-weight: bold;
+	        text-align: left;
+	    }
+	    .btn:hover {
+	        background-color: #0056b3;
+	    }
+	    .button-group{
+	    	width: 100%;
+	    }
+	    .filter-search{
+	    	border:1px solid lightgrey;
+	    	width:50%;
+	    	margin-bottom: 10px;
+	    }
+	    .ctgr {
+	    	width: 33%;
+	    	border-right: 1px solid;
+	        max-height: 300px; /* Adjust the maximum width as needed */
+    		overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+		}
+		
+		.sctgr {
+			width:66%;
+	        max-height: 300px; /* Adjust the maximum width as needed */
+    		overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+		}
+		
+		.box-border{
+			border-bottom: 1px solid
+		}
+		.category {
+		    display: inline-block;
+		    width: 99%; /* Adjust the width as needed */
+		    text-align: center; /* Center the text within the span */
+		    margin-top: 20px;
+		    margin-bottom: 20px;
+		    border: none;
+		    background-color: #fff;
+		    font-size: 14px;
+		}
+		.category.active{
+			color: #0000ff;
+		}
+		.scategory {
+		    width: 32%; /* Adjust the width as needed */
+		    margin-top: 20px;
+		    margin-bottom: 20px;
+		    border: none;
+		    background-color: #fff;
+		    font-size: 14px;
+		}
+		.scategory.active{
+			color: #0000ff;
+		}
+		.category2 {
+		    display: inline-block;
+		    width: 99%; /* Adjust the width as needed */
+		    text-align: center; /* Center the text within the span */
+		    margin-top: 20px;
+		    margin-bottom: 20px;
+		    border: none;
+		    background-color: #fff;
+		    font-size: 14px;
+		}
+		.category2.active{
+			color: #0000ff;
+		}
+		.scategory2 {
+		    width: 32%; /* Adjust the width as needed */
+		    margin-top: 20px;
+		    margin-bottom: 20px;
+		    border: none;
+		    background-color: #fff;
+		    font-size: 14px;
+		}
+		.scategory2.active{
+			color: #0000ff;
+		}
+		.search-form{
+			border: 1px solid lightgrey;
+		}
+		.search-form2{
+			border: 1px solid lightgrey;
+		}
+		.form-content{
+			overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+    		height: 80px;
+		}
+		.form-content-btn{
+			min-width: 50px;
+			max-width: 300px;
+			border: none;
+			background-color: #3d3d3d;
+			color: #fff;
+			border-radius: 20%;
+		}
+		.form-content2{
+			padding: 0px;
+		}
+		.form-content3{
+			overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+    		height: 80px;
+		}
+		.form-content3-btn{
+			min-width: 50px;
+			max-width: 300px;
+			border: none;
+			background-color: #3d3d3d;
+			color: #fff;
+			border-radius: 20%;
+		}
+		.form-content4{
+			padding: 0px;
+		}
+		.form-btn{
+			width: 200px;
+			height: 80px;
+			border: none;
+			background-color: #4698EA;
+			color: #fff;
+		}
+		.list-head{
+			background-color: #f2f2f2;
+			border:none;
+			font-size: 12px;
+			text-align: center;
+		}
+		.list-body{
+			border: 1px solid;
+			font-size: 12px;
+			height: 150px;
+			
+		}
+		.check-box-head{
+			width: 5%;
+			
+		}
+		.company-name-head{
+			width: 10%;
+			
+		}
+		.posting-name-head{
+			width: 45%;
+			
+		}
+		.company-address-head{
+			width: 7%;
+			
+			text-align: center;
+		}
+		.environment-type-head{
+			width: 5%;
+			
+			text-align: center;
+		}
+		.environment-salary-head{
+			width: 8%;
+			
+			text-align: center;
+		}
+		.working-hour-head{
+			width: 6%;
+			
+			text-align: center;
+		}
+		.application-edate-head{
+			width: 7%;
+			
+			text-align: center;
+		}
+		.application-sdate-head{
+			width: 7%;
+			
+			text-align: center;
+		}
+		.check-box-body{
+			vertical-align:middle;
+			text-align:center;
+		}
+		.check-box{
+			width: 30px;
+			height: 30px;
+		}
+		.company-name-body{
+			
+			font-size: 16px;
+			text-align: center;
+		}
+		.posting-name-body{
+			
+		}
+		.company-address-body{
+			
+			text-align: center;
+		}
+		.environment-type-body{
+			
+			text-align: center;
+		}
+		.environment-salary-body{
+			
+			text-align: center;
+		}
+		.working-hour-body{
+			
+			text-align: center;
+		}
+		.application-edate-body{
+			
+			text-align: center;
+		}
+		.application-sdate-body{
+			
+			text-align: center;
+		}
+		.testrow {
+	        display: flex;
+	        flex-direction: column;
+	        margin-left: 0px;
+	        margin-right: 0px;
+	        height: 150px;
+	    }
+	    .testcol {
+	    	display: flex; /* Flexbox로 설정합니다. */
+	        align-items: center; /* 수직 가운데 정렬을 적용합니다. */
+	        flex-grow: 1;
+	        flex-grow: 1;
+	        padding: 5px; /* 각 열의 여백을 추가합니다. */
+	    }
+	    .testcol:nth-child(1) {
+	        flex-basis: calc(45% - 10px); /* 첫 번째 열(위)의 너비는 50% */
+	        font-size: 20px;
+			vertical-align:middle;
+	    }
+	    .testcol:nth-child(2) {
+	        flex-basis: calc(30% - 10px); /* 두 번째 열(중간)의 너비는 25% */
+	    }
+	    .testcol:nth-child(3) {
+	        flex-basis: calc(25% - 10px); /* 세 번째 열(아래)의 너비는 25% */
+	    }
+	    .scrab{
+	    	height: 30px;
+	    	width: 90px;
+	    	background-color: #ff537c;
+	    	border: none;
+	    	color: #fff;
+	    }
+	    .apply{
+	    	height: 30px;
+	    	width: 90px;
+	    	background-color: #3399ff;
+	    	border: none;
+	    	color: #fff;
+	    }
+	    .posting-header{
+	    	margin-top: 60px;
+	    	margin-left: 40px;
+	    	padding-bottom: 5px;
+	    	border-bottom: 1px solid lightgrey;
+	    	width: 1400px;
+	    	font-size: 20px;
+	    }
+	    .alignment{
+	    	margin-left: 40px;
+	    	padding-left: 0;
+	    	margin-top: 10px;
+	    	margin-bottom: 10px;
+	    }
+	    .align-btn{
+	    	background-color: #fff;
+	    	border: none;
+	    	border-left: 1px solid lightgrey;
+	    }

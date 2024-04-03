@@ -77,7 +77,8 @@
 												</select>
 											</div>
 											<div class="col">
-												<label for="month">월</label> <select id="month" name="month" class="form-control">
+												<label for="month">월</label> 
+												<select id="month" name="month" class="form-control">
 													<option value="1">1월</option>
 													<option value="2">2월</option>
 													<option value="3">3월</option>
