@@ -151,6 +151,54 @@ public class PostingMgr {
 	        pool.freeConnection(con, pstmt);
 	    }
 	}
+	
+	public void insertApplication_period(application_periodBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+	        sql = "INSERT INTO application_period (posting_idx, application_sdatetime, application_edatetime) " +
+	                "VALUES (?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getPosting_idx());
+			pstmt.setString(2, bean.getApplication_sdatetime());
+			pstmt.setString(3, bean.getApplication_edatetime());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return;
+	}
+	
+	public void insertProcedure(List<procedureBean> procedures) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = "INSERT INTO procedure (posting_idx, procedure_num, procedure_name, procedure_sdatetime, procedure_edatetime) VALUES (?, ?, ?, ?, ?)";
+
+	    try {
+	        con = pool.getConnection();
+
+	        for (procedureBean bean : procedures) {
+	            pstmt = con.prepareStatement(sql);
+
+	            pstmt.setInt(1, bean.getPosting_idx());
+	            pstmt.setInt(2, bean.getProcedure_num()); // procedure_num은 클라이언트에서 설정한 값입니다.
+	            pstmt.setString(3, bean.getProcedure_name());
+	            pstmt.setString(4, bean.getProcedure_sdatetime());
+	            pstmt.setString(5, bean.getProcedure_edatetime());
+
+	            pstmt.executeUpdate();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+
 
 
 	

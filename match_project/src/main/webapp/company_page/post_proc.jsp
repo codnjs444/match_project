@@ -12,12 +12,16 @@
 <jsp:useBean id="qBean" class="match.posting.QualificationBean"></jsp:useBean>
 <jsp:useBean id="eBean" class="match.posting.environmentBean"></jsp:useBean>
 <jsp:useBean id="wBean" class="match.posting.WelfareBean"></jsp:useBean>
+<jsp:useBean id="prBean" class="match.posting.procedureBean"></jsp:useBean>
+<jsp:useBean id="aBean" class="match.posting.application_periodBean"></jsp:useBean>
 
 <jsp:setProperty property="*" name="pBean"/>
 <jsp:setProperty property="*" name="opBean"/>
 <jsp:setProperty property="*" name="qBean"/>
 <jsp:setProperty property="*" name="eBean"/>
 <jsp:setProperty property="*" name="wBean"/>
+<jsp:setProperty property="*" name="prBean"/>
+<jsp:setProperty property="*" name="aBean"/>
 <!DOCTYPE html>
 
 <%
@@ -103,8 +107,17 @@
 	        wBean.setWelfareContents(welfareContents);
 	        pMgr.insertWelfare(wBean); // 수정된 메서드를 호출해야 합니다. 이 메서드는 List를 처리할 수 있어야 합니다.
 	    }
-
-	
+	 /*--------------------------------------------------------------------------------*/
+	 String application_sdatetime = request.getParameter("application_sdatetime");
+	 String application_edatetime = request.getParameter("application_edatetime");
+	 
+	 aBean.setPosting_idx(generatedKey);
+	 aBean.setApplication_sdatetime(application_sdatetime);
+	 aBean.setApplication_edatetime(application_edatetime);
+	 
+	 pMgr.insertApplication_period(aBean);
+	 /*--------------------------------------------------------------------------------*/
+	 
 	String msg = "공고 등록이 완료 되었습니다.";
 	String location = "company_home.jsp";
 	
