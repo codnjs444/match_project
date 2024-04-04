@@ -33,7 +33,7 @@
 <%
 	String manager_id = (String)session.getAttribute("idKey");
 	String company_idx = mMgr.getCompany_idx(manager_id);
-	String posting_type = "일반 양식";
+	String posting_type = "일반채용";
 	String posting_cname = request.getParameter("posting_cname");
 	String posting_name = request.getParameter("posting_name");
 	String posting_pcode = request.getParameter("posting_pcode");

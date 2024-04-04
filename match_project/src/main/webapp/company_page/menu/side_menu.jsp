@@ -87,10 +87,6 @@
   </ul>
 </div>
 
-<div id="content" style="margin-left: 250px; padding: 20px;"> <!-- 내용을 표시할 공간 -->
-  <!-- 페이지 로드를 통해 여기에 동적으로 내용이 채워집니다. -->
-</div>
-
 <script>
   var prevActiveLink = null; // 이전에 활성화된 링크를 저장하기 위한 변수
 
