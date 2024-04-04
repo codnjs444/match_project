@@ -18,6 +18,7 @@
 <jsp:useBean id="aBean" class="match.posting.application_periodBean"></jsp:useBean>
 <jsp:useBean id="adBean" class="match.posting.adddocumentBean"></jsp:useBean>
 <jsp:useBean id="aqBean" class="match.posting.addquestionBean"></jsp:useBean>
+<jsp:useBean id="apBean" class="match.posting.applicationBean"></jsp:useBean>
 
 <jsp:setProperty property="*" name="pBean"/>
 <jsp:setProperty property="*" name="opBean"/>
@@ -28,6 +29,7 @@
 <jsp:setProperty property="*" name="aBean"/>
 <jsp:setProperty property="*" name="adBean"/>
 <jsp:setProperty property="*" name="aqBean"/>
+<jsp:setProperty property="*" name="apBean"/>
 <!DOCTYPE html>
 
 <%
@@ -172,7 +174,8 @@
 		    aqBean.setAddquestion_question(addquestionQuestion);
 		    pMgr.insertaddquestion(aqBean); // 추가 문서 데이터를 데이터베이스에 저장하는 메소드 호출
 		}
-
+	apBean.setPosting_idx(generatedKey);
+	pMgr.insertApplication(apBean);
 	
 	String msg = "공고 등록이 완료 되었습니다.";
 	String location = "company_home.jsp";

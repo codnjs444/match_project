@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.Types;
 
@@ -238,6 +239,7 @@ public class PostingMgr {
 	        pool.freeConnection(con, pstmt);
 	    }
 	}
+	
 	public void insertaddquestion(addquestionBean bean) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
@@ -265,6 +267,159 @@ public class PostingMgr {
 	    }
 	}
 
+	public void insertApplication(applicationBean bean) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = null;
+	    try {
+	        con = pool.getConnection();
+	        sql = "INSERT INTO application (posting_idx, resume_idx, user_id, application_datetime) " +
+	                "VALUES (?, ?, ?, ?)";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, bean.getPosting_idx());
 
+	        // resume_idx가 유효한 값인지 확인
+	        if (bean.getResume_idx() > 0) {
+	            pstmt.setInt(2, bean.getResume_idx());
+	        } else {
+	            pstmt.setNull(2, java.sql.Types.INTEGER); // resume_idx에 NULL 설정
+	        }
+
+	        // user_id가 유효한 값인지 확인
+	        if(bean.getUser_id() != null && !bean.getUser_id().isEmpty()) {
+	            pstmt.setString(3, bean.getUser_id());
+	        } else {
+	            pstmt.setNull(3, java.sql.Types.VARCHAR); // user_id에 NULL 설정
+	        }
+
+	        pstmt.setString(4, bean.getApplication_datetime());
+	        pstmt.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	    return;
+	}
 	
+	// 작성한 공고 총 개수 찾는 Mgr
+	public int searchPost(String manager_id, String posting_status) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int postNum = 0;
+		try {
+			con = pool.getConnection();
+			sql = "SELECT COUNT(posting_idx) AS total FROM posting WHERE manager_id = ? AND posting_status = ?;";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, manager_id);
+			pstmt.setString(2, posting_status);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+			    postNum = rs.getInt("total");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return postNum;
+	}
+
+	// 작성한 공고의 posting_idx들을 저장하는 Mgr
+	public ArrayList<Integer> savePostIdx(String manager_id, String posting_status) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    ArrayList<Integer> postIdxList = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+	        sql = "SELECT posting_idx FROM posting WHERE manager_id = ? AND posting_status = ?;";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, manager_id);
+	        pstmt.setString(2, posting_status);
+	        rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            // ResultSet에서 posting_idx 값을 읽어와 ArrayList에 추가
+	            int postingIdx = rs.getInt("posting_idx");
+	            postIdxList.add(postingIdx);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+	    return postIdxList;
+	}
+	
+	
+	public ArrayList<String> getPostingNames(ArrayList<Integer> postIdxList) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    ArrayList<String> postingNames = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+	        // 각 posting_idx에 대응하는 posting_name을 조회하는 쿼리
+	        sql = "SELECT posting_name FROM posting WHERE posting_idx = ?;";
+	        
+	        for (Integer postingIdx : postIdxList) {
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, postingIdx);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                String postingName = rs.getString("posting_name");
+	                postingNames.add(postingName); // 조회된 posting_name을 리스트에 추가
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        pool.freeConnection(con);
+	    }
+	    return postingNames;
+	}
+	
+	// 작성한 공고의 시작 및 종료 날짜(년월일)를 저장하는 Mgr
+	public ArrayList<String> getApplicationDates(ArrayList<Integer> postIdxList) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    ArrayList<String> dateList = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+	        // MySQL의 DATE_FORMAT 함수를 사용하여 날짜 형식을 'YYYY-MM-DD'로 지정
+	        sql = "SELECT DATE_FORMAT(application_sdatetime, '%Y-%m-%d') AS start_date, "
+	            + "DATE_FORMAT(application_edatetime, '%Y-%m-%d') AS end_date "
+	            + "FROM application_period WHERE posting_idx = ?";
+	        for (Integer postingIdx : postIdxList) {
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, postingIdx);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                // 시작 날짜와 종료 날짜를 하나의 문자열로 결합하여 리스트에 추가
+	                String startDate = rs.getString("start_date");
+	                String endDate = rs.getString("end_date");
+	                String datePair = startDate + "~" + endDate;
+	                dateList.add(datePair);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        if (con != null) try { con.close(); } catch (Exception e) {}
+	    }
+	    return dateList;
+	}
+
+
+
 }
