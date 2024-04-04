@@ -83,6 +83,7 @@
     <a href="../login/login.jsp">로그인</a>
     <a href="../login/logout.jsp">로그아웃</a>
     <a href="../login/signup.jsp">회원가입</a>
+    <a href="resume.jsp">이력서 작성</a>
     <a href="/corporate-services">기업 서비스</a>
   </div>
 </header>

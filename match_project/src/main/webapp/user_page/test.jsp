@@ -1,834 +1,519 @@
-<%@page import="match.category.job_categoryBean"%>
-<%@page import="java.util.Vector"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<jsp:useBean id="jcMgr" class="match.category.job_categoryMgr"/>
-<%
-	String name[] = {"IT개발·데이터","회계·세무·재무","총무·법무·사무","인사·노무·HRD","마케팅·홍보·조사","기획·전략","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류","상품기획·MD","운전·운송·배송","서비스","생산","건설·건축","의료","연구·R&D","교육"};
-%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-    	body{
-    		width: 100%;
-    	}
-    	.filter{
-    		margin-left: 40px;
-    	}
-		.fixed-div1 {
-		    position: fixed; /* 고정 위치 */
-		    top: 129px;
-		    right: 100px;
-		    width: 300px;
-		    height: 80px;
-		    display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-	  	}
-		.fixed-div2 {
-		    position: fixed; /* 고정 위치 */
-		    top: 208px;
-		    right: 100px;
-		    width: 300px;
-		    height: 160px;
-		    border: 1px solid lightgrey;
-	  	}
-        .id-picture{
-        	margin-left: 10px;
-        	margin-top: 10px;
-        	width: 60px;
-	        height: 60px;
-	        border-radius: 50%; /* 반지름이 너비와 높이의 절반 */
-	        border: 1px solid
-        }
-        .name{
-        	width: 70px;
-        }
-        .my-btn-div{
-        	width: 100px;
-        	height: 79px;
-        	display: flex;
-    		justify-content: center;
-    		align-items: center;
-    		flex-direction: column;
-        }
-        .info {
-	        border: 1px solid lightgrey;
-	        font-size: 11px;
-	        width: 90px;
-	    }
-	    .my-btn-text{
-	    	font-size: 11px;
-	    }
-	    
-	    .my-btn-icon1 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn1.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-	    .my-btn-icon2 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn2.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-	    .my-btn-icon3 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn3.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-	    .my-btn-icon4 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn4.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-	    .my-btn-icon5 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn5.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-	    .my-btn-icon6 {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('../img/user_btn6.png'); /* 첫 번째 이미지 링크 추가 */
-            background-size: contain; /* 이미지를 버튼에 맞게 조정 */
-            background-position: center; /* 이미지를 가운데 정렬 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-	    	border: none;
-	    	background-color: white;
-        }
-		.box {
-	        padding-left: 20px;
-	        padding-right: 20px;
-	        padding-top: 10px;
-	        padding-bottom: 1px;
-	        border: 1px solid #000;
-	        text-align: center;
-	        display: none;
-	    }
-	    .box.active {
-	        display: block;
-	    }
-	    .filter-btn.active {
-		    background-color: #3d3d3d;
-		    color: #fff;
-		    border-color: #000;
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>이력서 작성</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<style>
+		.resume{
+			display: flex;
+			justify-content: center;
 		}
-	    .filter-btn {
-	        padding: 10px 20px;
-	        cursor: pointer;
-	        background-color: #F9FAFC;
-	        color: #000;
-	        border: 1px solid lightgrey;
-	        margin: 0;
-	        border-radius: 0;
-	        width: 300px;
-	        font-size: 14px;
-	        font-weight: bold;
-	        text-align: left;
-	    }
-	    .btn:hover {
-	        background-color: #0056b3;
-	    }
-	    .button-group{
-	    	width: 100%;
-	    }
-	    .filter-search{
-	    	border:1px solid lightgrey;
-	    	width:50%;
-	    	margin-bottom: 10px;
-	    }
-	    .ctgr {
-	    	width: 33%;
-	    	border-right: 1px solid;
-	        max-height: 300px; /* Adjust the maximum width as needed */
-    		overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+		.resume-center{
+			width: 940px;
+			height: auto;
+		}
+		.resume-side{
+			background-color: #f1f2f4;
+			border: none; 
+		}
+		.fixed-left{
+			top: 155px;
+			left: 140px;
+			width: 300px;
+			height: 500px;
+			position: fixed;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+		}
+		.fixed-right{
+			top: 155px;
+			right: 240px;
+			width: 200px;
+			height: 600px;
+			position: fixed;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.left-img{
+			width: 140px;
+			height: 140px;
+			background-color: #fff;
+			border-radius: 50%;
+		}
+		.left-name{
+			text-align: center;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		.left-info{
+			width: 250px;
+			height: 270px;
+			background-color: #fff;
+			margin-bottom: 20px;
+			border-radius: 5%;
+		}
+		.right-header{
+			margin-top: 12px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		.right-content{
+			width: 90%;
+			height: 80%;
+			background-color: #fff;
+			border-radius: 10px/10px;
+		}
+		.right-btn{
+			background-color: #fff;
+			border: none;
+			width: 60%;
+			height: 35px;
+			border-radius: 5%:
+		}
+		.title {
+		    font-size: 20px;
+		    font-weight: bold;
+		    margin-bottom: 10px; /* 아래 여백 설정 */
+		    margin-top: 20px;
 		}
 		
-		.sctgr {
-			width:66%;
-	        max-height: 300px; /* Adjust the maximum width as needed */
-    		overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+		.stitle {
+		    font-size: 18px;
+		    font-weight: bolder;
+		    margin-bottom: 10px;
+		    margin-top: 15px;
+		    color: #717273;
 		}
-		
-		.box-border{
-			border-bottom: 1px solid
+		.input-box{
+			width: 930px;
+			height: 100px;
+			border: 1px solid lightgrey;
+			border-radius: 10px/10px;
 		}
-		.category {
-		    display: inline-block;
-		    width: 99%; /* Adjust the width as needed */
-		    text-align: center; /* Center the text within the span */
-		    margin-top: 20px;
-		    margin-bottom: 20px;
-		    border: none;
-		    background-color: #fff;
-		    font-size: 14px;
+		.box{
+			width: 930px;
+			min-height: 190px;
+			border: 1px solid lightgrey;
+			border-radius: 10px/10px;
+			padding-bottom: 10px;
 		}
-		.category.active{
-			color: #0000ff;
+		.career-box{
+			height:auto;
 		}
-		.scategory {
-		    width: 32%; /* Adjust the width as needed */
-		    margin-top: 20px;
-		    margin-bottom: 20px;
-		    border: none;
-		    background-color: #fff;
-		    font-size: 14px;
+		.edu-box{
+			height:auto;
+			margin-bottom: 10px;
 		}
-		.scategory.active{
-			color: #0000ff;
-		}
-		.search-form{
+		.box-style{
+			border-radius: 5px/5px;
 			border: 1px solid lightgrey;
 		}
-		.form-content{
-			overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
-    		height: 80px;
-		}
-		.form-save-btn{
-			min-width: 50px;
-			max-width: 300px;
-			border: none;
+		.sbox{
+			margin-left: 20px;
+			margin-top: 10px;
+			height: 55px;
+			width: 165px;
 			background-color: #fff;
 		}
-		.form-content2{
-			padding: 0px;
+		.mbox{
+			margin-left: 20px;
+			margin-top: 10px;
+			width: 330px;
+			height: 55px;
 		}
-		.form-btn{
+		.msbox{
+			margin-left: 20px;
+			margin-top: 10px;
 			width: 200px;
-			height: 80px;
-			border: none;
-			background-color: #4698EA;
+			height: 55px;
+		}
+		.lbox{
+			margin-left: 20px;
+			margin-top: 10px;
+			width: 900px;
+			height: 65px;
+		}
+		.sbox-con{
+			height: 55px;
+			width: 165px;
+			background-color: #fff;
+		}
+		.mbox-con{
+			width: 330px;
+			height: 55px;
+		}
+		.msbox-con{
+			width: 200px;
+			height: 55px;
+		}
+		.lbox-con{
+			width: 900px;
+			height: 63px;
+			resize: none;
+			overflow-y: auto;
+		}
+		.stext{
+			width: 100px;
+			margin-left: 12px;
+			margin-top: 10px;
+			display: flex;
+			text-align: center;
+			align-items: center;
+		}
+		.add-edu{
+			margin-top: 10px;
+			width: 150px;
+			background-color: #606060;
 			color: #fff;
+			border: 1px solid #606060;
+			border-radius: 5px/5px;
 		}
-		.list-head{
-			background-color: #f2f2f2;
-			border:none;
-			font-size: 12px;
-			text-align: center;
+		.add-career{
+			margin-top: 10px;
+			width: 150px;
+			background-color: #606060;
+			color: #fff;
+			border: 1px solid #606060;
+			border-radius: 5px/5px;
 		}
-		.list-body{
-			border: 1px solid;
-			font-size: 12px;
-			height: 150px;
-			
-		}
-		.check-box-head{
-			width: 5%;
-			
-		}
-		.company-name-head{
-			width: 10%;
-			
-		}
-		.posting-name-head{
-			width: 45%;
-			
-		}
-		.company-address-head{
-			width: 7%;
-			
-			text-align: center;
-		}
-		.environment-type-head{
-			width: 5%;
-			
-			text-align: center;
-		}
-		.environment-salary-head{
-			width: 8%;
-			
-			text-align: center;
-		}
-		.working-hour-head{
-			width: 6%;
-			
-			text-align: center;
-		}
-		.application-edate-head{
-			width: 7%;
-			
-			text-align: center;
-		}
-		.application-sdate-head{
-			width: 7%;
-			
-			text-align: center;
-		}
-		.check-box-body{
-			vertical-align:middle;
-			text-align:center;
-		}
-		.check-box{
-			width: 30px;
-			height: 30px;
-		}
-		.company-name-body{
-			
-			font-size: 16px;
-			text-align: center;
-		}
-		.posting-name-body{
-			
-		}
-		.company-address-body{
-			
-			text-align: center;
-		}
-		.environment-type-body{
-			
-			text-align: center;
-		}
-		.environment-salary-body{
-			
-			text-align: center;
-		}
-		.working-hour-body{
-			
-			text-align: center;
-		}
-		.application-edate-body{
-			
-			text-align: center;
-		}
-		.application-sdate-body{
-			
-			text-align: center;
-		}
-		.testrow {
-	        display: flex;
-	        flex-direction: column;
-	        margin-left: 0px;
-	        margin-right: 0px;
-	        height: 150px;
-	    }
-	    .testcol {
-	    	display: flex; /* Flexbox로 설정합니다. */
-	        align-items: center; /* 수직 가운데 정렬을 적용합니다. */
-	        flex-grow: 1;
-	        flex-grow: 1;
-	        padding: 5px; /* 각 열의 여백을 추가합니다. */
-	    }
-	    .testcol:nth-child(1) {
-	        flex-basis: calc(45% - 10px); /* 첫 번째 열(위)의 너비는 50% */
-	        font-size: 20px;
-			vertical-align:middle;
-	    }
-	    .testcol:nth-child(2) {
-	        flex-basis: calc(30% - 10px); /* 두 번째 열(중간)의 너비는 25% */
-	    }
-	    .testcol:nth-child(3) {
-	        flex-basis: calc(25% - 10px); /* 세 번째 열(아래)의 너비는 25% */
-	    }
-	    .scrab{
-	    	height: 30px;
-	    	width: 90px;
-	    	background-color: #ff537c;
-	    	border: none;
-	    	color: #fff;
-	    }
-	    .apply{
-	    	height: 30px;
-	    	width: 90px;
-	    	background-color: #3399ff;
-	    	border: none;
-	    	color: #fff;
-	    }
-    </style>
+	</style>
 </head>
 <body>
-	<div class="row">
-		<div class="col filter">
-			<div class="container">
-			    <div class="row filter-btn-group" style="width: 1400px">
-			        <div class="col-12" style="padding-left:0px; padding-right:0px;">
-				        <div class="button-group d-flex justify-content-center" role="group" aria-label="Button Group">
-			                <button type="button" class="btn filter-btn" id="filter-btn1" onclick="toggleContent('contentBox1')">직무</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn2" onclick="toggleContent('contentBox2')">근무지역</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn3" onclick="toggleContent('contentBox3')">경력</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn4" onclick="toggleContent('contentBox4')">학력</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn5" onclick="toggleContent('contentBox5')">기업형태</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn6" onclick="toggleContent('contentBox6')">고용형태</button>
-			            </div>
-			        	<div class="box openposition" id="contentBox1">
-			        		<div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="직무 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        			<%
-			        				for(int i = 0; i < 18; i++){
-			        			%>
-			        					<button class="category" id="job-category<%=i%>"><%=name[i]%></button>
-			        			<%
-			        				}
-			        			%>
-			        			</div>
-			        			<%
-			        				for(int j = 0; j < 18; j++){
-			        			%>
-	        					<div class="col-6 sctgr mx-auto p-2" id="job-scategory<%=j%>">
-        						<%
-		        					Vector<job_categoryBean> vlist0 = jcMgr.jobsnameList(name[j]);
-		        					for(int i = 0; i < vlist0.size(); i++){
-		        						job_categoryBean jcBean = vlist0.get(i);
-		        				%>
-		        						<button class="scategory"><%=jcBean.getJob_sname()%></button>
-		        				<%
-		        					}
-		        				%>
-	        					</div>
-			        			<%
-			        				}
-			        			%>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox2">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="근무지역 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox3">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="경력 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox4">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="학력 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox5">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="기업형태 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox6">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="고용형태 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-				        <div class="button-group d-flex justify-content-center col" role="group" aria-label="Button Group">
-			                <button type="button" class="btn filter-btn" id="filter-btn7" onclick="toggleContent('contentBox7')">산업</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn8" onclick="toggleContent('contentBox8')">직급/급여</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn9" onclick="toggleContent('contentBox9')">우대전공</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn10" onclick="toggleContent('contentBox10')">스킬</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn11" onclick="toggleContent('contentBox11')">자격증</button>
-			                <button type="button" class="btn filter-btn" id="filter-btn12" onclick="toggleContent('contentBox12')" style="border: 1px solid lightgrey; background-color: #F9FAFC;" disabled></button>
-			            </div>
-			        	<div class="box" id="contentBox7">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="산업 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox8">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="직급/급여 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox9">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="우대전공 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox10">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="스킬 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox11">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="자격증 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-						<div class="box" id="contentBox12">
-						    <div class="row box-border">
-			        			<input class="filter-search" type="text" placeholder="직무 검색">
-			        		</div>
-			        		<div class="row">
-			        			<div class="col-4 ctgr">
-			        				<button class="btn">a</button>
-			        			</div>
-			        			<div class="col-6 sctgr">
-			        				<button class="btn">b</button>
-			        			</div>
-			        		</div>
-						</div>
-			        </div>
-		            <div class="row px-0 mx-0 search-form" style="height: 82px;">
-		            	<div class="col form-content"></div>
-		            	<div class="col form-content2" style="flex-grow:0;">
-		            		<button class="form-btn">선택된 조건 검색하기</button>
-		            	</div>
-		            </div>
-		            <table>
-		            	<tr class="list-head">
-		            		<th class="check-box-head"></th>
-		            		<th class="company-name-head">기업명</th>
-		            		<th class="posting-name-head">공고제목/업무</th>
-		            		<th class="company-address-head">위치</th>
-		            		<th class="environment-type-head">고용형태</th>
-		            		<th class="environment-salary-head">연봉</th>
-		            		<th class="working-hour-head">근무시간</th>
-		            		<th class="application-edate-head">지원 기간</th>
-		            		<th class="application-sdate-head">등록일</th>
-		            	</tr>
-		            	<tr class="list-body">
-		            		<td class="check-box-body">
-		            			<input class="check-box" type="checkbox">
-		            		</td>
-		            		<td class="company-name-body">
-		            			카카오
-		            		</td>
-		            		<td class="posting-name-body">
-		            			<div class="row testrow">
-		            				<div class="col testcol">
-		            					[카카오] 카카오메이커스 콘텐츠 어시스턴트
-		            				</div>
-		            				<div class="col testcol">
-		            					상품분석
-		            				</div>
-		            				<div class="col testcol">
-		            					<button class="scrab">스크랩</button>
-		            					<div style="width: 10px;"></div>
-		            					<button class="apply">즉시지원</button>
-		            				</div>
-		            			</div>
-		            		</td>
-		            		<td class="company-address-body">
-		            			경기도 성남시
-		            		</td>
-		            		<td class="environment-type-body">
-		            			정규직
-		            		</td>
-		            		<td class="environment-salary-body">
-		            			3000만원
-		            		</td>
-		            		<td class="working-hour-body">
-		            			09:00~18:00
-		            		</td>
-		            		<td class="application-edate-body">
-		            			~2024-04-15
-		            		</td>
-		            		<td class="application-sdate-body">
-		            			2024-04-02
-		            		</td>
-		            	</tr>
-		            </table>
-			    </div>
+<%@ include file="top.jsp" %>
+	<div class="resume">
+		<form name="resumeFrm" method="post" action="resumeProc.jsp">
+			<div class="fixed-left resume-side row ms-0">
+				<div class="left-img"></div>
+				<div class="left-name">한우진</div>
+				<div class="left-info">
+					
+				</div>
 			</div>
-		</div>
-	    <!-- New button added here -->
-	    <div class="col">
-		    <div class="row">
-		        <div class="col">
-		            <div class="fixed-div1 border border-light-subtitle">
-		            	<div class="row" style="width:300px;">
-		            		<div class="col">
-		            			<div class="id-picture px-0"></div>
-		            		</div>
-		            		<div class="col name border-0 bg-body px-0">
-		            			<input class="name border-0 bg-body" type="text" disabled placeholder="한우진">
-		            		</div>
-		            		<div class="col px-0">
-		            			<button class="info border-light-subtitle bg-body" onclick="location.href='../login/logout.jsp'">
-	            					로그 아웃
-		            			</button>
-		            			<button class="info border-light-subtitle bg-body">
-		            				회원 정보 수정
-		            			</button>
-		            			<button class="info border-light-subtitle bg-body">
-		            				채용 공고 설정
-		            			</button>
-		            		</div>
-		            	</div>
-		            </div>
-		            <div class="fixed-div2">
-		            	<div class="row justify-content-center align-items-center">
-	            			<div class="my-btn-div px-0 border-end border-light-subtitle">
-	           					<button class="my-btn-icon1"></button>
-	           					<p class="my-btn-text">이력서 관리</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-light-subtitle">
-	            				<button class="my-btn-icon2"></button>
-	           					<p class="my-btn-text">이력서 열람</p>
-	            			</div>
-	            			<div class="my-btn-div px-0">
-	            				<button class="my-btn-icon3"></button>
-	           					<p class="my-btn-text">입사지원 현황</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
-	            				<button class="my-btn-icon4"></button>
-	           					<p class="my-btn-text">최근 본 공고</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
-	            				<button class="my-btn-icon5"></button>
-	           					<p class="my-btn-text">스크랩 공고</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-top border-light-subtitle">
-	            				<button class="my-btn-icon6"></button>
-	           					<p class="my-btn-text">문의</p>
-	            			</div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
+			
+			<div class="resume-center">
+				<div class="title">자기소개</div>
+				<div class="stitle">당신은 어떤 사람인가요? (한 줄 소개)</div>
+				<input class="input-box" type="text" name="intro1">
+				<div class="stitle">당신의 꿈, 목표와 비전에 대해 기술해주세요.</div>
+				<input class="input-box" type="text" name="intro2">
+				<div class="stitle">당신의 가치관에 대해 기술해주세요.</div>
+				<input class="input-box" type="text" name="intro3">
+				
+				<div class="title">학력</div>
+				<div class="box">
+					<div class="edu-box">
+						<div class="row">
+							<div class="box-style sbox p-0">
+								<div class="dropdown">
+						            <button class="box-style sbox-con dropdown-toggle" type="button" id="edu-type-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						                학력 유형 선택
+						            </button>
+						            <div class="dropdown-menu">
+						                <a class="dropdown-item" href="#" onclick="selectEdu('학력 무관', event)">학력 무관</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('검정고시', event)">검정고시</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('고등학교 졸업', event)">고등학교 졸업</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('대학교 졸업(2~3년)', event)">대학교 졸업(2~3년)</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('대학교 졸업(4년)', event)">대학교 졸업(4년)</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('대학원 졸업(석사)', event)">대학원 졸업(석사)</a>
+						                <a class="dropdown-item" href="#" onclick="selectEdu('대학원 졸업(박사)', event)">대학원 졸업(박사)</a>
+						                <input type="hidden" id="edu_type[]" name="edu_type[]" value="">
+						            </div>
+						        </div>
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="edu_school[]" name="edu_school[]" placeholder="학교명">
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="edu_major[]" name="edu_major[]" placeholder="전공명">
+							</div>
+						</div>
+						<div class="row">
+							<span class="stext">입학년월</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="edu_syear[]" name="edu_syear[]" class="box-style msbox-con">
+							</div>
+							<span class="stext">졸업년월</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="edu_eyear[]" name="edu_eyear[]" class="box-style msbox-con">
+							</div>
+							<div class="box-style sbox p-0">
+								<div class="dropdown">
+						            <button class="box-style sbox-con dropdown-toggle" type="button" id="status-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						                재학 상태 선택
+						            </button>
+						            <div class="dropdown-menu">
+						                <a class="dropdown-item" href="#" onclick="selectStatus('재학', event)">재학</a>
+						                <a class="dropdown-item" href="#" onclick="selectStatus('졸업 예정', event)">졸업 예정</a>
+						                <a class="dropdown-item" href="#" onclick="selectStatus('졸업', event)">졸업</a>
+						                <input type="hidden" id="status[]" name="status[]" value="">
+						            </div>
+						        </div>
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-edu mx-auto" onclick="addEduBox(this)">추가하기</button>
+					</div>
+				</div>
+				
+				<div class="title">경력</div>
+				<div class="box">
+					<div class="career-box">
+						<div class="row">
+							<div class="box-style sbox p-0">
+								<input class="box-style sbox-con" type="text" placeholder="회사명">
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" placeholder="부서명">
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" placeholder="담당 직무">
+							</div>
+						</div>
+						<div class="row">
+							<span class="stext">입사년월</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="" name="" class="box-style msbox-con">
+							</div>
+							<span class="stext">퇴사년월</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="" name="" class="box-style msbox-con">
+							</div>
+						</div>
+						<div class="row">
+							<div class="box-style lbox p-0">
+								<textarea class="lbox-con box-style" placeholder="담당 업무"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-career mx-auto" onclick="addCareerBox(this)">추가하기</button>
+					</div>
+				</div>
+				<div class="title">인턴, 대외 활동</div>
+				<div class="box">
+					<div class="row">
+						
+					</div>
+				</div>
+				<div class="title">교육 이수</div>
+				<div class="box">
+					<div class="row">
+						
+					</div>
+				</div>
+				<div class="title">스킬</div>
+				<div class="box">
+					<div class="row">
+						
+					</div>
+				</div>
+				<div class="title">자격증</div>
+				<div class="box">
+					<div class="row">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="fixed-right resume-side row me-0">
+				<div class="right-header">이력서 항목</div>
+				<div class="right-content">
+					
+				</div>
+				<button class="right-btn" onclick="submitResume()">저장</button>
+			</div>
+		</form>
 	</div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-	    function toggleContent(contentId) {
-	        var selectedBox = document.getElementById(contentId);
-	        
-	        // 현재 상태 확인하여 반대로 설정
-	        if (selectedBox.classList.contains('active')) {
-	            selectedBox.classList.remove('active'); // 활성화 클래스 제거하여 숨김
-	            // 해당하는 버튼의 active 클래스도 제거
-	            var btnId = 'filter-btn' + (contentId.slice(-2) >= 10 ? contentId.slice(-2) : contentId.slice(-1));
-	            document.getElementById(btnId).classList.remove('active');
-	        } 
-	        else {
-	            // 모든 박스 숨기기
-	            var boxes = document.getElementsByClassName('box');
-	            for (var i = 0; i < boxes.length; i++) {
-	                boxes[i].classList.remove('active');
-	            }
-	            // 모든 버튼의 active 클래스 제거
-	            var buttons = document.getElementsByClassName('filter-btn');
-	            for (var j = 0; j < buttons.length; j++) {
-	                buttons[j].classList.remove('active');
-	            }
-	            // 선택한 박스만 보이게 하기
-	            selectedBox.classList.add('active');
-	            // 해당하는 버튼의 active 클래스도 추가
-	            var btnId = 'filter-btn' + (contentId.slice(-2) >= 10 ? contentId.slice(-2) : contentId.slice(-1));
-	            document.getElementById(btnId).classList.add('active');
-	        }
-	    }
-	 // 새로운 기능 추가
-	    document.addEventListener('DOMContentLoaded', function () {
-		    var categoryButtons = document.querySelectorAll('.category');
-		
-		    categoryButtons.forEach(function (button) {
-		        button.addEventListener('click', function () {
-		            // 현재 클릭한 버튼에 active 클래스 추가
-		            if (!button.classList.contains('active')) {
-		                // 모든 버튼의 active 클래스 제거 및 ">" 특수문자 삭제
-		                categoryButtons.forEach(function (btn) {
-		                    btn.classList.remove('active');
-		                    btn.textContent = btn.textContent.replace(' >', '');
-		                });
-		                // 클릭한 버튼에 active 클래스 추가 및 ">" 특수문자 추가
-		                button.classList.add('active');
-		                button.innerHTML = button.innerHTML + ' >';
-		            }
-		        });
-		    });
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		    // edu-box의 DOM 요소를 가져옴
+		    var Box = document.querySelector('.box');
+	
+		    // edu-box의 내용이 변경될 때마다 높이를 조절하는 함수
+		    function adjustHeight() {
+		        // edu-box 내부의 콘텐츠 높이를 가져옴
+		        var contentHeight = Box.scrollHeight;
+		        // edu-box의 높이를 콘텐츠 높이에 맞게 조절
+		        Box.style.height = contentHeight + 'px';
+		    }
+	
+		    // 페이지 로드 시 초기 높이 조절
+		    adjustHeight();
+	
+		    // edu-box 내부의 콘텐츠가 변경될 때마다 높이 조절
+		    // 이벤트 리스너를 사용하여 콘텐츠 변화 감지
+		    Box.addEventListener('input', adjustHeight);
 		});
-	    document.addEventListener('DOMContentLoaded', function () {
-	    	// 페이지 로드 시 모든 서브 카테고리 div를 숨김
-	        var subCategoryDivs = document.querySelectorAll('[id^="job-scategory"]');
-	        subCategoryDivs.forEach(function (div) {
-	            div.style.display = 'none';
-	        });
-	        var categoryButtons = document.querySelectorAll('.category');
+		function selectEdu(edu, event) {
+		    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+		    var dropdownButton = event.target.closest('.dropdown').querySelector('.dropdown-toggle');
+		    dropdownButton.textContent = edu;
+		    dropdownButton.style.backgroundColor = '#606060';
+		    dropdownButton.style.color = 'white';
+		    // 선택한 교육 유형을 숨겨진 입력 필드에 저장
+		    var hiddenInput = event.target.closest('.dropdown').querySelector('input[type="hidden"]');
+		    hiddenInput.value = edu;
+		}
+		function selectStatus(status, event) {
+		    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+		    var dropdownButton = event.target.closest('.dropdown').querySelector('.dropdown-toggle');
+		    dropdownButton.textContent = status;
+		    dropdownButton.style.backgroundColor = '#606060';
+		    dropdownButton.style.color = 'white';
+		    // 선택한 재학 상태를 숨겨진 입력 필드에 저장
+		    var hiddenInput = event.target.closest('.dropdown').querySelector('input[type="hidden"]');
+		    hiddenInput.value = status;
+		}
+		function addEduBox(button) {
+		    var box = button.closest('.box');
+		    var newEduBox = document.createElement('div');
+		    newEduBox.className = 'edu-box';
 
-	        categoryButtons.forEach(function (button) {
-	            button.addEventListener('click', function () {
-	                // 현재 클릭한 버튼의 id 추출
-	                var categoryId = button.id;
-	                // 해당하는 서브 카테고리 div의 id 설정
-	                var subCategoryId = categoryId.replace('job-category', 'job-scategory');
+			 // 새로운 edu-box 위에 구분선을 추가
+		    var separator = document.createElement('hr');
+		    newEduBox.appendChild(separator);
 
-	                // 모든 서브 카테고리 div를 숨김
-	                var subCategoryDivs = document.querySelectorAll('[id^="job-scategory"]');
-	                subCategoryDivs.forEach(function (div) {
-	                    div.style.display = 'none';
-	                });
 
-	                // 현재 클릭한 버튼에 해당하는 서브 카테고리 div만 보이게 함
-	                var currentSubCategoryDiv = document.getElementById(subCategoryId);
-	                if (currentSubCategoryDiv) {
-	                    currentSubCategoryDiv.style.display = 'block';
-	                }
-	            });
-	        });
-	    });
-	    document.addEventListener('DOMContentLoaded', function () {
-	        var subCategoryButtons = document.querySelectorAll('.scategory');
+		    var existingEduBox = box.querySelector('.edu-box');
+		    var clonedEduContent = existingEduBox.cloneNode(true);
+		    newEduBox.appendChild(clonedEduContent);
 
-	        subCategoryButtons.forEach(function (button) {
-	            button.addEventListener('click', function () {
-	                // 클릭한 버튼에 active 클래스 추가 또는 제거
-	                if (button.classList.contains('active')) {
-	                    button.classList.remove('active');
-	                    // 클릭한 버튼의 텍스트 값
-	                    var buttonText = button.textContent.trim();
-	                    // filter-save 클래스를 가진 div 내의 모든 버튼에 대해 반복
-	                    var filterSaveButtons = document.querySelectorAll('.form-content button');
-	                    filterSaveButtons.forEach(function (filterButton) {
-	                        // 현재 버튼의 텍스트 값이 클릭한 버튼과 같다면 해당 버튼을 삭제
-	                        if (filterButton.textContent.trim() === buttonText) {
-	                            filterButton.remove();
-	                        }
-	                    });
-	                } else {
-	                    button.classList.add('active');
-	                    // 클릭한 버튼의 텍스트 값을 가져와서 새로운 버튼을 생성하여 filter-save 클래스를 가진 div에 삽입
-	                    var buttonText = button.textContent.trim();
-	                    var newButton = document.createElement('button');
-	                    newButton.textContent = buttonText;
-	                    newButton.classList.add('form-content-btn'); // 새로운 클래스 추가
-	                    document.querySelector('.form-content').appendChild(newButton);
-	                }
-	            });
-	        });
-	    });
-	    document.addEventListener('DOMContentLoaded', function () {
-	        // Add event listener to dynamically created filter-save-btn buttons
-	        document.querySelector('.form-content').addEventListener('click', function (event) {
-	            if (event.target && event.target.classList.contains('form-content-btn')) {
-	                // Remove the clicked button from its parent element
-	                event.target.parentNode.removeChild(event.target);
+		    // 새로운 edu-box의 id 값을 유니크하게 설정합니다.
+		    var eduBoxCount = document.querySelectorAll('.edu-box').length;
+		    var newEduBoxId = 'edu-box-' + eduBoxCount;
+		    newEduBox.setAttribute('id', newEduBoxId);
 
-	                // Get the text content of the clicked filter-save-btn button
-	                var buttonText = event.target.textContent.trim();
-	                // Find the corresponding scategory button with the same text content
-	                var scategoryButtons = document.querySelectorAll('.scategory');
-	                scategoryButtons.forEach(function (button) {
-	                    if (button.textContent.trim() === buttonText) {
-	                        // Remove the active class from the corresponding scategory button
-	                        button.classList.remove('active');
-	                    }
-	                });
-	            }
-	        });
-	    });
+		    // edu-box 내부의 개체에 동적으로 고유한 ID를 할당합니다.
+		    var elementsWithId = newEduBox.querySelectorAll('[id]');
+		    elementsWithId.forEach(function(element) {
+		        var oldId = element.id;
+		        element.id = oldId + '-' + eduBoxCount;
+		    });
+		    
+		 // 복제된 노드의 모든 입력과 텍스트 영역 요소의 값을 지웁니다.
+		    var inputs = newEduBox.querySelectorAll('input, textarea');
+		    inputs.forEach(function(input) {
+		        // 텍스트 입력과 텍스트 영역의 값 리셋
+		        if (input.type === 'text' || input.tagName.toLowerCase() === 'textarea') {
+		            input.value = '';
+		        } else if (input.type === 'hidden') {
+		            // 숨겨진 입력을 리셋하려면
+		            input.value = '';
+		        } else if (input.type === 'datetime-local') {
+		            input.value = ''; // 필요하다면 datetime-local 입력을 리셋
+		        }
+		        // 드롭다운을 기본 상태로 리셋
+		        if (input.classList.contains('dropdown-toggle')) {
+		            input.textContent = '선택';
+		            input.style.backgroundColor = '';
+		            input.style.color = '';
+		        }
+		    });
+
+		    // 드롭다운 메뉴 초기화
+		    resetDropdowns(newEduBox);
+
+		    box.insertBefore(newEduBox, button.parentNode);
+
+		    var deleteButtonContainer = document.createElement('div');
+		    deleteButtonContainer.style.textAlign = 'center';
+		    var deleteButton = document.createElement('button');
+		    deleteButton.textContent = '삭제';
+		    deleteButton.onclick = function() {
+		        deleteEduBox(newEduBox);
+		    };
+		    deleteButtonContainer.appendChild(deleteButton);
+		    newEduBox.appendChild(deleteButtonContainer);
+
+		    // 새로운 edu-box가 추가될 때마다 box의 높이를 170px 만큼 증가시킵니다.
+		    adjustHeightForBox();
+		}
+
+		function resetDropdowns(parentElement) {
+		    var dropdowns = parentElement.querySelectorAll('.dropdown-toggle');
+		    dropdowns.forEach(function(dropdown) {
+		        dropdown.textContent = '선택';
+		        dropdown.style.backgroundColor = '';
+		        dropdown.style.color = '';
+		    });
+
+		    var hiddenInputs = parentElement.querySelectorAll('input[type="hidden"]');
+		    hiddenInputs.forEach(function(input) {
+		        input.value = '';
+		    });
+		}
+
+		// 새로운 edu-box가 추가될 때마다 box의 높이를 170px씩 증가하는 함수
+		function adjustHeightForBox() {
+		    // 새로 추가된 edu-box만을 선택합니다.
+		    var newEduBox = document.querySelector('.box').lastElementChild.previousElementSibling;
+		    // 새로운 edu-box의 높이를 가져옵니다.
+		    var newEduBoxHeight = newEduBox.offsetHeight;
+		    // box의 현재 높이를 가져옵니다.
+		    var currentBoxHeight = parseInt(document.querySelector('.box').style.height.replace('px', '')) + 16;
+		    // 새로운 edu-box의 높이를 현재 높이에 더하여 설정합니다.
+		    document.querySelector('.box').style.height = currentBoxHeight + newEduBoxHeight + 'px';
+		}
+    	 // edu-box를 삭제하는 함수
+        function deleteEduBox(eduBox) {
+		    // 삭제할 edu-box의 높이를 가져옵니다.
+		    var deletedHeight = eduBox.offsetHeight;
+		    // 삭제할 edu-box를 삭제합니다.
+		    eduBox.parentNode.removeChild(eduBox);
+		    // box의 현재 높이를 가져옵니다.
+		    var currentBoxHeight = parseInt(document.querySelector('.box').style.height.replace('px', '')) - 15;
+		    // 현재 높이에서 삭제할 edu-box의 높이를 빼고 설정합니다.
+		    document.querySelector('.box').style.height = (currentBoxHeight - deletedHeight) + 'px';
+		}
+        function addCareerBox(button) {
+            var box = button.closest('.box'); // 'box' 클래스를 가진 가장 가까운 부모를 찾습니다.
+            var newCareerBox = document.createElement('div');
+            newCareerBox.className = 'career-box'; // 새로운 div에 'career-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newCareerBox.appendChild(separator);
+
+            var existingCareerBox = box.querySelector('.career-box');
+            var clonedCareerContent = existingCareerBox.cloneNode(true);
+            newCareerBox.appendChild(clonedCareerContent);
+
+            // 복제된 노드의 모든 입력과 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newCareerBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newCareerBox, button.parentNode); // '추가하기' 버튼 전에 새로운 경력 박스를 삽입합니다.
+
+            // 새로운 경력 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = '삭제';
+            deleteButton.onclick = function() {
+                deleteCareerBox(newCareerBox); // 해당 경력 박스를 삭제하는 함수
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newCareerBox.appendChild(deleteButtonContainer);
+        }
+
+        // 경력 박스를 삭제하는 함수
+        function deleteCareerBox(careerBox) {
+            careerBox.parentNode.removeChild(careerBox);
+        }
+        
+        function submitResume(){
+        	document.resumeFrm.submit();
+        }
 	</script>
 </body>
 </html>

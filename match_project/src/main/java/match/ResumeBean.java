@@ -1,4 +1,4 @@
-package match.resume;
+package match;
 
 public class ResumeBean {
 	private int resume_idx;
