@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.sql.Types;
 
@@ -385,6 +386,36 @@ public class PostingMgr {
 	    return postingNames;
 	}
 	
+	public ArrayList<String> getPostingTypes(ArrayList<Integer> postIdxList) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    ArrayList<String> postingTypes = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+	        // 각 posting_idx에 대응하는 posting_name을 조회하는 쿼리
+	        sql = "SELECT posting_type FROM posting WHERE posting_idx = ?;";
+	        
+	        for (Integer postingIdx : postIdxList) {
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, postingIdx);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                String postingType = rs.getString("posting_type");
+	                postingTypes.add(postingType); // 조회된 posting_name을 리스트에 추가
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        pool.freeConnection(con);
+	    }
+	    return postingTypes;
+	}	
+	
 	// 작성한 공고의 시작 및 종료 날짜(년월일)를 저장하는 Mgr
 	public ArrayList<String> getApplicationDates(ArrayList<Integer> postIdxList) {
 	    Connection con = null;
@@ -420,6 +451,120 @@ public class PostingMgr {
 	    return dateList;
 	}
 
+	public HashMap<Integer, ArrayList<String>> getProceduresByPosting(ArrayList<Integer> postIdxList) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    HashMap<Integer, ArrayList<String>> proceduresMap = new HashMap<>();
+
+	    try {
+	        con = pool.getConnection();
+	        // 백틱(`)을 추가하여 `procedure` 테이블을 명시
+	        sql = "SELECT posting_idx, procedure_name FROM `procedure` WHERE posting_idx = ? ORDER BY procedure_num ASC;";
+	        pstmt = con.prepareStatement(sql);
+	        
+	        for (Integer postingIdx : postIdxList) {
+	            pstmt.setInt(1, postingIdx);
+	            rs = pstmt.executeQuery();
+
+	            ArrayList<String> procedureNames = new ArrayList<>();
+	            while (rs.next()) {
+	                String procedureName = rs.getString("procedure_name");
+	                procedureNames.add(procedureName);
+	            }
+	            proceduresMap.put(postingIdx, procedureNames);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        if (con != null) try { con.close(); } catch (Exception e) {}
+	    }
+	    return proceduresMap;
+	}
+
+	// 작성한 공고의 posting_idx별로 최종 합격자 수를 저장하는 Mgr
+	public ArrayList<Integer> countFinalAcceptedByPostIdx(ArrayList<Integer> postIdxList) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    ArrayList<Integer> finalAcceptedCounts = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+	        // 각 posting_idx에 대해 최종 합격자의 수를 조회하는 쿼리
+	        String sql = "SELECT COUNT(*) AS final_accepted_count FROM application_result WHERE posting_idx = ? AND result_status = '최종 합격';";
+	        
+	        for (Integer postingIdx : postIdxList) {
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, postingIdx);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                // 조회된 최종 합격자 수를 ArrayList에 추가
+	                int finalAcceptedCount = rs.getInt("final_accepted_count");
+	                finalAcceptedCounts.add(finalAcceptedCount);
+	            } else {
+	                // 해당 posting_idx에 최종 합격자가 없는 경우 0을 추가
+	                finalAcceptedCounts.add(0);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 리소스 해제
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        if (con != null) try { con.close(); } catch (Exception e) {}
+	    }
+	    return finalAcceptedCounts;
+	}
+	public ArrayList<Integer> getSortedPostIdxList(String manager_id, String posting_status, String sort) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    ArrayList<Integer> sortedPostIdxList = new ArrayList<>();
+	    String sql = "SELECT p.posting_idx FROM posting p ";
+
+	    // 마감일순 정렬을 위한 JOIN
+	    if ("deadline".equals(sort)) {
+	        sql += "LEFT JOIN application_period ap ON p.posting_idx = ap.posting_idx ";
+	    }
+
+	    sql += "WHERE p.manager_id = ? AND p.posting_status = ? ";
+
+	    // 정렬 조건 추가
+	    if ("latest".equals(sort)) {
+	        sql += "ORDER BY p.posting_datetime DESC";
+	    } else if ("deadline".equals(sort)) {
+	        sql += "ORDER BY ap.application_edatetime ASC";
+	    } else {
+	        // 기본 정렬(정렬 조건이 제공되지 않았을 때)
+	        sql += "ORDER BY p.posting_datetime DESC";
+	    }
+
+	    try {
+	        con = pool.getConnection();
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, manager_id);
+	        pstmt.setString(2, posting_status);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            int postingIdx = rs.getInt("posting_idx");
+	            sortedPostIdxList.add(postingIdx);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 리소스 해제
+	        if (rs != null) try { rs.close(); } catch (Exception e) { /* Ignored */ }
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) { /* Ignored */ }
+	        if (con != null) try { con.close(); } catch (Exception e) { /* Ignored */ }
+	    }
+
+	    return sortedPostIdxList;
+	}
 
 
 }

@@ -198,7 +198,7 @@
 </footer>
 
 <!-- Modal -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modal" style="display: none;">
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -253,6 +253,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	  // 페이지 이동을 위한 로직
 	  window.location.href = page;
 	}
+
+	window.onload = function() {
+		  document.getElementById('myModal').style.display = 'none';
+		  // 여기에 나머지 코드 추가
+		};
 
 </script>
 

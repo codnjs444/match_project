@@ -1,7 +1,9 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="match.PostingMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="pMgr" class="match.PostingMgr"/>
+<jsp:useBean id="aMgr" class="match.application.applicationMgr"/>
 
 
 <!DOCTYPE html>
@@ -18,86 +20,91 @@
 	<link href="../css/company_home_middle.css" rel="stylesheet" type="text/css">    
 	
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <%!
-    	int i =0;
-    	String type = "일반 채용";
-    	String name = "온종합병원 전산 직원(개발자) 모집";
-    	String proceduretest = "서류전형->1차 면접->2차 면접->최종발표";
-   
-    %>
-    
 </head>
 <body>
-<%
-    // 페이지 번호 파라미터 확인, 없으면 1로 설정
-    String manager_id = (String)session.getAttribute("idKey");
-    String posting_status = "진행중"; // 예시 포스팅 타입
-    
-    ArrayList<Integer> postIdxList = pMgr.savePostIdx(manager_id, posting_status); // posting_idx 목록을 가져옴
-    ArrayList<String> postingNames = pMgr.getPostingNames(postIdxList); // 공고 이름 목록을 가져옴
-    
- 	// 시작 및 종료 날짜(년월일) 리스트를 가져옴. 각 요소는 "시작날짜~종료날짜" 형태의 문자열입니다.
-    ArrayList<String> dateRanges = pMgr.getApplicationDates(postIdxList);
 
-    
-    final int numperPage = 3; // 한 페이지에 보여줄 아이템 개수
-    
-    int totalPosts = pMgr.searchPost(manager_id, posting_status);
+<%
+    String manager_id = (String)session.getAttribute("idKey");
+    String posting_status = request.getParameter("posting_status");
+    if (posting_status == null) posting_status = "진행중"; // 기본값 설정
+    String sort = request.getParameter("sort"); // URL에서 sort 파라미터 값을 가져옵니다.
+    if (sort == null) {
+        sort = "latest"; // 기본 정렬 방식을 설정
+    }
+    ArrayList<Integer> postIdxList = pMgr.getSortedPostIdxList(manager_id, posting_status, sort);
+
+  /*   ArrayList<Integer> postIdxList = pMgr.savePostIdx(manager_id, posting_status); */
+    ArrayList<Integer> resumeNume = aMgr.ResumeNum(manager_id, posting_status);
+    ArrayList<Integer> finalAcceptedCounts = pMgr.countFinalAcceptedByPostIdx(postIdxList);
+
+    HashMap<Integer, ArrayList<String>> proceduresMap = pMgr.getProceduresByPosting(postIdxList);
+    ArrayList<String> postingNames = pMgr.getPostingNames(postIdxList);
+    ArrayList<String> dateRanges = pMgr.getApplicationDates(postIdxList);
+    ArrayList<String> postTypes = pMgr.getPostingTypes(postIdxList);
+
+
+    int totalPosts = postIdxList.size();
+    final int numperPage = 3;
     int totalPages = (int)Math.ceil((double)totalPosts / numperPage);
 
     String pageParam = request.getParameter("page");
     int currentPage = pageParam == null ? 1 : Integer.parseInt(pageParam);
 
-    // 현재 페이지에 따른 아이템 시작 인덱스 (실제 데이터베이스 쿼리에서 사용)
     int startIndex = (currentPage - 1) * numperPage;
-    int endIndex = Math.min(startIndex + numperPage, totalPosts); // endIndex 계산
-
-
+    int endIndex = Math.min(startIndex + numperPage, totalPosts);
 %>
-		<p>총 공고 수: <%= totalPosts %></p>
-		<p>총 공고 수: <%= manager_id %></p>
-<div class="container custom-container"> <!-- 여기에 custom-container 클래스 추가 -->
-	<div style="padding-left: 20px;"> <!-- 여기에 내부 패딩 추가 -->
+
+<div class="container-fluid custom-container"> <!-- fluid container for full width -->
+	<div style="padding-left: 10px;"> <!-- 여기에 내부 패딩 추가 -->
     <div class="row">
 		<div class="col filter-buttons">
-		    <button class="top_btn">진행중 <span><%= i %></span></button>
-		    <button class="top_btn">임시저장 <span><%= i %></span></button>
-		    <button class="top_btn">마감 <span><%= i %></span></button>
-		    <button class="top_btn">협업 <span><%= i %></span></button>
-		    <button class="top_btn">전체 <span><%= i %></span></button>
+		   	<a href="?posting_status=진행중" class="top_btn">진행중</a>
+            <a href="?posting_status=임시저장" class="top_btn">임시저장</a>
+            <a href="?posting_status=마감" class="top_btn">마감</a>
+            <a href="?posting_status=협업" class="top_btn">협업</a>
+            <a href="?posting_status=전체" class="top_btn">전체</a>
 		</div>
     </div>
     <div class="row mt-1">
         <div class="col d-flex justify-content-between">
             <!-- 추가 필터링 옵션 드롭다운 버튼들 -->
-		<div class="col buttons">
-		    <button class="filt_btn">최신등록일순</button>
-		    <button class="filt_btn">마감일순</button>
-		    <button class="filt_btn2">지원자순</button>
-		</div>
+			<div class="col buttons">
+				<a href="?posting_status=진행중&sort=latest" class="sort-button" style="color: #606060; font-weight: bold; margin-left: 30px; margin-right: 30px;">최신등록일순</a>
+			    <a href="?posting_status=진행중&sort=deadline" class="sort-button" style="color: #606060; font-weight: bold;">마감일순</a>
+			</div>
         </div>
     </div>
         <div class="row mt-1">
             <!-- 공고 리스트 출력 -->
             <div class="col-12">
-			<% for(int i = startIndex; i < endIndex; i++) { %>
+			<% for(int i = startIndex; i < endIndex && i < postingNames.size() && i < dateRanges.size(); i++) { %>
 				<div class="job-post">
 				    <div class="section top">
-				        <div class="procedure-box">서류전형->1차 면접->2차 면접->최종발표</div>
-				        <button class="close-btn" style="position: absolute; top: 10px; right: 10px; border: none; background: none;">
-				            <i class="fas fa-times"></i>
-				        </button>
+				                       <div class="procedure-box">
+                    <% 
+                    Integer postingIdx = postIdxList.get(i);
+                    ArrayList<String> procedures = proceduresMap.get(postingIdx);
+                    if (procedures != null) {
+                        for (int j = 0; j < procedures.size(); j++) {
+                            out.print(procedures.get(j));
+                            if (j < procedures.size() - 1) {
+                                out.print(" -> ");
+                            }
+                        }
+                    }
+                    %>
+                </div>
 				    </div>
 				    <div class="section middle">
 				        <div class="middle-container">
 				            <div class="horizontal-section" style="width: 8%;">
-				                <div class="posting_type">일반 채용</div>
+				                <div class="posting_type"><%= postTypes.get(i) %></div>
 				              
 				            </div>
 				            <div class="horizontal-section" style="width: 62%;">
-        						<div class="posting_name"><%= postingNames.get(i) %></div>
+							<div class="posting_name"><%= postingNames.get(i) %></div>
 				                <!-- 추가된 부분: 공고 이름과 날짜 정보 -->
-            					<div class="posting_date"><%= dateRanges.get(i - startIndex) %></div>
+            					<div class="posting_date"><%= dateRanges.get(i) %></div>
 				                <div class="posting_service">이용중이신 홍보 서비스가 없습니다.</div>
 				                
 				            </div> <!-- GreenYellow, 너비 25% -->  
@@ -110,11 +117,12 @@
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">수정</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">복사</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">마감</button>
+				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">삭제</button>
 				                </div>
 				                <!-- 지원자 및 합격자 수 표시 박스 -->
-				                <div style="border: 1px solid #C4C4C4; color: #606060; font-weight: bold; padding: 10px; width: 240px; border-radius: 8px; text-align: center; margin-left: 100px;">
-				                    <span style="margin-right: 30px;">지원자: <%= i %>명</span>
-				                    <span>합격자: <%= i %>명</span>
+				                <div style="border: 1px solid #C4C4C4; color: #606060; font-weight: bold; padding: 10px; width: 270px; border-radius: 8px; text-align: center; margin-left: 115px;">
+				                    <span style="margin-right: 28px;">지원자 : <%= resumeNume.get(i) %>명</span>
+                        			<span>최종 합격 : <%= finalAcceptedCounts.get(i) %>명</span>
 				                </div>
 				            </div>
 				        </div>
@@ -130,23 +138,22 @@
         <div class="row">
             <div class="col text-center">
                 <!-- 페이지네이션 -->
-        		<ul class="pagination justify-content-center"> <!-- justify-content-center 클래스를 추가하여 요소들을 부모 컨테이너의 중앙에 배치합니다. -->
-                    <% if(currentPage > 1) { %>
-                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage - 1%>">Previous</a></li>
-                    <% } %>
-                    <%
-                        for(int i = 1; i <= totalPages; i++) {
-                    %>
-                    <li class="page-item <%=currentPage == i ? "active" : ""%>"><a class="page-link" href="?page=<%=i%>"><%=i%></a></li>
-                    <%
-                        }
-                    %>
-                    <% if(currentPage < totalPages) { %>
-                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage + 1%>">Next</a></li>
-                    <% } %>
-                </ul>
+	            <nav aria-label="Page navigation">
+	                <ul class="pagination justify-content-center">
+	                    <% if(currentPage > 1) { %>
+	                    <li class="page-item"><a class="page-link" href="?posting_status=<%=posting_status%>&page=<%=currentPage - 1%>">Previous</a></li>
+	                    <% }
+	                       for(int i = 1; i <= totalPages; i++) { %>
+	                    <li class="page-item <%=currentPage == i ? "active" : ""%>"><a class="page-link" href="?posting_status=<%=posting_status%>&page=<%=i%>"><%=i%></a></li>
+	                    <% }
+	                       if(currentPage < totalPages) { %>
+	                    <li class="page-item"><a class="page-link" href="?posting_status=<%=posting_status%>&page=<%=currentPage + 1%>">Next</a></li>
+	                    <% } %>
+	                </ul>
+	            </nav>
             </div>
         </div>
+        
     </div>
 </div>
 
@@ -167,6 +174,52 @@
 	        });
 	    });
 	});
+	
+	document.addEventListener("DOMContentLoaded", function() {
+	    // URL에서 posting_status 값을 추출
+	    const urlParams = new URLSearchParams(window.location.search);
+	    const postingStatus = urlParams.get('posting_status') || '진행중';
+
+	    // 모든 top_btn에 대해 반복
+	    const buttons = document.querySelectorAll(".top_btn");
+	    buttons.forEach(function(button) {
+	        // 버튼의 href 속성에서 posting_status 값을 찾음
+	        const status = new URLSearchParams(button.getAttribute('href').split('?')[1]).get('posting_status');
+	        
+	        // 현재 URL의 posting_status와 버튼의 posting_status가 일치하면 active 클래스 추가
+	        if (status === postingStatus) {
+	            button.classList.add("active");
+	        }
+	        
+	        // 버튼 클릭 이벤트
+	        button.addEventListener("click", function() {
+	            // 클릭 시 모든 버튼의 active 클래스 제거
+	            buttons.forEach(btn => btn.classList.remove("active"));
+	            
+	            // 클릭한 버튼에 active 클래스 추가
+	            this.classList.add("active");
+	        });
+	    });
+	});
+	
+	document.addEventListener("DOMContentLoaded", function() {
+	    // "삭제" 버튼에 대한 이벤트 리스너 추가
+	    document.querySelectorAll('.delete-btn').forEach(function(button) {
+	        button.addEventListener('click', function() {
+	            const jobPost = this.closest('.job-post');
+	            if (jobPost) {
+	                const postId = jobPost.getAttribute('data-id');
+	                
+	                // AJAX를 사용하여 서버에 삭제 요청을 보내는 코드를 여기에 추가할 수 있습니다.
+	                // 예: deletePost(postId);
+
+	                // 클라이언트 측에서 공고 요소 제거
+	                jobPost.remove();
+	            }
+	        });
+	    });
+	});
+
 	
 </script>
 
