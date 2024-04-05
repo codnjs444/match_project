@@ -6,14 +6,21 @@
 <jsp:useBean id="rMgr" class="match.ResumeMgr"/>
 
 <jsp:useBean id="eBean" class="match.resume.EduBean"/>
-<jsp:useBean id="cBean" class="match.resume.CareerBean"/>
+<jsp:useBean id="caBean" class="match.resume.CareerBean"/>
 <jsp:useBean id="iBean" class="match.resume.InternshipBean"/>
+<jsp:useBean id="cuBean" class="match.resume.CurriculumBean"/>
+<jsp:useBean id="sBean" class="match.resume.SkillBean"/>
+<jsp:useBean id="ceBean" class="match.resume.CertificateBean"/>
 
 <jsp:setProperty property="*" name="uBean"/>
 <jsp:setProperty property="*" name="rBean"/>
 <jsp:setProperty property="*" name="eBean"/>
-<jsp:setProperty property="*" name="cBean"/>
+<jsp:setProperty property="*" name="caBean"/>
 <jsp:setProperty property="*" name="iBean"/>
+<jsp:setProperty property="*" name="cuBean"/>
+<jsp:setProperty property="*" name="sBean"/>
+<jsp:setProperty property="*" name="ceBean"/>
+
 <%
 	String msg = "실패";
 	int generatedKey = 0;
@@ -65,17 +72,17 @@
 	
 	if(careerCnames != null && careerDeps != null && careerJobs != null && careerSyears != null && careerEyears != null && careerDutys != null){
 		for(int i = 0; i < careerCnames.length; i++){
-			cBean.setResume_idx(generatedKey);
-			cBean.setCareer_cname(careerCnames[i]);
-			cBean.setCareer_dep(careerDeps[i]);
-			cBean.setCareer_job(careerJobs[i]);
+			caBean.setResume_idx(generatedKey);
+			caBean.setCareer_cname(careerCnames[i]);
+			caBean.setCareer_dep(careerDeps[i]);
+			caBean.setCareer_job(careerJobs[i]);
 			if(careerSyears[i].length() > 7)
-				cBean.setCareer_syear(careerSyears[i]);
+				caBean.setCareer_syear(careerSyears[i].substring(0,7));
 			if(careerEyears[i].length() > 7)	
-				cBean.setCareer_eyear(careerEyears[i]);
-			cBean.setCareer_duty(careerDutys[i]);
+				caBean.setCareer_eyear(careerEyears[i].substring(0,7));
+			caBean.setCareer_duty(careerDutys[i]);
 			
-			boolean career_result = rMgr.insertCareer(cBean);
+			boolean career_result = rMgr.insertCareer(caBean);
 		}
 	}
 	
@@ -95,6 +102,47 @@
 			iBean.setInternship_duty(internDutys[i]);
 			
 			boolean intern_result = rMgr.insertInternship(iBean);
+		}
+	}
+	
+	String[] curriculumNames = request.getParameterValues("curriculum_name[]");
+	String[] curriculumCnames = request.getParameterValues("curriculum_cname[]");
+	String[] curriculumSyears = request.getParameterValues("curriculum_syear[]");
+	String[] curriculumEyears = request.getParameterValues("curriculum_eyear[]");
+	String[] curriculumContents = request.getParameterValues("curriculum_content[]");
+	
+	if(curriculumNames != null && curriculumCnames != null && curriculumSyears != null && curriculumEyears != null && curriculumContents != null){
+		for(int i = 0; i < curriculumNames.length; i++){
+			cuBean.setResume_idx(generatedKey);
+			cuBean.setCurriculum_name(curriculumNames[i]);
+			cuBean.setCurriculum_cname(curriculumCnames[i]);
+			cuBean.setCurriculum_syear(curriculumSyears[i]);
+			cuBean.setCurriculum_eyear(curriculumEyears[i]);
+			cuBean.setCurriculum_content(curriculumContents[i]);
+			
+			boolean curriculum_result = rMgr.insertCurriculum(cuBean);
+		}
+	}
+	
+	String[] skillSnames = request.getParameterValues("skill_sname[]");
+	
+	if(skillSnames != null){
+		for(int i = 0; i < skillSnames.length; i++){
+			sBean.setResume_idx(generatedKey);
+			sBean.setSkill_sname(skillSnames[i]);
+			
+			boolean skill_result = rMgr.insertSkill(sBean);
+		}
+	}
+	
+	String[] certificateSnames = request.getParameterValues("certificate_sname[]");
+	
+	if(certificateSnames != null){
+		for(int i = 0; i < certificateSnames.length; i++){
+			ceBean.setResume_idx(generatedKey);
+			ceBean.setCertificate_sname(certificateSnames[i]);
+			
+			boolean certificate_result = rMgr.insertCertificate(ceBean);
 		}
 	}
 %>
