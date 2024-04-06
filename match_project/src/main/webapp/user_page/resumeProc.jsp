@@ -1,4 +1,5 @@
 <!-- resumeProc.jsp -->
+<%@page import="match.ResumeMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="uBean" class="match.UserBean"/>
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
@@ -11,6 +12,10 @@
 <jsp:useBean id="cuBean" class="match.resume.CurriculumBean"/>
 <jsp:useBean id="sBean" class="match.resume.SkillBean"/>
 <jsp:useBean id="ceBean" class="match.resume.CertificateBean"/>
+<jsp:useBean id="aBean" class="match.resume.AwardBean"/>
+<jsp:useBean id="gBean" class="match.resume.GlobalexBean"/>
+<jsp:useBean id="lBean" class="match.resume.LanguageBean"/>
+<jsp:useBean id="pBean" class="match.resume.PrefferBean"/>
 
 <jsp:setProperty property="*" name="uBean"/>
 <jsp:setProperty property="*" name="rBean"/>
@@ -20,6 +25,9 @@
 <jsp:setProperty property="*" name="cuBean"/>
 <jsp:setProperty property="*" name="sBean"/>
 <jsp:setProperty property="*" name="ceBean"/>
+<jsp:setProperty property="*" name="aBean"/>
+<jsp:setProperty property="*" name="gBean"/>
+<jsp:setProperty property="*" name="lBean"/>
 
 <%
 	String msg = "실패";
@@ -145,6 +153,74 @@
 			boolean certificate_result = rMgr.insertCertificate(ceBean);
 		}
 	}
+	
+	String[] awardNames = request.getParameterValues("award_name[]");
+	String[] awardCnames = request.getParameterValues("award_cname[]");
+	String[] awardSyears = request.getParameterValues("award_syear[]");
+	String[] awardContents = request.getParameterValues("award_content[]");
+	
+	if(awardNames != null && awardCnames != null && awardSyears != null && awardContents != null){
+		for(int i = 0; i < awardNames.length; i++){
+			aBean.setResume_idx(generatedKey);
+			aBean.setAward_name(awardNames[i]);
+			aBean.setAward_cname(awardCnames[i]);
+			aBean.setAward_syear(awardSyears[i]);
+			aBean.setAward_content(awardContents[i]);
+			
+			boolean award_result = rMgr.insertAward(aBean);
+		}
+	}
+	
+	String[] globalexNames = request.getParameterValues("globalex_name[]");
+	String[] globalexSyears = request.getParameterValues("globalex_syear[]");
+	String[] globalexEyears = request.getParameterValues("globalex_eyear[]");
+	String[] globalexContents = request.getParameterValues("globalex_content[]");
+	
+	if(globalexNames != null && globalexSyears != null && globalexEyears != null && globalexContents != null){
+		for(int i = 0; i < globalexNames.length; i++){
+			gBean.setResume_idx(generatedKey);
+			gBean.setGlobalex_name(globalexNames[i]);
+			gBean.setGlobalex_syear(globalexSyears[i]);
+			gBean.setGlobalex_eyear(globalexEyears[i]);
+			gBean.setGlobalex_content(globalexContents[i]);
+			
+			boolean globalex_result = rMgr.insertGlobalex(gBean);
+		}
+	}
+	
+	String[] languageNames = request.getParameterValues("language_name[]");
+	String[] languageLevels = request.getParameterValues("language_level[]");
+	
+	if(languageNames != null && languageLevels != null){
+		for(int i = 0; i < languageNames.length; i++){
+			lBean.setResume_idx(generatedKey);
+			lBean.setLanguage_name(languageNames[i]);
+			lBean.setLanguage_level(languageLevels[i]);
+			
+			boolean language_result = rMgr.insertLanguage(lBean);
+		}
+	}
+	
+	String checkbox1 = request.getParameter("checkbox1");
+	String checkbox2 = request.getParameter("checkbox2");
+	String checkbox3 = request.getParameter("checkbox3");
+	String checkbox4 = request.getParameter("checkbox4");
+	String checkbox5 = request.getParameter("checkbox5");
+	String disable = request.getParameter("disabled");
+	String military = request.getParameter("military");
+	
+	pBean.setResume_idx(generatedKey);
+	// 체크박스 값이 "on"이면 "대상자", null이면 "대상자 아님"
+	pBean.setPreffer_miliprotect(checkbox1 != null ? "대상자" : "대상자 아님");
+	pBean.setPreffer_eprotect(checkbox2 != null ? "대상자" : "대상자 아님");
+	pBean.setPreffer_sprotect(checkbox3 != null ? "대상자" : "대상자 아님");
+
+	// 장애와 병역은 선택된 경우 해당 값을, 아니면 "대상자 아님"
+	pBean.setPreffer_disabilitype(checkbox4 != null ? disable : "대상자 아님");
+	pBean.setPreffer_militype(checkbox5 != null ? military : "대상자 아님");
+	
+	
+	boolean preffer_result = rMgr.insertPreffer(pBean);
 %>
 <script>
 	location.href("resume.jsp");

@@ -194,4 +194,103 @@ public class ResumeMgr {
 		}
 		return flag;
 	}
+	
+	public boolean insertAward(AwardBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into award values(?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getAward_name());
+			pstmt.setString(3, bean.getAward_cname());
+			pstmt.setString(4, bean.getAward_syear());
+			pstmt.setString(5, bean.getAward_content());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertGlobalex(GlobalexBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into globalex values(?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getGlobalex_name());
+			pstmt.setString(3, bean.getGlobalex_syear());
+			pstmt.setString(4, bean.getGlobalex_eyear());
+			pstmt.setString(5, bean.getGlobalex_content());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertLanguage(LanguageBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into language values(?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getLanguage_name());
+			pstmt.setString(3, bean.getLanguage_level());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertPreffer(PrefferBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into preffer values(?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getPreffer_miliprotect());
+			pstmt.setString(3, bean.getPreffer_eprotect());
+			pstmt.setString(4, bean.getPreffer_sprotect());
+			pstmt.setString(5, bean.getPreffer_disabilitype());
+			pstmt.setString(6, bean.getPreffer_militype());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
