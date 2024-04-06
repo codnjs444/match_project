@@ -124,7 +124,74 @@ public class ResumeMgr {
 		} finally {
 			pool.freeConnection(con, pstmt);
 		}
-		System.out.println(flag);
+		return flag;
+	}
+	
+	public boolean insertCurriculum(CurriculumBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into curriculum values(?,?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getCurriculum_name());
+			pstmt.setString(3, bean.getCurriculum_cname());
+			pstmt.setString(4, bean.getCurriculum_syear());
+			pstmt.setString(5, bean.getCurriculum_eyear());
+			pstmt.setString(6, bean.getCurriculum_content());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertSkill(SkillBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into skill values(?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getSkill_sname());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertCertificate(CertificateBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into certificate values(?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getCertificate_sname());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
 		return flag;
 	}
 }
