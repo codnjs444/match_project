@@ -18,8 +18,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-
-
 	<filter>
 		<filter-name>Set Character Encoding</filter-name>
 		<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
