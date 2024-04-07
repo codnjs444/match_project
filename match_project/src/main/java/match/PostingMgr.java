@@ -17,6 +17,7 @@ public class PostingMgr {
 		pool = DBConnectionMgr.getInstance();
 	}
 	
+	// 공고 넣는 Mgr
 	public int insertBpost(PostingBean bean) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
@@ -56,6 +57,43 @@ public class PostingMgr {
 	    return generatedKey; // 생성된 posting_idx 값을 반환
 	}
 	
+	public void deletePost(String posting_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    try {
+	        con = pool.getConnection();
+	        
+	        // posting_idx를 외래키로 사용하는 테이블들의 데이터를 삭제
+	        // 예: openposition, qualification, environment, welfare, application_period, procedure, adddocument, addquestion, application
+	        // 이 명령어들은 외래 키의 종속성에 따라 순서가 중요할 수 있음
+	        String[] sqlStatements = {
+	            "DELETE FROM application WHERE posting_idx = ?",
+	            "DELETE FROM addquestion WHERE posting_idx = ?",
+	            "DELETE FROM adddocument WHERE posting_idx = ?",
+	            "DELETE FROM `procedure` WHERE posting_idx = ?",
+	            "DELETE FROM application_period WHERE posting_idx = ?",
+	            "DELETE FROM welfare WHERE posting_idx = ?",
+	            "DELETE FROM environment WHERE posting_idx = ?",
+	            "DELETE FROM qualification WHERE posting_idx = ?",
+	            "DELETE FROM openposition WHERE posting_idx = ?",
+	            // 마지막으로, posting 테이블에서 레코드 삭제
+	            "DELETE FROM posting WHERE posting_idx = ?"
+	        };
+
+	        for (String sql : sqlStatements) {
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setString(1, posting_idx);
+	            pstmt.executeUpdate();
+	            pstmt.close();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+
+
 	public void insertOpenposition(OpenPositionBean bean) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -355,7 +393,6 @@ public class PostingMgr {
 	    return postIdxList;
 	}
 	
-	
 	public ArrayList<String> getPostingNames(ArrayList<Integer> postIdxList) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
@@ -519,52 +556,53 @@ public class PostingMgr {
 	    }
 	    return finalAcceptedCounts;
 	}
+	
 	public ArrayList<Integer> getSortedPostIdxList(String manager_id, String posting_status, String sort) {
-	    Connection con = null;
-	    PreparedStatement pstmt = null;
-	    ResultSet rs = null;
-	    ArrayList<Integer> sortedPostIdxList = new ArrayList<>();
-	    String sql = "SELECT p.posting_idx FROM posting p ";
-
-	    // 마감일순 정렬을 위한 JOIN
-	    if ("deadline".equals(sort)) {
-	        sql += "LEFT JOIN application_period ap ON p.posting_idx = ap.posting_idx ";
-	    }
-
-	    sql += "WHERE p.manager_id = ? AND p.posting_status = ? ";
-
-	    // 정렬 조건 추가
-	    if ("latest".equals(sort)) {
-	        sql += "ORDER BY p.posting_datetime DESC";
-	    } else if ("deadline".equals(sort)) {
-	        sql += "ORDER BY ap.application_edatetime ASC";
-	    } else {
-	        // 기본 정렬(정렬 조건이 제공되지 않았을 때)
-	        sql += "ORDER BY p.posting_datetime DESC";
-	    }
-
-	    try {
-	        con = pool.getConnection();
-	        pstmt = con.prepareStatement(sql);
-	        pstmt.setString(1, manager_id);
-	        pstmt.setString(2, posting_status);
-	        rs = pstmt.executeQuery();
-
-	        while (rs.next()) {
-	            int postingIdx = rs.getInt("posting_idx");
-	            sortedPostIdxList.add(postingIdx);
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        // 리소스 해제
-	        if (rs != null) try { rs.close(); } catch (Exception e) { /* Ignored */ }
-	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) { /* Ignored */ }
-	        if (con != null) try { con.close(); } catch (Exception e) { /* Ignored */ }
-	    }
-
-	    return sortedPostIdxList;
-	}
+		    Connection con = null;
+		    PreparedStatement pstmt = null;
+		    ResultSet rs = null;
+		    ArrayList<Integer> sortedPostIdxList = new ArrayList<>();
+		    String sql = "SELECT p.posting_idx FROM posting p ";
+	
+		    // 마감일순 정렬을 위한 JOIN
+		    if ("deadline".equals(sort)) {
+		        sql += "LEFT JOIN application_period ap ON p.posting_idx = ap.posting_idx ";
+		    }
+	
+		    sql += "WHERE p.manager_id = ? AND p.posting_status = ? ";
+	
+		    // 정렬 조건 추가
+		    if ("latest".equals(sort)) {
+		        sql += "ORDER BY p.posting_datetime DESC";
+		    } else if ("deadline".equals(sort)) {
+		        sql += "ORDER BY ap.application_edatetime ASC";
+		    } else {
+		        // 기본 정렬(정렬 조건이 제공되지 않았을 때)
+		        sql += "ORDER BY p.posting_datetime DESC";
+		    }
+	
+		    try {
+		        con = pool.getConnection();
+		        pstmt = con.prepareStatement(sql);
+		        pstmt.setString(1, manager_id);
+		        pstmt.setString(2, posting_status);
+		        rs = pstmt.executeQuery();
+	
+		        while (rs.next()) {
+		            int postingIdx = rs.getInt("posting_idx");
+		            sortedPostIdxList.add(postingIdx);
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        // 리소스 해제
+		        if (rs != null) try { rs.close(); } catch (Exception e) { /* Ignored */ }
+		        if (pstmt != null) try { pstmt.close(); } catch (Exception e) { /* Ignored */ }
+		        if (con != null) try { con.close(); } catch (Exception e) { /* Ignored */ }
+		    }
+	
+		    return sortedPostIdxList;
+		}
 
 
 }

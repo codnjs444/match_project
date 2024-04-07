@@ -70,7 +70,7 @@
 
 <div class="sidebar">
   <ul>
-	<li><a href="#" onclick="loadPage('../company_home.jsp')"><i class="fas fa-home icon"></i><span>홈</span></a></li>
+	<li><a href="#" onclick="window.location.href='company_home.jsp'"><i class="fas fa-home icon"></i><span>홈</span></a></li>
     <li>
       <a href="#" onclick="toggleSubMenu('jobSubMenu')">
         <i class="fas fa-briefcase icon"></i><span>공고</span>

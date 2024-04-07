@@ -13,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="../css/loginstyle.css" rel="stylesheet" type="text/css">
 </head>
-<body class="main-tab">
+<body class="main-tab"> 
 	<div class="logo">
 		<button type="button" onclick="redirectTo('../user_page/user_home.jsp')">
 			<img src="../img/logo.png" width="210" height="50">

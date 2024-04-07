@@ -117,7 +117,8 @@
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">수정</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">복사</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">마감</button>
-				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">삭제</button>
+									<button type="button" class="btn" style="color: #606060; font-weight: bold;"
+									    onclick="deletePosting('<%= postingIdx %>', '<%= postingNames.get(i).replaceAll("'", "\\\\'") %>')">삭제</button>
 				                </div>
 				                <!-- 지원자 및 합격자 수 표시 박스 -->
 				                <div style="border: 1px solid #C4C4C4; color: #606060; font-weight: bold; padding: 10px; width: 270px; border-radius: 8px; text-align: center; margin-left: 115px;">
@@ -202,23 +203,37 @@
 	    });
 	});
 	
-	document.addEventListener("DOMContentLoaded", function() {
-	    // "삭제" 버튼에 대한 이벤트 리스너 추가
-	    document.querySelectorAll('.delete-btn').forEach(function(button) {
-	        button.addEventListener('click', function() {
-	            const jobPost = this.closest('.job-post');
-	            if (jobPost) {
-	                const postId = jobPost.getAttribute('data-id');
-	                
-	                // AJAX를 사용하여 서버에 삭제 요청을 보내는 코드를 여기에 추가할 수 있습니다.
-	                // 예: deletePost(postId);
-
-	                // 클라이언트 측에서 공고 요소 제거
-	                jobPost.remove();
+	function deletePosting(postingIdx, postingName) {
+	    if (confirm(postingName + " 공고를 정말 삭제하시겠습니까?")) {
+	        // AJAX 요청
+	        var xhr = new XMLHttpRequest();
+	        xhr.open("POST", "/match_project/DeletePostServlet", true); // 컨텍스트 경로를 포함한 전체 경로 사용
+	        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	        xhr.onload = function() {
+	            if (xhr.status == 200) {
+	                alert("공고가 성공적으로 삭제되었습니다.");
+	                window.location.reload(); // 페이지 새로고침
 	            }
-	        });
-	    });
-	});
+	        };
+	        xhr.send("postingIdx=" + postingIdx); // 데이터 전송
+	    }
+	}
+
+
+
+/* 	function deletePosting(postingIdx, postingName) {
+	    var message = `${postingName} 공고를 정말 삭제하시겠습니까?`;
+	    var confirmed = confirm(message);
+
+	    if (confirmed) {
+	        console.log(`삭제 승인. 공고 idx: ${postingIdx}, 이름: ${postingName}`);
+	        // 삭제 로직 수행
+	        // 예: 서버에 삭제 요청을 보내는 AJAX 호출 등
+	    } else {
+	        console.log("삭제 취소");
+	    }
+	} */
+
 
 	
 </script>

@@ -101,16 +101,19 @@
   /* 추가된 스타일 */
   position: absolute; /* 부모 요소를 상대적으로 설정하기 위해 */
   top: 50%; /* 화면 상단에서 50% 위치로 이동 */
-  left: 50%; /* 화면 왼쪽에서 50% 위치로 이동 */
+  left: 18%; /* 화면 왼쪽에서 50% 위치로 이동 */
   transform: translate(-50%, -50%); /* 수직 및 수평으로 이동하여 화면 중앙에 정렬 */
 }
 
 .close {
   color: #aaa;
-  float: right;
   font-size: 28px;
   cursor: pointer;
+  position: absolute; /* 절대 위치 설정 */
+  top: 5px; /* 상단에서 5px 떨어진 곳에 위치 */
+  right: 10px; /* 우측에서 10px 떨어진 곳에 위치 */
 }
+
 
 .close:hover,
 .close:focus {

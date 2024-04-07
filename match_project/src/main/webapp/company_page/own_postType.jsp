@@ -1638,7 +1638,7 @@ document.getElementById('addadddocument_Fields').addEventListener('click', funct
 	//'취소하기' 버튼 클릭 시 확인 후 main.jsp로 이동
 	function cancelForm() {
 	    if (confirm("정말 나가시겠습니까? 아직 공고가 작성중입니다.")) {
-	        window.location.href = "main.jsp";
+	        window.location.href = "company_home.jsp";
 	    }
 	}
 	
