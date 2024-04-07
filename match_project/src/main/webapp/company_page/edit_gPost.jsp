@@ -12,7 +12,7 @@
 <%@ page import="match.category.skill_categoryMgr" %>
 <%@ page import="match.category.certificate_categoryBean" %>
 <%@ page import="match.category.certificate_categoryMgr" %>
-<%@page import="match.posting.procedureBean"%>
+<%@ page import="match.posting.procedureBean"%>
 
 <jsp:useBean id="cMgr" class="match.category.certificate_categoryMgr"/>
 <jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
@@ -30,6 +30,8 @@
 <jsp:useBean id="wBean" class="match.posting.WelfareBean"/>
 <jsp:useBean id="apBean" class="match.posting.application_periodBean"/>
 <jsp:useBean id="prBean" class="match.posting.procedureBean"/>
+<jsp:useBean id="adqBean" class="match.posting.addquestionBean"/>
+<jsp:useBean id="addBean" class="match.posting.adddocumentBean"/>
 
 
 <jsp:setProperty property="*" name="pBean"/>
@@ -39,21 +41,26 @@
 <jsp:setProperty property="*" name="wBean"/>
 <jsp:setProperty property="*" name="apBean"/>
 <jsp:setProperty property="*" name="prBean"/>
+<jsp:setProperty property="*" name="adqBean"/>
+<jsp:setProperty property="*" name="addBean"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%
 	String posting_idx = request.getParameter("posting_idx");
+	String posting_name = pMgr.getPostingName(posting_idx);
 	pBean = pMgr.searchPostingInfo(posting_idx);	
 	opBean = pMgr.searchOpenPositionInfo(posting_idx); // 수정됨
 	quBean = pMgr.searchQualificationInfo(posting_idx);
 	eBean = pMgr.searchEnvironmentInfo(posting_idx);
-	List<procedureBean> prBeanList = pMgr.searchProcedureInfo(posting_idx);
+	int procedureNum = pMgr.countProcedureNum(posting_idx);
+	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
 	List<WelfareBean> wBeanList = pMgr.searchWelfareInfo(posting_idx);
 	apBean = pMgr.searchperiodInfo(posting_idx);
 	String selectedJobCategoryName = opBean.getOpenposition_name();
+	List<String> addQuestionQuestions = pMgr.getAddQuestionQuestions(posting_idx);
+	List<String> addDocumentDocuments = pMgr.getAddDuestionDuestions(posting_idx);
 	
     Gson gson = new Gson();
     String wBeanListJson = gson.toJson(wBeanList);
-    String proceduresJson = gson.toJson(prBeanList);
     
 	String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
 	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
@@ -76,7 +83,7 @@
 <body>
 <div class="container mt-10">
     <!-- 좌측 레이아웃 -->
-    <form name="companyForm" action="own_post_proc.jsp" method="GET">
+    <form name="companyForm" action="edit_gPost_proc.jsp" method="GET">
     <div class="row">
         <div class="col-md-8 offset-md-2"> <!-- 왼쪽으로 옮길 컨테이너 -->
             <div class="title" id="MycompanyInfo">기업 정보</div>
@@ -86,6 +93,8 @@
                     <div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">기업명</label>
+                            <input type="hidden" name="posting_idx" value="<%=posting_idx%>">
+                            
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
@@ -642,13 +651,16 @@
                     </div>
                     <hr/>
                 <!-- 기업명 텍스트와 텍스트 필드 -->
+					                        <%
+					for(procedureBean procedure : procedureList) {
+					%>
                     <div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">전형 절차</label>
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-					      	<input type="text" class="input" id="procedure_name[]" name="procedure_name[]" placeholder="서류 전형">
+					      	<input type="text" class="input" name="procedure_name[]" value="<%= procedure.getProcedure_name() %>" placeholder="전형 절차">
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -657,7 +669,7 @@
                         </div>
                         <span class="essential_money">[시작 기간]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-					      	<input type="datetime-Local" id="procedure_sdatetime[]" name="procedure_sdatetime[]" class="input">
+					      	<input type="datetime-local" name="procedure_sdatetime[]" value="<%= procedure.getProcedure_sdatetime() %>" class="input">
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -666,57 +678,45 @@
                         </div>
                         <span class="essential_money">[종료 기간]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-					      	<input type="datetime-Local" id="procedure_edatetime[]" name="procedure_edatetime[]" class="input">
+					      	 <input type="datetime-local" name="procedure_edatetime[]" value="<%= procedure.getProcedure_edatetime() %>" class="input">
                         </div>
                     </div>
                     <hr/>
-				    <div class="row justify-content-center"> <!-- 여기에 justify-content-center 클래스를 추가 -->
-				        <div class="col-auto"> <!-- col-auto로 변경하여 버튼의 너비에 맞게 컬럼 크기 조정 -->
-				            <button type="button" id="addProcedureBtn" class="addbtn">절차 추가</button>
-				        </div>
-				    </div>
-				    <hr/>    
-				                    <!-- 기업명 텍스트와 텍스트 필드 -->
-					<div class="row align-items-center">
-					    <div class="col">
-					        <label for="procedure_final" class="question">최종 합격</label>
-					    </div>
-					    <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
-					    <div class="col">
-					        <input type="text" class="input" id="procedure_final" name="procedure_name[]" value="최종 합격" readonly>
-					    </div>
-					</div>
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <label for="companyName" class="question">    </label>
-                        </div>
-                        <span class="essential_money">[마감 기간]</span> <!-- 필수 문구 추가 -->
-                        <div class="col">
-					      	<input type="datetime-Local" id="procedure_edatetime[]" name="procedure_edatetime[]" class="input">
-                        </div>
-                    </div>
+<%
+}
+%>
 
             </div> <!-- 채용 절차 박스 -->
 
             <div class="title" id="MyadditionalSubmission">추가 제출사항</div>
             <div class="stitle">자사만의 추가 질문 혹은 추가 제출 자료가 있나요?</div>
 			<div class="box">
+			<%for(String question : addQuestionQuestions) {
+%>
 			    <div class="row align-items-center addquestion" id="addquestion_Fields">
 			        <div class="col">
-			            <input type="text" class="input_all" name="addquestion_question[]" placeholder="추가 질문 사항을 작성해주세요.">
+			            <input type="text" class="input_all" name="addquestion_question[]" placeholder="추가 질문 사항을 작성해주세요." value="<%=question%>">
 			        </div>
 			    </div>
+			    <%
+}
+%>
 			    <div class="row justify-content-center"> <!-- 여기에 justify-content-center 클래스를 추가 -->
 			        <div class="col-auto"> <!-- col-auto로 변경하여 버튼의 너비에 맞게 컬럼 크기 조정 -->
 			            <button type="button" id="addaddquestion_Fields" class="addbtn">질문 추가</button>
 			        </div>
 			    </div>
 			    <hr/>
+			    	<%for(String document : addDocumentDocuments) {
+%>
 			    <div class="row align-items-center adddocument" id="adddocument_Fields">
 			        <div class="col">
-			            <input type="text" class="input_all" name="adddocument_document[]" placeholder="추가 제출 파일을 작성해주세요.">
+			            <input type="text" class="input_all" name="adddocument_document[]" placeholder="추가 제출 파일을 작성해주세요."value="<%=document%>">
 			        </div>
 			    </div>
+			    <%
+}
+%>
 			    <div class="row justify-content-center"> <!-- 여기에 justify-content-center 클래스를 추가 -->
 			        <div class="col-auto"> <!-- col-auto로 변경하여 버튼의 너비에 맞게 컬럼 크기 조정 -->
 			            <button type="button" id="addadddocument_Fields" class="addbtn">파일 추가</button>
@@ -773,9 +773,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="titleForm" method="get" action="own_post_proc.jsp">
+      <form id="titleForm" method="get" action="edit_gPost_proc.jsp">
         <div class="modal-body">
-          <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
+          <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력" value="<%=posting_name%>">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
@@ -1249,49 +1249,6 @@ document.getElementById("registerButton1").addEventListener("click", function() 
 		});
 
 
- 		/////////////////////////////////////////////////////////////////////////////////////////////////
- 	    // [채용 절차(채용 절차 주가)] 	 		
-		document.getElementById('addProcedureBtn').addEventListener('click', function() {
-        var newProcedureContainer = document.createElement('div');
-        newProcedureContainer.classList.add('procedure-container');
-        newProcedureContainer.innerHTML = `
-            <div class="row align-items-center">
-                <div class="col">
-                <label for="companyName" class="question"></label>
-                </div>
-                <div class="col" style="margin-left: 20px;">
-                <input type="text" class="input" name="procedure_name[]" placeholder="추가하실 절차 명을 입력해주세요." /* style="background-color: lightgrey; */">
-                </div>
-            </div>
-            <div class="row align-items-center" style="margin-left: 135px;">
-                <span class="essential_date">[시작 기간을 입력해주세요.]</span>
-                <div class="col">
-                    <input type="datetime-local" class="input" name="procedure_sdatetime[]" placeholder="시작 날짜와 시간">
-                </div>
-            </div>
-            <div class="row align-items-center" style="margin-left: 135px;">
-                <span class="essential_date">[종료 기간을 입력해주세요.]</span>
-                <div class="col">
-                    <input type="datetime-local" class="input" name="procedure_edatetime[]" placeholder="종료 날짜와 시간">
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <button type="button" class="addbtn2 date-remove-btn">절차 제거</button>
-                </div>
-            </div>
-            <hr/>
-        `;
-
-        // '날짜 제거' 버튼 클릭 이벤트 추가
-        newProcedureContainer.querySelector('.date-remove-btn').addEventListener('click', function() {
-            newProcedureContainer.remove(); // 전체 절차 컨테이너 제거
-        });
-
-        // '절차 추가' 버튼의 부모 요소에 새로운 절차 입력 폼 컨테이너 삽입
-        var addProcedureBtnContainer = document.getElementById('addProcedureBtn').parentNode;
-        addProcedureBtnContainer.insertBefore(newProcedureContainer, document.getElementById('addProcedureBtn'));
-    });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// [추가 질문 사항(질문 주가)] 	
 	document.getElementById('addaddquestion_Fields').addEventListener('click', function() {
