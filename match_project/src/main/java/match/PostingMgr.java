@@ -93,7 +93,30 @@ public class PostingMgr {
 	    }
 	}
 
-
+	public String searchPostType(String posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String postingType = null;
+		try {
+			con = pool.getConnection();
+			sql = "SELECT posting_type FROM posting WHERE posting_idx = ?\r\n"
+					+ "";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, posting_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				postingType = rs.getString("posting_type");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return postingType;
+	}
+	
 	public void insertOpenposition(OpenPositionBean bean) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -603,6 +626,224 @@ public class PostingMgr {
 	
 		    return sortedPostIdxList;
 		}
+	
+    // 특정 posting_idx에 해당하는 posting 정보를 조회하는 메서드
+    public PostingBean searchPostingInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        PostingBean posting = null; // 결과를 저장할 PostingBean 객체 초기화
 
+        try {
+            con = pool.getConnection();
+            
+            String sql = "SELECT posting_cname, posting_pcode, posting_address FROM posting WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
 
+            if (rs.next()) {
+                posting = new PostingBean(); // 결과가 있으면 새 PostingBean 객체 생성
+                // ResultSet에서 데이터를 가져와 PostingBean 객체에 설정
+                posting.setPosting_cname(rs.getString("posting_cname"));
+                posting.setPosting_pcode(rs.getString("posting_pcode"));
+                posting.setPosting_address(rs.getString("posting_address"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+
+        return posting; // 조회된 PostingBean 객체 반환
+    }
+    
+    // 특정 posting_idx에 해당하는 openposition 정보를 조회하는 메서드
+    public OpenPositionBean searchOpenPositionInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        OpenPositionBean openPosition = null; // 결과를 저장할 OpenPositionBean 객체 초기화
+
+        try {
+            con = pool.getConnection();
+
+            String sql = "SELECT openposition_name, openposition_duty, openposition_num, openposition_sname, openposition_position FROM openposition WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                openPosition = new OpenPositionBean(); // 결과가 있으면 새 OpenPositionBean 객체 생성
+                // ResultSet에서 데이터를 가져와 OpenPositionBean 객체에 설정
+                openPosition.setOpenposition_name(rs.getString("openposition_name"));
+                openPosition.setOpenposition_duty(rs.getString("openposition_duty"));
+                openPosition.setOpenposition_num(rs.getInt("openposition_num"));
+                openPosition.setOpenposition_sname(rs.getString("openposition_sname"));
+                openPosition.setOpenposition_position(rs.getString("openposition_position"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+
+        return openPosition; // 조회된 OpenPositionBean 객체 반환
+    }
+    
+    public QualificationBean searchQualificationInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        QualificationBean qualification = null; // 결과를 저장할 OpenPositionBean 객체 초기화
+        try {
+            con = pool.getConnection();
+
+            String sql = "SELECT qualification_edutype, qualification_gender, qualification_experience, qualification_skill, qualification_certificate FROM qualification WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+            	qualification = new QualificationBean(); // 결과가 있으면 새 OpenPositionBean 객체 생성
+                // ResultSet에서 데이터를 가져와 OpenPositionBean 객체에 설정
+            	qualification.setQualification_edutype(rs.getString("qualification_edutype"));
+            	qualification.setQualification_gender(rs.getString("qualification_gender"));
+            	qualification.setQualification_experience(rs.getString("qualification_experience"));
+            	qualification.setQualification_skill(rs.getString("qualification_skill"));
+            	qualification.setQualification_certificate(rs.getString("qualification_certificate"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        return qualification; // 조회된 OpenPositionBean 객체 반환
+    }
+    
+    public environmentBean searchEnvironmentInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        environmentBean environment = null; // 결과를 저장할 OpenPositionBean 객체 초기화
+        try {
+            con = pool.getConnection();
+
+            String sql = "SELECT environment_minsalary, environment_maxsalary, environment_type, working_day, working_hour FROM environment WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+            	environment = new environmentBean(); // 결과가 있으면 새 OpenPositionBean 객체 생성
+                // ResultSet에서 데이터를 가져와 OpenPositionBean 객체에 설정
+            	environment.setEnvironment_minsalary(rs.getInt("environment_minsalary"));
+            	environment.setEnvironment_maxsalary(rs.getInt("environment_maxsalary"));
+            	environment.setEnvironment_type(rs.getString("environment_type"));
+            	environment.setWorking_day(rs.getString("working_day"));
+            	environment.setWorking_hour(rs.getString("working_hour"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        return environment; // 조회된 OpenPositionBean 객체 반환
+    }
+    
+    public List<WelfareBean> searchWelfareInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<WelfareBean> welfareList = new ArrayList<>(); // 결과를 저장할 리스트 초기화
+
+        try {
+            con = pool.getConnection();
+            String sql = "SELECT Welfare_content FROM welfare WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            // 단일 WelfareBean 객체 생성
+            WelfareBean welfare = new WelfareBean();
+            welfare.setPosting_idx(Integer.parseInt(posting_idx)); // posting_idx 설정
+            
+            List<String> contents = new ArrayList<>(); // 복리후생 내용을 담을 리스트 생성
+            while (rs.next()) {
+                // 결과 리스트에 각 Welfare_content 값을 추가
+                contents.add(rs.getString("Welfare_content"));
+            }
+            // WelfareBean에 복리후생 내용 리스트 설정
+            welfare.setWelfareContents(contents);
+            
+            // 모든 내용이 추가된 WelfareBean을 리스트에 추가
+            welfareList.add(welfare);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+
+        return welfareList; // 조회된 복리후생 정보 리스트 반환
+    }
+
+    public application_periodBean searchperiodInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        application_periodBean period = null; // 결과를 저장할 OpenPositionBean 객체 초기화
+        try {
+            con = pool.getConnection();
+
+            String sql = "SELECT application_sdatetime, application_edatetime FROM application_period WHERE posting_idx=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+            	period = new application_periodBean();
+            	period.setApplication_sdatetime(rs.getString("application_sdatetime"));
+            	period.setApplication_edatetime(rs.getString("application_edatetime"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        return period; // 조회된 OpenPositionBean 객체 반환
+    }
+    
+    public List<procedureBean> searchProcedureInfo(String posting_idx) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<procedureBean> procedures = new ArrayList<>(); // 결과를 저장할 리스트 초기화
+
+        try {
+            con = pool.getConnection();
+            String sql = "SELECT * FROM procedure WHERE posting_idx=? ORDER BY procedure_num ASC";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, posting_idx);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+            	procedureBean procedure = new procedureBean(); // 결과가 있으면 새 ProcedureBean 객체 생성
+                // ResultSet에서 데이터를 가져와 ProcedureBean 객체에 설정
+                procedure.setPosting_idx(rs.getInt("posting_idx"));
+                procedure.setProcedure_num(rs.getInt("procedure_num"));
+                procedure.setProcedure_name(rs.getString("procedure_name"));
+                procedure.setProcedure_sdatetime(rs.getString("procedure_sdatetime"));
+                procedure.setProcedure_edatetime(rs.getString("procedure_edatetime"));
+
+                procedures.add(procedure); // 리스트에 추가
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        return procedures; // 조회된 ProcedureBean 객체 리스트 반환
+    }
+
+    
 }

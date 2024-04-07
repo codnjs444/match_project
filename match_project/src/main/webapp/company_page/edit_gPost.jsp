@@ -1,3 +1,7 @@
+<%@page import="match.posting.WelfareBean"%>
+<%@page import="java.util.List"%>
+<%@ page import="com.google.gson.Gson" %>
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
@@ -8,36 +12,71 @@
 <%@ page import="match.category.skill_categoryMgr" %>
 <%@ page import="match.category.certificate_categoryBean" %>
 <%@ page import="match.category.certificate_categoryMgr" %>
+<%@page import="match.posting.procedureBean"%>
+
 <jsp:useBean id="cMgr" class="match.category.certificate_categoryMgr"/>
 <jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
 <jsp:useBean id="jMgr" class="match.category.job_categoryMgr"/>
 <jsp:useBean id="jBean" class="match.category.job_categoryBean"/>
 <jsp:useBean id="sMgr" class="match.category.skill_categoryMgr"/>
 <jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
+
+<jsp:useBean id="pMgr" class="match.PostingMgr" scope="request"/>
+
+<jsp:useBean id="pBean" class="match.PostingBean"/>
+<jsp:useBean id="opBean" class="match.posting.OpenPositionBean"/>
+<jsp:useBean id="quBean" class="match.posting.QualificationBean"/>
+<jsp:useBean id="eBean" class="match.posting.environmentBean"/>
+<jsp:useBean id="wBean" class="match.posting.WelfareBean"/>
+<jsp:useBean id="apBean" class="match.posting.application_periodBean"/>
+<jsp:useBean id="prBean" class="match.posting.procedureBean"/>
+
+
+<jsp:setProperty property="*" name="pBean"/>
+<jsp:setProperty property="*" name="opBean"/>
+<jsp:setProperty property="*" name="quBean"/>
+<jsp:setProperty property="*" name="eBean"/>
+<jsp:setProperty property="*" name="wBean"/>
+<jsp:setProperty property="*" name="apBean"/>
+<jsp:setProperty property="*" name="prBean"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%
-		String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
-		String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
-		
-		Vector<certificate_categoryBean> certificateList = cMgr.certificatenameList();
-		
-		//스킬 이름을 저장할 배열 생성
-		String[] data = new String[certificateList.size()];
-		for (int i = 0; i < certificateList.size(); i++) {
-		 data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
-		}
+	String posting_idx = request.getParameter("posting_idx");
+	pBean = pMgr.searchPostingInfo(posting_idx);	
+	opBean = pMgr.searchOpenPositionInfo(posting_idx); // 수정됨
+	quBean = pMgr.searchQualificationInfo(posting_idx);
+	eBean = pMgr.searchEnvironmentInfo(posting_idx);
+	List<procedureBean> prBeanList = pMgr.searchProcedureInfo(posting_idx);
+	List<WelfareBean> wBeanList = pMgr.searchWelfareInfo(posting_idx);
+	apBean = pMgr.searchperiodInfo(posting_idx);
+	String selectedJobCategoryName = opBean.getOpenposition_name();
+	
+    Gson gson = new Gson();
+    String wBeanListJson = gson.toJson(wBeanList);
+    String proceduresJson = gson.toJson(prBeanList);
+    
+	String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
+	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
+	
+	Vector<certificate_categoryBean> certificateList = cMgr.certificatenameList();
+	
+	//스킬 이름을 저장할 배열 생성
+	String[] data = new String[certificateList.size()];
+	for (int i = 0; i < certificateList.size(); i++) {
+	 data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
+	}
+
 %>
 
 <title>Announcement Form with Bootstrap</title>
 <!-- 최신 버전의 부트스트랩 CSS 추가 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="../css/post_type.css" rel="stylesheet" type="text/css"> 
-
 </head>
 <body>
 <div class="container mt-10">
     <!-- 좌측 레이아웃 -->
-    <form name="companyForm" action="blind_post_proc.jsp" method="GET">
+    <form name="companyForm" action="own_post_proc.jsp" method="GET">
     <div class="row">
         <div class="col-md-8 offset-md-2"> <!-- 왼쪽으로 옮길 컨테이너 -->
             <div class="title" id="MycompanyInfo">기업 정보</div>
@@ -50,7 +89,7 @@
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="text" class="input" id="posting_cname" name="posting_cname">
+                            <input type="text" class="input" id="posting_cname" name="posting_cname" value="<%=pBean.getPosting_cname()%>" required>
                         </div>
                     </div>
                     
@@ -61,17 +100,16 @@
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="text" class="input" id="posting_pcode" name="posting_pcode" placeholder="우편번호" >
+                            <input type="text" class="input" id="posting_pcode" name="posting_pcode" placeholder="우편번호" value="<%=pBean.getPosting_pcode()%>" required>
                             <input type="button" class="btn-search" onclick="execDaumPostcode()" value="우편번호 찾기">  
                         </div>
                     </div>       
                     <!-- 회사주소와 상세주소 입력 -->
                     <div class="row">
                         <div class="col">
-                            <input type="text" class="input_noq" id="posting_address" name="posting_address" placeholder="회사주소" readonly >
+                            <input type="text" class="input_noq" id="posting_address" name="posting_address" placeholder="회사주소" readonly value="<%=pBean.getPosting_address()%>" required>
                         </div>
-                        <div class="col">
-                            <input type="text" class="input_noq" id="posting_dcode" name="posting_dcode" placeholder="상세주소" >    
+                        <div class="col">  
                             <input type="hidden" name="posting_name">
                         </div>
                     </div>
@@ -171,7 +209,7 @@
                             <label for="companyName" class="question">담당 업무</label>
                         </div>
                         <div class="col">
-                            <input type="text" class="input" id="openposition_duty" name="openposition_duty">
+                            <input type="text" class="input" id="openposition_duty" name="openposition_duty"value="<%=opBean.getOpenposition_duty()%>" required>
                         </div>
                     </div>
                      <div class="row align-items-center">
@@ -180,7 +218,7 @@
                         </div>
                         <div class="col">
                            <!-- 숫자 입력을 위한 필드 (type을 "text"로 유지) -->
-							<input type="text" class="input_num" id="openposition_num" name="openposition_num" placeholder="모집하는 인원 수를 입력해주세요.">
+							<input type="text" class="input_num" id="openposition_num" name="openposition_num" placeholder="모집하는 인원 수를 입력해주세요."value="<%=opBean.getOpenposition_num()%>" required>
                         </div>
                     </div> 
                     
@@ -192,7 +230,7 @@
 			                <input type="checkbox" id="openposition_snameToggle" onchange="toggleField('openposition_sname')">
 			            </div>
 			            <div class="col">
-			                <input type="text" class="form-control input" id="openposition_sname" name="openposition_sname" placeholder="근무 부서를 입력하세요." readonly>
+			                <input type="text" class="form-control input" id="openposition_sname" name="openposition_sname" placeholder="근무 부서를 입력하세요." readonly value="<%=opBean.getOpenposition_sname()%>" required>
 			            </div>
 		        	</div>
 		        	
@@ -223,7 +261,54 @@
             
             <div class="title" id="Myqualification">지원 자격 요건</div>
             <div class="stitle">지원자 자격 요건은 어떻게 되나요?</div>
-            <div class="box">            
+            <div class="box">
+                <!-- 지원자격 학력 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">지원자 학력</label>
+                        </div>
+                        <div class="col">
+                          <div class="dropdown">
+						        <button class="toggle_btn" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            요구하는 지원자의 학력을 선택해주세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+									<a class="dropdown-item" href="#" onclick="selectEdutype('학력 무관', event)">학력 무관</a>
+									<a class="dropdown-item" href="#" onclick="selectEdutype('검정고시', event)">검정고시</a>
+									<a class="dropdown-item" href="#" onclick="selectEdutype('고등학교 졸업', event)">고등학교 졸업</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(2,3년)', event)">대학 졸업(2,3년)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(4년)', event)">대학 졸업(4년)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('대학 졸업(4년 예정자)', event)">대학 졸업(4년 예정자)</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('석사 졸업', event)">석사 졸업</a>
+						            <a class="dropdown-item" href="#" onclick="selectEdutype('박사 졸업', event)">박사 졸업</a>
+						            <!-- 추가적으로 필요한 직급/직책 항목을 여기에 추가 -->        
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="qualification_edutype" name="qualification_edutype" value="">
+						        </div>
+						    </div>
+                        </div>  
+                    </div>
+                <!-- 지원자격 성별 -->
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="companyName" class="question">지원자 성별</label>
+                        </div>
+                        <div class="col">
+                          <div class="dropdown">
+						        <button class="toggle_btn" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						            성별을 선택하세요.
+						        </button>
+						        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+									<a class="dropdown-item" href="#" onclick="selectGender('성별무관', event)">성별무관</a>
+									<a class="dropdown-item" href="#" onclick="selectGender('남성', event)">남성</a>
+									<a class="dropdown-item" href="#" onclick="selectGender('여성', event)">여성</a>
+						            <!-- 숨겨진 입력 필드를 openpositionForm에 추가 -->
+									<input type="hidden" id="qualification_gender" name="qualification_gender" value="">
+						        </div>
+						    </div>
+                        </div>  
+                    </div>
+                    
 					<div class="row align-items-center">
 					    <div class="col">
 					        <label for="companyName" class="question">경력 여부</label>
@@ -232,7 +317,7 @@
 					        <!-- 버튼 그룹을 좌측으로 정렬하는 부분 -->
 					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
 					            <label class="btn btn-secondary active">
-					                <input type="radio" name="qualification_experience" id="noExperience" value="경력 무관" checked> 경력 무관
+					                <input type="radio" name="qualification_experience" id="noExperience" value="경력 무관"> 경력 무관
 					            </label>
 					            <label class="btn btn-secondary">
 					                <input type="radio" name="qualification_experience" id="newcomer" value="신입"> 신입
@@ -433,7 +518,7 @@
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="number" class="input" id="environment_minsalary" name="environment_minsalary" placeholder="최소 금액 (단위_만)">               
+                            <input type="number" class="input" id="environment_minsalary" name="environment_minsalary" placeholder="최소 금액 (단위_만)" value="<%=eBean.getEnvironment_minsalary()%>" required>             
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -442,18 +527,17 @@
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="number" class="input" id="environment_maxsalary" name="environment_maxsalary" placeholder="최대 금액 (단위_만)">
+                            <input type="number" class="input" id="environment_maxsalary" name="environment_maxsalary" placeholder="최대 금액 (단위_만)" value="<%=eBean.getEnvironment_maxsalary()%>" required>
                         </div>
                     </div>                       
                     <div class="row align-items-center">
 					    <div class="col">
 					        <label for="companyName" class="question">고용 형태</label>
 					    </div>
-					    <span class="essential">필수</span> <!-- 필수 문구 추가 -->
 					    <div class="col">
 					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
 					            <label class="btn btn-secondary active">
-					                <input type="radio" name="environment_type" id="noExperience" value="정규직" checked> 정규직
+					                <input type="radio" name="environment_type" id="noExperience" value="정규직"> 정규직
 					            </label>
 					            <label class="btn btn-secondary">
 					                <input type="radio" name="environment_type" id="newcomer" value="계약직"> 계약직
@@ -643,7 +727,7 @@
 			    <div class="row justify-content-center mt-4">
 			        <div class="col-auto">
 			            <!-- 등록하기 버튼 -->
-			            <button id="registerButton" type="button" class="addbtn_rlast" onclick="submitForm()">등록하기</button>
+			            <button id="registerButton" type="button" class="addbtn_rlast" onclick="submitForm()">수정하기</button>
 			        </div>
 			        <div class="col-auto">
 			            <!-- 취소하기 버튼 -->
@@ -658,9 +742,7 @@
         <!-- 우측 레이아웃 -->
 		<div class="col-md-3 d-flex flex-column align-items-center justify-content-center fixed-bottom-right">
 		    <!-- 등록 완료 버튼에 margin-bottom을 추가하여 다음 버튼과의 간격을 띄웁니다 -->
-		    <button id="registerButton1" type="button" class="addbtn22" style="margin-bottom: 10px;">등록완료</button>
-		    <!-- 임시저장 버튼 -->
-		    <button type="button" class="addbtn22">임시저장</button>
+		    <button id="registerButton1" type="button" class="addbtn22" style="margin-bottom: 10px;">수정완료</button>
 		    
 		    <div class="Postsidebar">
 		    
@@ -691,7 +773,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="titleForm" method="get" action="blind_post_proc.jsp">
+      <form id="titleForm" method="get" action="own_post_proc.jsp">
         <div class="modal-body">
           <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
         </div>
@@ -703,8 +785,6 @@
     </div>
   </div>
 </div>
-
-
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -762,45 +842,6 @@
 	// [등록 완료 버튼 클릭 시 기능] 
 	// 등록 완료 버튼 클릭 시 모달 활성화
 	// 등록 버튼 클릭 시 필수 입력 필드 확인
-document.getElementById("registerButton1").addEventListener("click", function() {
-    var companyName = document.getElementById("posting_cname").value.trim();
-    var postalCode = document.getElementById("posting_pcode").value.trim();
-    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
-    var minsalary = document.getElementById("environment_minsalary").value.trim();
-    var maxsalary = document.getElementById("environment_maxsalary").value.trim();
-    var application_sdate = document.getElementById("application_sdatetime").value.trim();
-    var application_edate = document.getElementById("application_edatetime").value.trim();
-    
-    var missingFields = []; // 비어 있는 필수 항목의 이름을 모을 배열 초기화
-
-    // 각 필수 항목을 검사하고 비어있다면 missingFields 배열에 추가
-    if (companyName === "") missingFields.push("회사명");
-    if (postalCode === "") missingFields.push("우편번호");
-    if (selectedField === "모집 분야를 선택해주세요.") missingFields.push("모집 분야");
-    if (minsalary === "") missingFields.push("최소 급여");
-    if (maxsalary === "") missingFields.push("최대 급여");
-    if (application_sdate === "") missingFields.push("접수 시작 날짜");
-    if (application_edate === "") missingFields.push("접수 종료 날짜");
-
-    // 'procedure_name' 클래스를 가진 모든 입력 필드 검사
-    document.querySelectorAll(".procedure_name").forEach(function(input, index) {
-        if (input.value.trim() === "") missingFields.push(`전형 절차 이름 ${index + 1}`);
-    });
-
-    // 'procedure_edatetime' 클래스를 가진 모든 입력 필드 검사
-    document.querySelectorAll(".procedure_edatetime").forEach(function(input, index) {
-        if (input.value.trim() === "") missingFields.push(`전형 절차 마감 날짜 ${index + 1}`);
-    });
-
-    // missingFields 배열에 항목이 있다면 경고 메시지 생성
-    if (missingFields.length > 0) {
-        var message = "다음 필수 사항을 입력해주세요:\n" + missingFields.join("\n");
-        alert(message);
-    } else {
-        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
-        $('#titleModal').modal('show');
-    }
-});
 document.getElementById("registerButton").addEventListener("click", function() {
     var companyName = document.getElementById("posting_cname").value.trim();
     var postalCode = document.getElementById("posting_pcode").value.trim();
@@ -840,8 +881,45 @@ document.getElementById("registerButton").addEventListener("click", function() {
         $('#titleModal').modal('show');
     }
 });
+document.getElementById("registerButton1").addEventListener("click", function() {
+    var companyName = document.getElementById("posting_cname").value.trim();
+    var postalCode = document.getElementById("posting_pcode").value.trim();
+    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
+    var minsalary = document.getElementById("environment_minsalary").value.trim();
+    var maxsalary = document.getElementById("environment_maxsalary").value.trim();
+    var application_sdate = document.getElementById("application_sdatetime").value.trim();
+    var application_edate = document.getElementById("application_edatetime").value.trim();
+    
+    var missingFields = []; // 비어 있는 필수 항목의 이름을 모을 배열 초기화
 
-	
+    // 각 필수 항목을 검사하고 비어있다면 missingFields 배열에 추가
+    if (companyName === "") missingFields.push("회사명");
+    if (postalCode === "") missingFields.push("우편번호");
+    if (selectedField === "모집 분야를 선택해주세요.") missingFields.push("모집 분야");
+    if (minsalary === "") missingFields.push("최소 급여");
+    if (maxsalary === "") missingFields.push("최대 급여");
+    if (application_sdate === "") missingFields.push("접수 시작 날짜");
+    if (application_edate === "") missingFields.push("접수 종료 날짜");
+
+    // 'procedure_name' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_name").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 이름 ${index + 1}`);
+    });
+
+    // 'procedure_edatetime' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_edatetime").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 마감 날짜 ${index + 1}`);
+    });
+
+    // missingFields 배열에 항목이 있다면 경고 메시지 생성
+    if (missingFields.length > 0) {
+        var message = "다음 필수 사항을 입력해주세요:\n" + missingFields.join("\n");
+        alert(message);
+    } else {
+        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
+        $('#titleModal').modal('show');
+    }
+});
 	function submitAnnouncement() {
 		//var formData = new FormData(document.getElementById("companyForm"));
 		formData = document.companyForm;
@@ -918,6 +996,30 @@ document.getElementById("registerButton").addEventListener("click", function() {
 	    }
 	});
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+    // [지원 자격(학력) 드롭다운 기능]
+	function selectEdutype(edutype, event) {
+	    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+	    var dropdownButton = document.getElementById('dropdownMenuButton3');
+	    dropdownButton.textContent = edutype;
+	    dropdownButton.style.backgroundColor = '#606060';
+	    dropdownButton.style.color = 'white';
+	    // 선택한 학력을 숨겨진 입력 필드에 저장
+	    document.getElementById('qualification_edutype').value = edutype;
+	}
+
+    // [지원 자격(성별) 드롭다운 기능]
+	// 성별 선택 함수 수정
+	function selectGender(gender, event) {
+	    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+	    var dropdownButton = document.getElementById('dropdownMenuButton4');
+	    dropdownButton.textContent = gender;
+	    dropdownButton.style.backgroundColor = '#606060';
+	    dropdownButton.style.color = 'white';
+	    // 선택한 성별을 숨겨진 입력 필드에 저장
+	    document.getElementById('qualification_gender').value = gender;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// [모집 정보_모집분야 명 드롭다운 관련 기능]
 	function changeRightSkill(skill, event) {
@@ -1033,8 +1135,6 @@ document.getElementById("registerButton").addEventListener("click", function() {
 	// 이벤트 리스너 추가
 	document.getElementById('certificateSearch').addEventListener('input', filterList);
 	
-	// 페이지 로드 시 드롭다운 리스트 초기화
-	window.onload = initDropdownList;
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// 선택한 자격증을 관리하기 위한 배열
 	var selectedCertificates = [];
@@ -1311,6 +1411,239 @@ document.getElementById('addadddocument_Fields').addEventListener('click', funct
 	        }
 	    });
 	});
+	
+	window.onload = function() {
+	    // Set selected job category
+	    initDropdownList();
+	    var selectedJobCategoryName = '<%= selectedJobCategoryName %>';
+	    var dropdownButtonJob = document.getElementById('dropdownMenuButton');
+	    dropdownButtonJob.textContent = selectedJobCategoryName;
+
+	    // Set selected job category value to hidden input field
+	    var hiddenInputJob = document.getElementById('openposition_name');
+	    hiddenInputJob.value = selectedJobCategoryName;
+
+	    // Set position information received from opBean
+	    var position = '<%= opBean != null ? opBean.getOpenposition_position() : "" %>';
+	    var dropdownButtonPosition = document.getElementById('dropdownMenuButton2');
+	    if (position) {
+	        dropdownButtonPosition.textContent = position;
+	    } else {
+	        dropdownButtonPosition.textContent = "귀사의 직급/직책을 선택해주세요.";
+	    }
+
+	    // Set education, gender, experience, skills, and certificates information received from quBean
+	    var edutype = '<%= quBean != null ? quBean.getQualification_edutype() : "" %>';
+	    var gender = '<%= quBean != null ? quBean.getQualification_gender() : "" %>';
+	    var skills = '<%= quBean != null ? quBean.getQualification_skill() : "" %>';
+	    var certificates = '<%= quBean != null ? quBean.getQualification_certificate() : "" %>';
+	    var experience = '<%= quBean != null ? quBean.getQualification_experience() : "" %>';
+
+	    // Set experience radio button selection and style
+	    $('input[type="radio"][name="qualification_experience"]').each(function() {
+	        if (this.value === experience) {
+	            this.checked = true;
+	            $(this).parent().addClass('active');
+	        } else {
+	            $(this).parent().removeClass('active');
+	        }
+	    });
+
+	    if (certificates) {
+	        var certificatesArray = certificates.split(',');
+	        certificatesArray.forEach(function(certificate) {
+	            addSelectedCertificate(certificate.trim());
+	        });
+	    }
+
+	    var dropdownButtonEdutype = document.getElementById('dropdownMenuButton3');
+	    if (edutype) {
+	        dropdownButtonEdutype.textContent = edutype;
+	    } else {
+	        dropdownButtonEdutype.textContent = "요구하는 지원자의 학력을 선택해주세요.";
+	    }
+
+	    var dropdownButtonGender = document.getElementById('dropdownMenuButton4');
+	    if (gender) {
+	        dropdownButtonGender.textContent = gender;
+	    } else {
+	        dropdownButtonGender.textContent = "성별을 선택하세요.";
+	    }
+
+	    // Set working day and working hour dropdowns
+	    var workingDay = '<%= eBean.getWorking_day() %>';
+	    if (workingDay) {
+	        document.getElementById('dropworkingdayBtn').textContent = workingDay;
+	        document.getElementById('working_day').value = workingDay;
+	    }
+
+	    var workingHour = '<%= eBean.getWorking_hour() %>';
+	    if (workingHour) {
+	        document.getElementById('dropworkinghourBtn').textContent = workingHour;
+	        document.getElementById('working_hour').value = workingHour;
+	    }
+
+	    if (skills) {
+	        var skillsArray = skills.split(',');
+	        skillsArray.forEach(function(skill) {
+	            addSelectedSkill(skill.trim());
+	        });
+	    }
+
+	    var environmentType = '<%= eBean.getEnvironment_type() %>';
+	    var employmentTypeButtons = document.getElementsByName('environment_type');
+	    for (var i = 0; i < employmentTypeButtons.length; i++) {
+	        if (employmentTypeButtons[i].value === environmentType) {
+	            employmentTypeButtons[i].checked = true;
+	            $(employmentTypeButtons[i]).parent().addClass('active');
+	            break;
+	        }
+	    }
+	    
+	    // DB에서 가져온 시작 날짜 값 설정
+	    var application_sdatetime_value = '<%= apBean.getApplication_sdatetime() %>';
+	    document.getElementById('application_sdatetime').value = application_sdatetime_value;
+
+	    // DB에서 가져온 종료 날짜 값 설정
+	    var application_edatetime_value = '<%= apBean.getApplication_edatetime() %>';
+	    document.getElementById('application_edatetime').value = application_edatetime_value;
+	    
+	    // 복리후생 정보가 담긴 JSON 문자열 예시
+	    // 서버로부터 실제로 받은 데이터로 대체해야 합니다.
+	    var welfareDataJson = '<%= wBeanListJson %>'; // JSP 문법을 사용하여 서버에서 전달한 JSON 문자열을 변수에 할당
+
+	    // JSON 문자열을 JavaScript 객체로 변환
+	    var welfareData = JSON.parse(welfareDataJson);
+
+	    // 복리후생 정보가 담긴 배열을 순회하며 입력 필드를 생성
+	    welfareData.forEach(function(welfareItem, index) {
+	        if (index === 0) {
+	            // 첫 번째 복리후생 정보는 이미 입력 필드가 존재한다고 가정하고 값을 설정
+	            var firstWelfareInput = document.querySelector('#welfareFields .input_all');
+	            if (firstWelfareInput) firstWelfareInput.value = welfareItem.welfareContents;
+	        } else {
+	            // 첫 번째를 제외한 나머지 복리후생 정보에 대해 입력 필드 추가
+	            addWelfareField(welfareItem.welfareContents);
+	        }
+	    });
+	    
+
+	    // Add change event listener for environment type selection
+	    $('input[type="radio"][name="environment_type"]').change(function() {
+	        $('input[type="radio"][name="environment_type"]').each(function() {
+	            if ($(this).is(':checked')) {
+	                $(this).parent().addClass('active');
+	            } else {
+	                $(this).parent().removeClass('active');
+	            }
+	        });
+	    });
+	};
+
+
+	
+	function addSelectedSkill(skillName) {
+	    var displayArea = document.getElementById('selectedSkillsDisplay');
+	    var skillElement = document.createElement('span');
+	    skillElement.textContent = skillName;
+	    skillElement.classList.add('selected-skill');
+	    skillElement.style.marginRight = '10px';
+	    skillElement.style.marginBottom = '10px';
+	    skillElement.style.display = 'inline-block';
+	    skillElement.style.padding = '5px 10px';
+	    skillElement.style.borderRadius = '20px';
+	    skillElement.style.backgroundColor = '#606060';
+	    skillElement.style.color = 'white';
+	    skillElement.style.cursor = 'pointer';
+	    skillElement.style.fontSize = '14px';
+	    skillElement.onclick = function() {
+	        removeSkill(skillName);
+	    };
+	    displayArea.appendChild(skillElement);
+	}
+
+	function removeSkill(skillName) {
+	    var skillsArray = document.getElementById('qualification_skill').value.split(',');
+	    skillsArray = skillsArray.filter(function(skill) {
+	        return skill.trim() !== skillName.trim();
+	    });
+	    document.getElementById('qualification_skill').value = skillsArray.join(',');
+	    var selectedSkillsDisplay = document.getElementById('selectedSkillsDisplay');
+	    selectedSkillsDisplay.innerHTML = ''; // Clear the display area
+	    skillsArray.forEach(function(skill) {
+	        addSelectedSkill(skill.trim());
+	    });
+	}
+	function addSelectedCertificate(certificateName) {
+	    var displayArea = document.getElementById('selectedCertificatesDisplay');
+	    var certificateElement = document.createElement('span');
+	    certificateElement.textContent = certificateName;
+	    certificateElement.classList.add('selected-certificate');
+	    // 스타일 설정
+	    certificateElement.style.marginRight = '10px';
+	    certificateElement.style.marginBottom = '10px';
+	    certificateElement.style.display = 'inline-block';
+	    certificateElement.style.padding = '5px 10px';
+	    certificateElement.style.borderRadius = '20px';
+	    certificateElement.style.backgroundColor = '#606060';
+	    certificateElement.style.color = 'white';
+	    certificateElement.style.cursor = 'pointer';
+	    certificateElement.style.fontSize = '14px';
+	    certificateElement.onclick = function() {
+	        removeCertificate(certificateName);
+	    };
+	    displayArea.appendChild(certificateElement);
+	}
+
+	function removeCertificate(certificateName) {
+	    var certificatesArray = document.getElementById('qualification_certificate').value.split(',');
+	    certificatesArray = certificatesArray.filter(function(certificate) {
+	        return certificate.trim() !== certificateName.trim();
+	    });
+	    document.getElementById('qualification_certificate').value = certificatesArray.join(',');
+	    var selectedCertificatesDisplay = document.getElementById('selectedCertificatesDisplay');
+	    selectedCertificatesDisplay.innerHTML = ''; // Clear the display area
+	    certificatesArray.forEach(function(certificate) {
+	        addSelectedCertificate(certificate.trim());
+	    });
+	}
+	
+	function selectDay(day, event) {
+	    event.preventDefault();
+	    document.getElementById('dropworkingdayBtn').textContent = day;
+	    document.getElementById('working_day').value = day;
+	}
+
+	function selectHour(hour, event) {
+	    event.preventDefault();
+	    document.getElementById('dropworkinghourBtn').textContent = hour;
+	    document.getElementById('working_hour').value = hour;
+	}
+	// 복리후생 필드를 동적으로 추가하는 함수
+	function addWelfareField(value) {
+	    var container = document.getElementById('welfareFields');
+	    var newDiv = document.createElement('div');
+	    newDiv.className = 'row align-items-center welfare';
+
+	    var newInput = document.createElement('input');
+	    newInput.type = 'text';
+	    newInput.className = 'input_all';
+	    newInput.name = 'Welfare_content[]';
+	    newInput.value = value; // 서버로부터 받은 값으로 입력 필드 초기화
+	    newInput.placeholder = '귀사의 복지, 혜택에 대해 작성해주세요.';
+
+	    var deleteButton = document.createElement('button');
+	    deleteButton.textContent = '삭제하기';
+	    deleteButton.type = 'button';
+	    deleteButton.className = 'addbtn'; // 적절한 클래스 이름 사용
+	    deleteButton.onclick = function() { newDiv.remove(); };
+
+	    newDiv.appendChild(newInput);
+	    newDiv.appendChild(deleteButton);
+	    container.appendChild(newDiv);
+	}
+	
+	
 	</script>
 
 </body>

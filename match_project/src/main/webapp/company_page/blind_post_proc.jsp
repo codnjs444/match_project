@@ -34,7 +34,7 @@
 <%
 	String manager_id = (String)session.getAttribute("idKey");
 	String company_idx = mMgr.getCompany_idx(manager_id);
-	String posting_type = "일반";
+	String posting_type = "블라인드";
 	String posting_cname = request.getParameter("posting_cname");
 	String posting_name = request.getParameter("posting_name");
 	String posting_pcode = request.getParameter("posting_pcode");
@@ -57,7 +57,12 @@
 	String openposition_duty = request.getParameter("openposition_duty");
 	
 	String openposition_num_str = request.getParameter("openposition_num");
-	int openposition_num = Integer.parseInt(openposition_num_str);
+	int openposition_num = 0; // 초기값을 0으로 설정
+
+	// 입력된 값이 null이 아니고, 숫자로 변환 가능한지 확인
+	if(openposition_num_str != null && openposition_num_str.matches("\\d+")) {
+	    openposition_num = Integer.parseInt(openposition_num_str);
+	}
 
 	String openposition_sname = request.getParameter("openposition_sname");
 	String openposition_position = request.getParameter("openposition_position");

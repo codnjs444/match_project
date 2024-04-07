@@ -16,352 +16,23 @@
 <jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%
-String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
-String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
-
-Vector<certificate_categoryBean> certificateList = cMgr.certificatenameList();
-
-//스킬 이름을 저장할 배열 생성
-String[] data = new String[certificateList.size()];
-for (int i = 0; i < certificateList.size(); i++) {
- data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
-}
+	String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
+	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
+	
+	Vector<certificate_categoryBean> certificateList = cMgr.certificatenameList();
+	
+	//스킬 이름을 저장할 배열 생성
+	String[] data = new String[certificateList.size()];
+	for (int i = 0; i < certificateList.size(); i++) {
+	 data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
+	}
 
 %>
 
 <title>Announcement Form with Bootstrap</title>
 <!-- 최신 버전의 부트스트랩 CSS 추가 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-<style>
-body {
-    background-color: #F8F8F8;
-}
-
-.custom-bte {
-        background-color: #606060; /* 버튼의 배경색을 파란색으로 지정 */
-        color: white; /* 버튼 텍스트 색상을 흰색으로 지정 */
-}
-    
-.title {
-    font-size: 16px;
-    font-weight: bold;
-    color: blue; /* 파란색으로 설정 */
-    margin-bottom: 10px; /* 아래 여백 설정 */
-    margin-top: 20px; /* 위 여백 설정 */
-}
-
-.stitle {
-    font-size: 18px;
-    font-weight: bolder;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-
-/* 흰색 박스 스타일 */
-.box {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-/* (기업명)라벨과 입력 필드 크기 및 간격 수정 */
-.question {
-    font-size: 16px; /* 라벨 텍스트 크기 조정 */
-    margin-bottom: 10px; /* 라벨 아래 여백 조정 */
-    font-weight: bolder;
-    margin-left: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-.questionsub {
-    font-size: 16px; /* 라벨 텍스트 크기 조정 */
-    margin-bottom: 10px; /* 라벨 아래 여백 조정 */
-    font-weight: bolder;
-    margin-left: 60px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    color: gray; /* 폰트 색상 변경 */
-}
-
-.input {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 500px;
-    height: 40px;
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-.input_rtime {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 500px;
-    height: 40px;
-}
-.input_ltime {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 500px;
-    height: 40px;
-}
-.inputplus {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 500px;
-    height: auto; /* 높이 자동 조절 */
-    max-height: 200px; /* 최대 높이 설정 */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 생성 */
-    border: 1px solid black; /* 경계선 표시 */
-    margin-right: 10px; /* 오른쪽 여백 */
-    display: flex; /* flexbox 모델 적용 */
-    flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄로 */
-    align-items: flex-start; /* 내용 상단 정렬 */
-}
-
-.input_num {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 300px;
-    height: 40px;
-    margin-right: 210px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-.input_all {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 670px;
-    height: 40px;
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    margin-left: 10px;
-}
-.addbtn {
-    /* 원하는 스타일 속성을 여기에 추가하세요 */
-    background-color: #606060; /* 배경색을 파란색으로 변경 */
-    color: white; /* 글꼴 색상을 흰색으로 변경 */
-    border: 2px solid black; /* 테두리 스타일을 추가 */
-    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
-    padding: 3px 16px; /* 내부 여백을 추가하여 버튼 크기 조정 */
-    font-size: 12px; /* 글꼴 크기를 변경 */
-    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
-}
-
-.addbtn22 {
-    /* 원하는 스타일 속성을 여기에 추가하세요 */
-    background-color: #606060; /* 배경색을 파란색으로 변경 */
-    color: white; /* 글꼴 색상을 흰색으로 변경 */
-    border: 2px solid black; /* 테두리 스타일을 추가 */
-    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
-    padding: 5px 22px; /* 내부 여백을 추가하여 버튼 크기 조정 */
-    font-size: 16px; /* 글꼴 크기를 변경 */
-    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
-}
-.addbtn_rlast {
-    /* 원하는 스타일 속성을 여기에 추가하세요 */
-    background-color: #3448FF; /* 배경색을 파란색으로 변경 */
-    color: white; /* 글꼴 색상을 흰색으로 변경 */
-    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
-    border: none; /* Border */
-    padding: 6px 30px; /* 내부 여백을 추가하여 버튼 크기 조정 */
-    font-size: 18px; /* 글꼴 크기를 변경 */
-    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
-    margin-bottom: 10px;
-}
-.addbtn_llast {
-    /* 원하는 스타일 속성을 여기에 추가하세요 */
-    background-color: white; /* 배경색을 파란색으로 변경 */
-    color: black; /* 글꼴 색상을 흰색으로 변경 */
-    border: none; /* Border */
-    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
-    padding: 6px 30px; /* 내부 여백을 추가하여 버튼 크기 조정 */
-    font-size: 18px; /* 글꼴 크기를 변경 */
-    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
-    margin-bottom: 10px;
-}
-.addbtn2 {
-    /* 원하는 스타일 속성을 여기에 추가하세요 */
-    background-color: #606060; /* 배경색을 파란색으로 변경 */
-    color: white; /* 글꼴 색상을 흰색으로 변경 */
-    border: 2px; /* 테두리 스타일을 추가 */
-    border-radius: 5px; /* 버튼의 모서리를 둥글게 만듭니다 */
-    padding: 3px 10px; /* 내부 여백을 추가하여 버튼 크기 조정 */
-    font-size: 12px; /* 글꼴 크기를 변경 */
-    cursor: pointer; /* 커서 모양을 포인터로 변경하여 버튼을 클릭할 때 표시되는 모양을 변경 */
-}
-/* 선택한 버튼이 마우스로 클릭되었을 때의 스타일 */
-.addbtn:active {
-    background-color: darkblue; /* 클릭시 배경색을 진한 파란색으로 변경 */
-}
-
-.toggle_btn {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    background-color: white;
-    border-color: grey;
-    width: 500px;
-    height: 40px;
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    color: grey;
-    font-size: 17px;
-    text-align: left;
-}
-
-.toggle_btn_skill {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    background-color: white;
-    border-color: grey;
-    width: 500px;
-    height: 40px;
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    color: grey;
-    font-size: 17px;
-    text-align: left;
-    margin-top: 10px;
-}
-
-.input_noq {
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    width: 500px;
-    height: 40px;
-    margin-left: 180px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-
-/* 필수 */
-.essential {
-    font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
-    color: red; /* 빨간색으로 설정 */
-}
-.essential_money {
-    font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
-    color: black; /* 빨간색으로 설정 */
-}
-.essential_date {
-    font-size: 12px; /* 필수 문구 텍스트 크기 조정 */
-    color: black; /* 빨간색으로 설정 */
-    margin-left: 50px;
-}
-.modal-dialog {
-    margin-top: 400px; /* 원하는 위치로 조절 */
-}
-/* ------------------------------------------------------------------------------ */
-/* [지원자 자격 요건_경력 여부 버튼] */
-.btn-group {
-  width: 500px;
-  height: 40px;
-  align-items: center;
-  margin-right: 10px; /* 오른쪽 여백 줄이기 */
-}
-.btn-group .btn {
-  flex: 1;
-  background-color: white; /* 버튼 배경색 */
-  color: grey; /* 버튼 텍스트 색상 */
-}
-
-
-.btn-group .btn.active {
-  background-color: #606060; /* 눌렸을 때의 배경색 */
-}
-
-.btn-group .btn.active:hover {
-  background-color: #0056b3; /* 마우스 호버 또는 포커스 시 배경색 */
-}
-/* ------------------------------------------------------------------------------ */
-.direct-input {
-    display: flex; /* flexbox 모델 적용 */
-    justify-content: space-between; /* 컨테이너 내부 요소들 사이에 공간을 균등하게 배분 */
-    margin-top: 10px; /* 상단 여백 추가 */
-    margin-bottom: 10px; /* 하단 여백 추가 */
-}
-.selfbtn {
-    padding: 10px 15px; /* 버튼 내부 여백 조정 */
-    font-size: 14px; /* 폰트 크기 조정 */
-    border-radius: 5px; /* 버튼의 모서리 둥글기 조정 */
-}
-.direct-input input {
-            flex: 1;
-            margin-right: 10px;
-            margin-left: 10px;
-            width: 85%; /* 입력 필드의 너비 조정 */
-}
-
-.direct-input button {
-            width: 15%; /* 버튼의 너비 조정 */
-            background-color: 606060;
-                        margin-right: 10px;
-            border-color: 606060;
-}
-
-#qualification_skill {
-    width: 500px; /* 필요에 따라 조절 */
-    height: 80px; /* 자동 높이 조절 */
-    overflow-y: auto; /* 세로 스크롤바가 필요할 때만 나타남 */
-    resize: none; /* 사용자가 크기 조절 못하도록 함 */
-    font-size: 18px; /* 입력 필드 텍스트 크기 조정 */
-    padding: 10px; /* 입력 필드 내부 여백 조정 */
-    margin-bottom: 10px; /* 입력 필드 아래 여백 조정 */
-    margin-left: 180px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-    margin-right: 10px; /* 입력 필드 오른쪽 여백 조정하여 왼쪽으로 이동 */
-}
-.dropdown-menu {
-    max-height: 270px; /* 드롭다운 메뉴의 최대 높이 */
-    overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤바 표시 */
-    z-index: 1050; /* .Postsidebar보다 높은 값을 설정 */
-}
-.procedure-container .row .col {
-    padding-left: 46px; /* 오른쪽 패딩을 추가하여 요소들을 우측으로 조금 이동시킵니다. */
-}
-.fixed-bottom-right {
-    position: fixed; /* 고정 위치 */
-    bottom: 300px;    /* 하단에서 20px의 여백 */
-    right: 70px;     /* 우측에서 20px의 여백 */
-    z-index: 1000;   /* 다른 요소들 위에 표시 */
-}
-
-.button-container {
-    bottom: 20px; /* 하단에서 20px 떨어진 위치 */
-    margin-right: 30px;
-    z-index: 1000; /* 다른 요소들 위에 표시되도록 z-index 설정 */
-}
-
-
-.Postsidebar {
-    background-color: white; /* 흰색 배경 */
-    padding: 20px; /* 안쪽 여백 */
-    border-radius: 10px; /* 모서리를 둥글게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    max-width: 250px; /* 최대 너비 */
-    margin: 20px; /* 바깥쪽 여백 */
-}
-
-.Postsidebar ul {
-    list-style-type: none; /* 기본 리스트 스타일 제거 */
-    padding: 0; /* 패딩 제거 */
-}
-
-.Postsidebar ul li {
-    margin-bottom: 10px; /* 리스트 아이템 사이의 여백 */
-}
-
-.Postsidebar ul li a {
-    text-decoration: none; /* 밑줄 제거 */
-    color: #333; /* 글자 색상 */
-    font-weight: bold; /* 글자 두께 */
-}
-
-.Postsidebar ul li a:hover {
-    color: #007bff; /* 링크 호버 색상 */
-}
-
-
-
-</style>
+<link href="../css/post_type.css" rel="stylesheet" type="text/css"> 
 </head>
 <body>
 <div class="container mt-10">
@@ -558,7 +229,6 @@ body {
                         <div class="col">
                             <label for="companyName" class="question">지원자 학력</label>
                         </div>
-                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
                           <div class="dropdown">
 						        <button class="toggle_btn" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -605,7 +275,6 @@ body {
 					    <div class="col">
 					        <label for="companyName" class="question">경력 여부</label>
 					    </div>
-					    <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
 					    <div class="col">
 					        <!-- 버튼 그룹을 좌측으로 정렬하는 부분 -->
 					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
@@ -809,25 +478,24 @@ body {
                         <div class="col">
                             <label for="companyName" class="question">연봉/급여</label>
                         </div>
-                        <span class="essential_money">[최소 금액]</span> <!-- 필수 문구 추가 -->
+                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="number" class="input" id="environment_minsalary" name="environment_minsalary" placeholder="만원">               
+                            <input type="number" class="input" id="environment_minsalary" name="environment_minsalary" placeholder="최소 금액 (단위_만)">               
                         </div>
                     </div>
                     <div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">     </label>
                         </div>
-                        <span class="essential_money">[최대 금액]</span> <!-- 필수 문구 추가 -->
+                        <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="number" class="input" id="environment_maxsalary" name="environment_maxsalary" placeholder="만원">
+                            <input type="number" class="input" id="environment_maxsalary" name="environment_maxsalary" placeholder="최대 금액 (단위_만)">
                         </div>
                     </div>                       
                     <div class="row align-items-center">
 					    <div class="col">
 					        <label for="companyName" class="question">고용 형태</label>
 					    </div>
-					    <span class="essential">필수</span> <!-- 필수 문구 추가 -->
 					    <div class="col">
 					        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="text-align: left;"> 
 					            <label class="btn btn-secondary active">
@@ -1069,7 +737,7 @@ body {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="titleForm" method="get" action="post_proc.jsp">
+      <form id="titleForm" method="get" action="own_post_proc.jsp">
         <div class="modal-body">
           <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
         </div>
@@ -1081,8 +749,6 @@ body {
     </div>
   </div>
 </div>
-
-
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -1140,30 +806,84 @@ body {
 	// [등록 완료 버튼 클릭 시 기능] 
 	// 등록 완료 버튼 클릭 시 모달 활성화
 	// 등록 버튼 클릭 시 필수 입력 필드 확인
-	document.getElementById("registerButton").addEventListener("click", function() {
-	    var companyName = document.getElementById("posting_cname").value.trim();
-	    var postalCode = document.getElementById("posting_pcode").value.trim();
-	    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
-	    // 기본 드롭다운 버튼의 텍스트와 비교
-	    if (companyName === "" || postalCode === "" || selectedField === "모집 분야를 선택해주세요.") {
-	        alert("필수 사항들을 모두 입력해주세요.");
-	    } else {
-	        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
-	        $('#titleModal').modal('show');
-	    }
-	});
-	document.getElementById("registerButton1").addEventListener("click", function() {
-	    var companyName = document.getElementById("posting_cname").value.trim();
-	    var postalCode = document.getElementById("posting_pcode").value.trim();
-	    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
-	    // 기본 드롭다운 버튼의 텍스트와 비교
-	    if (companyName === "" || postalCode === "" || selectedField === "모집 분야를 선택해주세요.") {
-	        alert("필수 사항들을 모두 입력해주세요.");
-	    } else {
-	        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
-	        $('#titleModal').modal('show');
-	    }
-	});
+document.getElementById("registerButton").addEventListener("click", function() {
+    var companyName = document.getElementById("posting_cname").value.trim();
+    var postalCode = document.getElementById("posting_pcode").value.trim();
+    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
+    var minsalary = document.getElementById("environment_minsalary").value.trim();
+    var maxsalary = document.getElementById("environment_maxsalary").value.trim();
+    var application_sdate = document.getElementById("application_sdatetime").value.trim();
+    var application_edate = document.getElementById("application_edatetime").value.trim();
+    
+    var missingFields = []; // 비어 있는 필수 항목의 이름을 모을 배열 초기화
+
+    // 각 필수 항목을 검사하고 비어있다면 missingFields 배열에 추가
+    if (companyName === "") missingFields.push("회사명");
+    if (postalCode === "") missingFields.push("우편번호");
+    if (selectedField === "모집 분야를 선택해주세요.") missingFields.push("모집 분야");
+    if (minsalary === "") missingFields.push("최소 급여");
+    if (maxsalary === "") missingFields.push("최대 급여");
+    if (application_sdate === "") missingFields.push("접수 시작 날짜");
+    if (application_edate === "") missingFields.push("접수 종료 날짜");
+
+    // 'procedure_name' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_name").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 이름 ${index + 1}`);
+    });
+
+    // 'procedure_edatetime' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_edatetime").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 마감 날짜 ${index + 1}`);
+    });
+
+    // missingFields 배열에 항목이 있다면 경고 메시지 생성
+    if (missingFields.length > 0) {
+        var message = "다음 필수 사항을 입력해주세요:\n" + missingFields.join("\n");
+        alert(message);
+    } else {
+        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
+        $('#titleModal').modal('show');
+    }
+});
+document.getElementById("registerButton1").addEventListener("click", function() {
+    var companyName = document.getElementById("posting_cname").value.trim();
+    var postalCode = document.getElementById("posting_pcode").value.trim();
+    var selectedField = document.getElementById("dropdownMenuButton").textContent.trim();
+    var minsalary = document.getElementById("environment_minsalary").value.trim();
+    var maxsalary = document.getElementById("environment_maxsalary").value.trim();
+    var application_sdate = document.getElementById("application_sdatetime").value.trim();
+    var application_edate = document.getElementById("application_edatetime").value.trim();
+    
+    var missingFields = []; // 비어 있는 필수 항목의 이름을 모을 배열 초기화
+
+    // 각 필수 항목을 검사하고 비어있다면 missingFields 배열에 추가
+    if (companyName === "") missingFields.push("회사명");
+    if (postalCode === "") missingFields.push("우편번호");
+    if (selectedField === "모집 분야를 선택해주세요.") missingFields.push("모집 분야");
+    if (minsalary === "") missingFields.push("최소 급여");
+    if (maxsalary === "") missingFields.push("최대 급여");
+    if (application_sdate === "") missingFields.push("접수 시작 날짜");
+    if (application_edate === "") missingFields.push("접수 종료 날짜");
+
+    // 'procedure_name' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_name").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 이름 ${index + 1}`);
+    });
+
+    // 'procedure_edatetime' 클래스를 가진 모든 입력 필드 검사
+    document.querySelectorAll(".procedure_edatetime").forEach(function(input, index) {
+        if (input.value.trim() === "") missingFields.push(`전형 절차 마감 날짜 ${index + 1}`);
+    });
+
+    // missingFields 배열에 항목이 있다면 경고 메시지 생성
+    if (missingFields.length > 0) {
+        var message = "다음 필수 사항을 입력해주세요:\n" + missingFields.join("\n");
+        alert(message);
+    } else {
+        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
+        $('#titleModal').modal('show');
+    }
+});
 	function submitAnnouncement() {
 		//var formData = new FormData(document.getElementById("companyForm"));
 		formData = document.companyForm;

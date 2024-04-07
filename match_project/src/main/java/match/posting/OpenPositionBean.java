@@ -7,6 +7,7 @@ public class OpenPositionBean {
 	private int openposition_num;
 	private String openposition_sname;
 	private String openposition_position;
+	
 	public int getPosting_idx() {
 		return posting_idx;
 	}

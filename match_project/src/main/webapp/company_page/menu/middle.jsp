@@ -21,6 +21,11 @@
 	
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<style>
+body {
+    background-color: #F8F8F8;
+}
+</style>
 <body>
 
 <%
@@ -112,9 +117,8 @@
 				            <div class="horizontal-section" style="width: 35%;">
 				                <!-- 버튼 추가 -->
 				                <div class="btn-group" role="group" aria-label="Basic example" style="padding: 10px; display: flex; justify-content: space-around; margin-top: 10px;">
-				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">홍보</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">권한</button>
-				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">수정</button>
+									<button type="button" class="btn" style="color: #606060; font-weight: bold;" data-posting-idx="<%= postingIdx %>">수정</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">복사</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">마감</button>
 									<button type="button" class="btn" style="color: #606060; font-weight: bold;"
@@ -219,7 +223,18 @@
 	    }
 	}
 
+	document.addEventListener("DOMContentLoaded", function() {
+	    // 모든 '수정' 버튼에 대한 참조를 가져옵니다.
+	    const editButtons = document.querySelectorAll(".btn[data-posting-idx]");
 
+	    // 각 버튼에 대해 클릭 이벤트 리스너를 추가합니다.
+	    editButtons.forEach(function(button) {
+	        button.addEventListener("click", function() {
+	            const postingIdx = this.getAttribute("data-posting-idx"); // 버튼의 data-posting-idx 속성값을 가져옵니다.
+	            window.location.href = "edit_proc.jsp?posting_idx=" + postingIdx;
+	        });
+	    });
+	});
 
 /* 	function deletePosting(postingIdx, postingName) {
 	    var message = `${postingName} 공고를 정말 삭제하시겠습니까?`;

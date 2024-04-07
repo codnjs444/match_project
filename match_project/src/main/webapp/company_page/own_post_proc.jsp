@@ -58,7 +58,13 @@
 	String openposition_duty = request.getParameter("openposition_duty");
 	
 	String openposition_num_str = request.getParameter("openposition_num");
-	int openposition_num = Integer.parseInt(openposition_num_str);
+	int openposition_num = 0; // 초기값을 0으로 설정
+
+	// 입력된 값이 null이 아니고, 숫자로 변환 가능한지 확인
+	if(openposition_num_str != null && openposition_num_str.matches("\\d+")) {
+	    openposition_num = Integer.parseInt(openposition_num_str);
+	}
+
 
 	String openposition_sname = request.getParameter("openposition_sname");
 	String openposition_position = request.getParameter("openposition_position");
@@ -72,8 +78,8 @@
 	
 	pMgr.insertOpenposition(opBean);
 	/*--------------------------------------------------------------------------------*/
-	String qualification_edutype = "블라인드";
-	String qualification_gender = "블라인드";
+	String qualification_edutype = request.getParameter("qualification_edutype");
+	String qualification_gender = request.getParameter("qualification_gender");
 	String qualification_experience = request.getParameter("qualification_experience");
 	String qualification_skill = request.getParameter("selectedSkills");
 	/*수정 필요*/

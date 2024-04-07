@@ -7,6 +7,7 @@ public class environmentBean {
 	private String environment_type;
 	private String working_day;
 	private String working_hour;
+	
 	public int getPosting_idx() {
 		return posting_idx;
 	}
