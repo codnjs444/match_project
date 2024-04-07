@@ -17,6 +17,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>이력서 작성</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
 		.resume{
 			display: flex;
@@ -646,8 +647,31 @@
 				<div class="box">
 					<div class="project-box">
 						<div class="row">
+							<div class="box-style sbox p-0">
+								<input type="text" class="box-style sbox-con" id="project_name[]" name="project_name[]" placeholder="프로젝트 제목">
+							</div>
+							<div class="box-style mbox p-0">
+								<input type="text" class="box-style mbox-con" id="project_url[]" name="project_url[]" placeholder="프로젝트 url을 입력해주세요.">
+							</div>
+							<div class="box-style mbox p-0">
+								<input type="file" class="box-style mbox-con" id="project_file1" name="project_file[]" placeholder="프로젝트 파일을 업로드해주세요.">
+								<input type="hidden" id="project_fname[]" name="project_fname[]">
+    							<input type="hidden" id="project_extension[]" name="project_extension[]">
+							</div>
+						</div>
+						<div class="row">
+							<span class="stext">시작일</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="project_syear[]" name="project_syear[]" class="box-style msbox-con">
+							</div>
+							<span class="stext">종료일</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="project_eyear[]" name="project_eyear[]" class="box-style msbox-con">
+							</div>
+						</div>
+						<div class="row">
 							<div class="box-style lbox p-0">
-								<input type="text" class="box-style lbox-con" id="" name="" placeholder="프로젝트를 추가해주세요." readonly>
+								<input type="text" id="project_duty[]" name="project_duty[]" class="box-style lbox-con">
 							</div>
 						</div>
 					</div>
@@ -661,7 +685,7 @@
 					<div class="portfolio-box1">
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<textarea class="box-style lbox-con" id="url[]" name="url[]" placeholder="포트폴리오 url을 입력해주세요."></textarea>
+								<textarea class="box-style lbox-con" id="portfolio_url[]" name="portfolui_url[]" placeholder="포트폴리오 url을 입력해주세요."></textarea>
 							</div>
 						</div>
 					</div>
@@ -670,11 +694,11 @@
 					</div>
 					<hr>
 					<div class="portfolio-box2">
-						<div class="row">
-							<div class="box-style lbox p-0">
-								<input class="box-style lbox-con" type="file" id="file[]" name="file[]" onclick="" placeholder="파일을 선택해주세요.">
-							</div>
-						</div>
+					    <div class="row">
+					        <div class="box-style lbox p-0 ">
+								<input class="box-style lbox-con" type="file" id="" name="" placeholder="포트폴리오 파일을 업로드해주세요." readonly>
+					        </div>
+					    </div>
 					</div>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addPortfolioBox2(this)">추가하기</button>
@@ -827,6 +851,7 @@
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 		    // edu-box의 DOM 요소를 가져옴
@@ -1120,6 +1145,52 @@
             curriculumBox.parentNode.removeChild(curriculumBox);
         }
         
+        var proidx = 1;
+        
+        function addProjectBox(button) {
+        	proidx++;
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newProjectBox = document.createElement('div');
+            newProjectBox.className = 'project-box'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newProjectBox.appendChild(separator);
+
+            var existingProjectBox = box.querySelector('.project-box');
+            var clonedProjectContent = existingProjectBox.cloneNode(true);
+            newProjectBox.appendChild(clonedProjectContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newProjectBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+                if (input.type === 'file') {
+                    fileId++; // 파일 입력 태그의 경우 id 값을 1 증가시킵니다.
+                    input.id = 'project_file' + fileId; // 새로운 id 값으로 설정합니다.
+                }
+            });
+
+            box.insertBefore(newProjectBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deleteProjectBox(newProjectBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newProjectBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deleteProjectBox(ProjectBox) {
+        	ProjectBox.parentNode.removeChild(ProjectBox);
+        }
+        
         
         function addPortfolioBox1(button) {
             var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
@@ -1198,6 +1269,7 @@
         function deletePortfolioBox2(portfolioBox) {
             portfolioBox.parentNode.removeChild(portfolioBox);
         }
+        
         
         
         function addAwardBox(button) {
@@ -1497,6 +1569,26 @@
                     }
                 });
             });
+        });
+        
+        
+        document.getElementById('project_file[]').addEventListener('change', function(e) {
+            var fullPath = e.target.value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+
+                var dotIndex = filename.lastIndexOf('.');
+                var fileName = filename.substring(0, dotIndex);
+                var fileExtension = filename.substring(dotIndex + 1);
+
+                // 파일 이름과 확장자를 hidden input에 설정
+                document.getElementById('project_fname[]').value = fileName;
+                document.getElementById('project_extension[]').value = fileExtension;
+            }
         });
 
         	

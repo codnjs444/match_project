@@ -10,6 +10,11 @@ import match.resume.*;
 
 public class ResumeMgr {
 	private DBConnectionMgr pool;
+	public static final String SAVEFOLDER = "C:/Jsp/match_project/match_project/src/main/webapp/fileupload";
+	public static final String ENCODING = "UTF-8";
+	public static final int MAXSIZE = 1024*1024*20;
+	
+	
 	public ResumeMgr() {
 		pool = DBConnectionMgr.getInstance();
 	}
@@ -142,7 +147,9 @@ public class ResumeMgr {
 			pstmt.setString(4, bean.getCurriculum_syear());
 			pstmt.setString(5, bean.getCurriculum_eyear());
 			pstmt.setString(6, bean.getCurriculum_content());
-			pstmt.executeUpdate();
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -286,6 +293,60 @@ public class ResumeMgr {
 			
 			if(pstmt.executeUpdate() == 1)
 				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertProject(ProjectBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into project values(?,?,?,?,?,?,?,?,now())";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getProject_name());
+			pstmt.setString(3, bean.getProject_syear());
+			pstmt.setString(4, bean.getProject_eyear());
+			pstmt.setString(5, bean.getProject_duty());
+			pstmt.setString(6, bean.getProject_url());
+			pstmt.setString(7, bean.getProject_fname());
+			pstmt.setString(8, bean.getProject_extension());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	public boolean insertPortfolio(PortfolioBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into portfolio values(?,?,?,?,?,now()";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bean.getResume_idx());
+			pstmt.setString(2, bean.getPortfolio_name());
+			pstmt.setString(3, bean.getPortfolio_url());
+			pstmt.setString(4, bean.getPortfolio_fname());
+			pstmt.setString(5, bean.getPortfolio_extension());
+			
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

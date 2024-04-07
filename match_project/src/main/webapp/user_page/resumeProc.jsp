@@ -15,7 +15,9 @@
 <jsp:useBean id="aBean" class="match.resume.AwardBean"/>
 <jsp:useBean id="gBean" class="match.resume.GlobalexBean"/>
 <jsp:useBean id="lBean" class="match.resume.LanguageBean"/>
-<jsp:useBean id="pBean" class="match.resume.PrefferBean"/>
+<jsp:useBean id="preBean" class="match.resume.PrefferBean"/>
+<jsp:useBean id="proBean" class="match.resume.ProjectBean"/>
+<jsp:useBean id="poBean" class="match.resume.PortfolioBean"/>
 
 <jsp:setProperty property="*" name="uBean"/>
 <jsp:setProperty property="*" name="rBean"/>
@@ -28,6 +30,9 @@
 <jsp:setProperty property="*" name="aBean"/>
 <jsp:setProperty property="*" name="gBean"/>
 <jsp:setProperty property="*" name="lBean"/>
+<jsp:setProperty property="*" name="preBean"/>
+<jsp:setProperty property="*" name="proBean"/>
+<jsp:setProperty property="*" name="poBean"/>
 
 <%
 	String msg = "실패";
@@ -209,18 +214,43 @@
 	String disable = request.getParameter("disabled");
 	String military = request.getParameter("military");
 	
-	pBean.setResume_idx(generatedKey);
+	preBean.setResume_idx(generatedKey);
 	// 체크박스 값이 "on"이면 "대상자", null이면 "대상자 아님"
-	pBean.setPreffer_miliprotect(checkbox1 != null ? "대상자" : "대상자 아님");
-	pBean.setPreffer_eprotect(checkbox2 != null ? "대상자" : "대상자 아님");
-	pBean.setPreffer_sprotect(checkbox3 != null ? "대상자" : "대상자 아님");
+	preBean.setPreffer_miliprotect(checkbox1 != null ? "대상자" : "대상자 아님");
+	preBean.setPreffer_eprotect(checkbox2 != null ? "대상자" : "대상자 아님");
+	preBean.setPreffer_sprotect(checkbox3 != null ? "대상자" : "대상자 아님");
 
 	// 장애와 병역은 선택된 경우 해당 값을, 아니면 "대상자 아님"
-	pBean.setPreffer_disabilitype(checkbox4 != null ? disable : "대상자 아님");
-	pBean.setPreffer_militype(checkbox5 != null ? military : "대상자 아님");
+	preBean.setPreffer_disabilitype(checkbox4 != null ? disable : "대상자 아님");
+	preBean.setPreffer_militype(checkbox5 != null ? military : "대상자 아님");
 	
 	
-	boolean preffer_result = rMgr.insertPreffer(pBean);
+	boolean preffer_result = rMgr.insertPreffer(preBean);
+	
+	String[] projectNames = request.getParameterValues("project_name[]");
+	String[] projectSyears = request.getParameterValues("project_syear[]");
+	String[] projectEyears = request.getParameterValues("project_eyear[]");
+	String[] projectDutys = request.getParameterValues("project_duty[]");
+	String[] projectUrls = request.getParameterValues("project_url[]");
+	String[] projectFnames = request.getParameterValues("project_fname[]");
+	String[] projectExtensions = request.getParameterValues("project_extension[]");
+	
+	if(projectNames != null && projectSyears != null && projectEyears != null && projectDutys != null && projectUrls != null && projectFnames != null && projectExtensions != null){
+		for(int i = 0; i < projectNames.length; i++){
+			proBean.setResume_idx(generatedKey);
+			proBean.setProject_name(projectNames[i]);
+			if(projectSyears[i].length() > 0)
+				proBean.setProject_syear(projectSyears[i].substring(0,10));
+			if(projectEyears[i].length() > 0)
+				proBean.setProject_eyear(projectEyears[i].substring(0,10));
+			proBean.setProject_duty(projectDutys[i]);
+			proBean.setProject_url(projectUrls[i]);
+			proBean.setProject_fname(projectFnames[i]);
+			proBean.setProject_extension(projectExtensions[i]);
+			
+			boolean project_result = rMgr.insertProject(proBean);
+		}
+	}
 %>
 <script>
 	location.href("resume.jsp");

@@ -17,6 +17,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>이력서 작성</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
 		.resume{
 			display: flex;
@@ -25,6 +26,7 @@
 		.resume-center{
 			width: 940px;
 			height: auto;
+			margin-bottom: 20px;
 		}
 		.resume-side{
 			background-color: #f1f2f4;
@@ -108,7 +110,7 @@
 		}
 		.box{
 			width: 930px;
-			min-height: 150px;
+			min-height: 100px;
 			border: 1px solid lightgrey;
 			border-radius: 10px/10px;
 			padding-bottom: 10px;
@@ -123,6 +125,9 @@
 		.box-style{
 			border-radius: 5px/5px;
 			border: 1px solid lightgrey;
+		}
+		.box-style.active{
+			border: 1px solid #0000ff;
 		}
 		.sbox{
 			margin-left: 20px;
@@ -155,6 +160,12 @@
 			width: 900px;
 			height: 70px;
 		}
+		.lsbox{
+			margin-left: 20px;
+			margin-top: 10px;
+			width: 678px;
+			height: 70px;
+		}
 		.sbox-con{
 			height: 55px;
 			width: 165px;
@@ -176,6 +187,12 @@
 		}
 		.lbox-con{
 			width: 900px;
+			height: 68px;
+			resize: none;
+			overflow-y: auto;
+		}
+		.lsbox-con{
+			width: 678px;
 			height: 68px;
 			resize: none;
 			overflow-y: auto;
@@ -298,6 +315,71 @@
 			overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
 			height: 68px;
 		}
+		/* 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed; /* 위치 설정 */
+            z-index: 1; /* 위로 배치 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4); /* 배경색과 투명도 조절 */
+        }
+
+        /* 모달 콘텐츠 스타일 */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 모달 콘텐츠가 화면 중앙에 위치하도록 설정 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 800px; /* 너비 설정 */
+            height: 350px; /* 높이 설정 */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            position: relative; /* 닫기 버튼 위치 설정을 위해 상대 위치 지정 */
+            align-items: center;
+        }
+
+        /* 모달 닫기 버튼 스타일 */
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute; /* 절대 위치 설정 */
+            top: 0;
+            right: 0;
+            margin-right: 20px; /* 오른쪽 여백 설정 */
+            margin-top: 10px; /* 상단 여백 설정 */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-save-btn{
+        	height: 60px;
+        	width: 100px;
+        	background-color: #0066ff;
+        	border: 1px solid #0066ff;
+        	border-radius: 15px/15px;
+        	color: #fff;
+        }
+        .modal-esc-btn{
+        	height: 60px;
+        	width: 100px;
+        	background-color: #fff;
+        	border: 1px solid #0066ff;
+        	color: #0066ff;
+        	border-radius: 15px/15px;
+        }
+        .preffer-check{
+        	width: 20px;
+        	height: 20px;
+        	margin-left: 13px;
+        	margin-top: 16px;
+        }
 	</style>
 </head>
 <body>
@@ -560,12 +642,197 @@
 						</div>
 					</div>
 				</div>
+        		
 				<div class="title">프로젝트</div>
 				<div class="box">
 					<div class="project-box">
 						<div class="row">
+							<div class="box-style sbox p-0">
+								<input type="text" class="box-style sbox-con" id="project_name[]" name="project_name[]" placeholder="프로젝트 제목">
+							</div>
+							<div class="box-style mbox p-0">
+								<input type="text" class="box-style mbox-con" id="project_url[]" name="project_url[]" placeholder="프로젝트 url을 입력해주세요.">
+							</div>
+							<div class="box-style mbox p-0">
+								<input type="file" class="box-style mbox-con" id="project_file1" name="project_file[]" placeholder="프로젝트 파일을 업로드해주세요.">
+								<input type="hidden" id="project_fname1" name="project_fname[]">
+    							<input type="hidden" id="project_extension1" name="project_extension[]">
+							</div>
+						</div>
+						<div class="row">
+							<span class="stext">시작일</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="project_syear[]" name="project_syear[]" class="box-style msbox-con">
+							</div>
+							<span class="stext">종료일</span>
+							<div class="box-style msbox p-0">
+								<input type="datetime-Local" id="project_eyear[]" name="project_eyear[]" class="box-style msbox-con">
+							</div>
+						</div>
+						<div class="row">
 							<div class="box-style lbox p-0">
-								<input type="text" class="box-style lbox-con" onclick="" placeholder="프로젝트를 추가해주세요." readonly>
+								<input type="text" id="project_duty[]" name="project_duty[]" class="box-style lbox-con">
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addProjectBox(this)">추가하기</button>
+					</div>
+				</div>
+				
+				<div class="title">포트폴리오</div>
+				<div class="box">
+					<div class="portfolio-box1">
+						<div class="row">
+							<div class="box-style lbox p-0">
+								<textarea class="box-style lbox-con" id="portfolio_url[]" name="portfolui_url[]" placeholder="포트폴리오 url을 입력해주세요."></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addPortfolioBox1(this)">추가하기</button>
+					</div>
+					<hr>
+					<div class="portfolio-box2">
+					    <div class="row">
+					        <div class="box-style lbox p-0 ">
+								<input class="box-style lbox-con" type="file" id="" name="" placeholder="포트폴리오 파일을 업로드해주세요." readonly>
+					        </div>
+					    </div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addPortfolioBox2(this)">추가하기</button>
+					</div>
+				</div>
+				
+				<div class="title">수상내역</div>
+				<div class="box">
+					<div class="award-box">
+						<div class="row">
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="award_name[]" name="award_name[]" placeholder="수상명">
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="award_cname[]" name="award_cname[]" placeholder="수여기관">
+							</div>
+							<span class="sstext p-0">수상연도</span>
+							<select id="award_syear[]" name="award_syear[]" class="box-style ssbox p-0">
+							<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+							</select>
+						</div>
+						<div class="row">
+							<div class="box-style lbox p-0">
+								<textarea class="box-style lbox-con" id="award_content[]" name="award_content[]" placeholder="수상 내용과 결과에 대해 작성해주세요."></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addAwardBox(this)">추가하기</button>
+					</div>
+				</div>
+				<div class="title">해외경험</div>
+				<div class="box">
+					<div class="globalex-box">
+						<div class="row">
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="globalex_name[]" name="globalex_name[]" placeholder="국가명">
+							</div>
+							<span class="sstext p-0">시작연도</span>
+							<select id="globalex_syear[]" name="globalex_syear[]" class="box-style ssbox p-0">
+							<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+							</select>
+							<span class="sstext p-0">종료연도</span>
+							<select id="globalex_eyear[]" name="globalex_eyear[]" class="box-style ssbox p-0">
+							<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+							</select>
+						</div>
+						<div class="row">
+							<div class="box-style lbox p-0">
+								<textarea class="box-style lbox-con" id="globalex_content[]" name="globalex_content[]" placeholder="해외에서 어떤 경험을 했는지 작성해주세요. (ex. 어학연수, 교환학생, 워킹홀리데이, 해외근무)"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addGlobalexBox(this)">추가하기</button>
+					</div>
+				</div>
+				<div class="title">어학</div>
+				<div class="box">
+					<div class="language-box">
+						<div class="row">
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="language_name[]" name="language_name[]" placeholder="외국어">
+							</div>
+							<div class="box-style mbox p-0">
+								<input class="box-style mbox-con" type="text" id="language_level[]" name="language_level[]" placeholder="회화능력">
+							</div>
+						</div>
+					</div>
+					<div class="row m-0">
+						<button class="add-btn mx-auto" type="button" onclick="addLanguageBox(this)">추가하기</button>
+					</div>
+				</div>
+				<div class="title">취업우대</div>
+				<div class="box">
+					<div class="preffer-box">
+						<div class="row">
+							<div class="box-style sbox p-0">
+								<input class="preffer-check" type="checkbox" id="checkbox1" name="checkbox1" onclick="toggleActiveClass(this)">
+								<span>보훈 대상</span>
+							</div>
+							<div class="box-style sbox p-0">
+								<input class="preffer-check" type="checkbox" id="checkbox2" name="checkbox2" onclick="toggleActiveClass(this)">
+								<span>취업보호 대상</span>
+							</div>
+							<div class="box-style sbox p-0">
+								<input class="preffer-check" type="checkbox" id="checkbox3" name="checkbox3" onclick="toggleActiveClass(this)">
+								<span>고용지원금 대상</span>
+							</div>
+							<div class="box-style sbox p-0">
+								<input class="preffer-check" type="checkbox" id="checkbox4" name="checkbox4" onclick="toggleActiveClass(this)">
+								<span>장애</span>
+							</div>
+							<div class="box-style sbox p-0">
+								<input class="preffer-check" type="checkbox" id="checkbox5" name="checkbox5" onclick="toggleActiveClass(this)">
+								<span>병역</span>
+							</div>
+						</div>
+						<div class="row">
+							<span class="sstext">장애</span>
+							<div class="box-style sbox p-0">
+								<div class="dropdown">
+						            <button class="box-style sbox-con dropdown-toggle" type="button" id="disabled-dropdown" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+						                장애 등급 선택
+						            </button>
+						            <div class="dropdown-menu">
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('1급', event)">1급</a>
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('2급', event)">2급</a>
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('3급', event)">3급</a>
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('4급', event)">4급</a>
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('5급', event)">5급</a>
+						                <a class="dropdown-item" href="#" onclick="selectDisabled('6급', event)">6급</a>
+						                <input type="hidden" id="disabled" name="disabled" value="">
+						            </div>
+						        </div>
+							</div>
+						</div>
+						<div class="row">
+							<span class="sstext">병역</span>
+							<div class="box-style sbox p-0">
+								<div class="dropdown">
+						            <button class="box-style sbox-con dropdown-toggle" type="button" id="military-dropdown" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+						                병역 선택
+						            </button>
+						            <div class="dropdown-menu">
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('현역', event)">현역</a>
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('예비역', event)">예비역</a>
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('보충역', event)">보충역</a>
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('병역준비역', event)">병역준비역</a>
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('전시근로역', event)">전시근로역</a>
+						                <a class="dropdown-item" href="#" onclick="selectMilitary('대체역', event)">대체역</a>
+						                <input type="hidden" id="military" name="military" value="">
+						            </div>
+						        </div>
 							</div>
 						</div>
 					</div>
@@ -579,9 +846,25 @@
 			</div>
 		</form>
 	</div>
+	
+	
+	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+		    // 이미 존재하는 모든 파일 입력 요소에 대해 이벤트 리스너를 추가합니다.
+		    var existingFileInputs = document.querySelectorAll('input[type="file"]');
+		    existingFileInputs.forEach(function(fileInput, index) {
+		        // 첫 번째 프로젝트 박스의 인덱스는 1로 시작한다고 가정합니다.
+		        var currentIndex = index + 1;
+		        fileInput.addEventListener('change', function(e) {
+		            updateFileNameAndExtension(e.target, currentIndex);
+		        });
+		    });
+		});
+	
 		document.addEventListener("DOMContentLoaded", function() {
 		    // edu-box의 DOM 요소를 가져옴
 		    var Box = document.querySelector('.box');
@@ -630,6 +913,26 @@
 		    // 선택한 재학 상태를 숨겨진 입력 필드에 저장
 		    var hiddenInput = event.target.closest('.dropdown').querySelector('input[type="hidden"]');
 		    hiddenInput.value = intern;
+		}
+		function selectDisabled(disabled, event) {
+		    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+		    var dropdownButton = event.target.closest('.dropdown').querySelector('.dropdown-toggle');
+		    dropdownButton.textContent = disabled;
+		    dropdownButton.style.backgroundColor = '#606060';
+		    dropdownButton.style.color = 'white';
+		    // 선택한 재학 상태를 숨겨진 입력 필드에 저장
+		    var hiddenInput = event.target.closest('.dropdown').querySelector('input[type="hidden"]');
+		    hiddenInput.value = disabled;
+		}
+		function selectMilitary(military, event) {
+		    event.preventDefault(); // 페이지 상단으로 스크롤되는 것을 방지
+		    var dropdownButton = event.target.closest('.dropdown').querySelector('.dropdown-toggle');
+		    dropdownButton.textContent = military;
+		    dropdownButton.style.backgroundColor = '#606060';
+		    dropdownButton.style.color = 'white';
+		    // 선택한 재학 상태를 숨겨진 입력 필드에 저장
+		    var hiddenInput = event.target.closest('.dropdown').querySelector('input[type="hidden"]');
+		    hiddenInput.value = military;
 		}
 		function addEduBox(button) {
 		    var box = button.closest('.box');
@@ -853,7 +1156,279 @@
         function deleteCurriculumBox(curriculumBox) {
             curriculumBox.parentNode.removeChild(curriculumBox);
         }
+        
+        var proidx = 1;
+        
+        function addProjectBox(button) {
+            proidx++;
+            var box = button.closest('.box');
+            var newProjectBox = document.createElement('div');
+            newProjectBox.className = 'project-box';
+
+            var separator = document.createElement('hr');
+            newProjectBox.appendChild(separator);
+
+            var existingProjectBox = box.querySelector('.project-box');
+            var clonedProjectContent = existingProjectBox.cloneNode(true);
+            newProjectBox.appendChild(clonedProjectContent);
+
+            var inputs = newProjectBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+                if (input.type === 'file') {
+                    var newFileId = 'project_file' + proidx;
+                    input.id = newFileId; // 새로운 id 값으로 설정합니다.
+                    // 이벤트 리스너를 여기에서 추가합니다.
+                    input.addEventListener('change', function(e) {
+                        updateFileNameAndExtension(e.target, proidx);
+                    });
+                }
+                if (input.type === 'hidden') {
+                    if (input.id.startsWith('project_fname')) {
+                        input.id = 'project_fname' + proidx; // project_fname의 새로운 id 값으로 설정
+                    } else if (input.id.startsWith('project_extension')) {
+                        input.id = 'project_extension' + proidx; // project_extension의 새로운 id 값으로 설정
+                    }
+                }
+            });
+
+            box.insertBefore(newProjectBox, button.parentNode);
+
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn';
+            deleteButton.textContent = '삭제';
+            deleteButton.onclick = function() {
+                deleteProjectBox(newProjectBox);
+                proidx--;
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newProjectBox.appendChild(deleteButtonContainer);
+        }
+        
+        function updateFileNameAndExtension(inputElement, index) {
+            var fullPath = inputElement.value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+
+                var dotIndex = filename.lastIndexOf('.');
+                var fileName = filename.substring(0, dotIndex);
+                var fileExtension = filename.substring(dotIndex + 1);
+
+                document.getElementById('project_fname' + index).value = fileName;
+                document.getElementById('project_extension' + index).value = fileExtension;
+            }
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deleteProjectBox(ProjectBox) {
+        	ProjectBox.parentNode.removeChild(ProjectBox);
+        	proidx--;
+        }
+        
+        
+        function addPortfolioBox1(button) {
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newPortfolioBox = document.createElement('div');
+            newPortfolioBox.className = 'portfolio-box1'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newPortfolioBox.appendChild(separator);
+
+            var existingPortfolioBox = box.querySelector('.portfolio-box1');
+            var clonedPortfolioContent = existingPortfolioBox.cloneNode(true);
+            newPortfolioBox.appendChild(clonedPortfolioContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newPortfolioBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newPortfolioBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deletePortfolioBox1(newPortfolioBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newPortfolioBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deletePortfolioBox1(portfolioBox) {
+            portfolioBox.parentNode.removeChild(portfolioBox);
+        }
+        
+        function addPortfolioBox2(button) {
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newPortfolioBox = document.createElement('div');
+            newPortfolioBox.className = 'portfolio-box2'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newPortfolioBox.appendChild(separator);
+
+            var existingPortfolioBox = box.querySelector('.portfolio-box2');
+            var clonedPortfolioContent = existingPortfolioBox.cloneNode(true);
+            newPortfolioBox.appendChild(clonedPortfolioContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newPortfolioBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newPortfolioBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deletePortfolioBox2(newPortfolioBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newPortfolioBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deletePortfolioBox2(portfolioBox) {
+            portfolioBox.parentNode.removeChild(portfolioBox);
+        }
+        
+        
+        
+        function addAwardBox(button) {
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newAwardBox = document.createElement('div');
+            newAwardBox.className = 'award-box'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newAwardBox.appendChild(separator);
+
+            var existingAwardBox = box.querySelector('.award-box');
+            var clonedAwardContent = existingAwardBox.cloneNode(true);
+            newAwardBox.appendChild(clonedAwardContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newAwardBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newAwardBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deleteAwardBox(newAwardBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newAwardBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deleteAwardBox(awardBox) {
+            awardBox.parentNode.removeChild(awardBox);
+        }
 		
+        function addGlobalexBox(button) {
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newGlobalexBox = document.createElement('div');
+            newGlobalexBox.className = 'globalex-box'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newGlobalexBox.appendChild(separator);
+
+            var existingGlobalexBox = box.querySelector('.globalex-box');
+            var clonedGlobalexContent = existingGlobalexBox.cloneNode(true);
+            newGlobalexBox.appendChild(clonedGlobalexContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newGlobalexBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newGlobalexBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deleteGlobalexBox(newGlobalexBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newGlobalexBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deleteGlobalexBox(globalexBox) {
+        	globalexBox.parentNode.removeChild(globalexBox);
+        }
+        
+        function addLanguageBox(button) {
+            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
+            var newLanguageBox = document.createElement('div');
+            newLanguageBox.className = 'language-box'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+
+            // 시각적 구분을 위한 구분선 추가
+            var separator = document.createElement('hr');
+            newLanguageBox.appendChild(separator);
+
+            var existingLanguageBox = box.querySelector('.language-box');
+            var clonedLanguageContent = existingLanguageBox.cloneNode(true);
+            newLanguageBox.appendChild(clonedLanguageContent);
+
+            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
+            var inputs = newLanguageBox.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = ''; // 모든 입력 필드를 비웁니다.
+            });
+
+            box.insertBefore(newLanguageBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
+
+            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+            var deleteButtonContainer = document.createElement('div');
+            deleteButtonContainer.style.textAlign = 'center';
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
+            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
+            deleteButton.onclick = function() {
+                deleteLanguageBox(newLanguageBox); // 커리큘럼 박스를 삭제하는 함수 호출
+            };
+            deleteButtonContainer.appendChild(deleteButton);
+            newLanguageBox.appendChild(deleteButtonContainer);
+        }
+
+        // 커리큘럼 박스를 삭제하는 함수
+        function deleteLanguageBox(languageBox) {
+        	languageBox.parentNode.removeChild(languageBox);
+        }
+        
         function toggleContent(num) {
             var box = document.getElementById('contentBox'+num);
             box.classList.toggle('active');
@@ -1035,6 +1610,9 @@
                 });
             });
         });
+        
+        
+        
 
         	
         document.addEventListener('DOMContentLoaded', function () {
@@ -1091,7 +1669,47 @@
                 }
             });
         });
-
+        
+		function toggleActiveClass(checkbox) {
+		    var container = checkbox.parentNode; // 체크박스를 감싸고 있는 div 요소 선택
+		    if (checkbox.checked) {
+		        checkbox.classList.add('active'); // 체크박스에 active 클래스 추가
+		        container.classList.add('active'); // 해당 div 요소에 active 클래스 추가
+		        if (checkbox.id === 'checkbox4') {
+		            var disabledDropdown = document.getElementById('disabled-dropdown');
+		            disabledDropdown.disabled = false;
+		            disabledDropdown.textContent = "장애 등급 선택";
+		            disabledDropdown.style.backgroundColor = '';
+		            disabledDropdown.style.color = '';
+		            document.getElementById('disabled').value = "";
+		        } else if (checkbox.id === 'checkbox5') {
+		            var militaryDropdown = document.getElementById('military-dropdown');
+		            militaryDropdown.disabled = false;
+		            militaryDropdown.textContent = "병역 선택";
+		            militaryDropdown.style.backgroundColor = '';
+		            militaryDropdown.style.color = '';
+		            document.getElementById('military').value = "";
+		        }
+		    } else {
+		        checkbox.classList.remove('active'); // 체크박스에서 active 클래스 제거
+		        container.classList.remove('active'); // 해당 div 요소에서 active 클래스 제거
+		        if (checkbox.id === 'checkbox4') {
+		            var disabledDropdown = document.getElementById('disabled-dropdown');
+		            disabledDropdown.disabled = true;
+		            disabledDropdown.textContent = "장애 등급 선택";
+		            disabledDropdown.style.backgroundColor = '';
+		            disabledDropdown.style.color = '';
+		            document.getElementById('disabled').value = "";
+		        } else if (checkbox.id === 'checkbox5') {
+		            var militaryDropdown = document.getElementById('military-dropdown');
+		            militaryDropdown.disabled = true;
+		            militaryDropdown.textContent = "병역 선택";
+		            militaryDropdown.style.backgroundColor = '';
+		            militaryDropdown.style.color = '';
+		            document.getElementById('military').value = "";
+		        }
+		    }
+		}
         
         function submitResume(){
         	document.resumeFrm.submit();
@@ -1102,6 +1720,13 @@
             var interneyearDropdown = document.getElementById("intern_eyear[]");
             var curriculumsyearDropdown = document.getElementById("curriculum_syear[]");
             var curriculumeyearDropdown = document.getElementById("curriculum_eyear[]");
+            var projectsyearDropdown = document.getElementById("project_syear[]");
+            var projecteyearDropdown = document.getElementById("project_eyear[]");
+            var awardsyearDropdown = document.getElementById("award_syear[]");
+            var globalexsyearDropdown = document.getElementById("globalex_syear[]");
+            var globalexeyearDropdown = document.getElementById("globalex_eyear[]");
+            
+            
             var currentYear = new Date().getFullYear();
 
             for (var i = currentYear - 60; i <= currentYear; i++) {
@@ -1109,6 +1734,11 @@
                 var interneoption = document.createElement("option");
                 var curriculumsoption = document.createElement("option");
                 var curriculumeoption = document.createElement("option");
+                var projectsoption = document.createElement("option");
+                var projecteoption = document.createElement("option");
+                var awardsoption = document.createElement("option")
+                var globalexsoption = document.createElement("option");
+                var globalexeoption = document.createElement("option")
                 
                 internsoption.text = i;
                 internsoption.value = i;
@@ -1117,16 +1747,30 @@
                 interneoption.value = i;
                 
                 curriculumsoption.text = i;
-                curriculumeoption.text = i;
-                
                 curriculumsoption.value = i;
+                
+                curriculumeoption.text = i;
                 curriculumeoption.value = i;
+                
+                awardsoption.text = i;
+                awardsoption.value = i;
+                
+                globalexsoption.text = i;
+                globalexsoption.value = i;
+                
+                globalexeoption.text = i;
+                globalexeoption.value = i;
                 
                 internsyearDropdown.appendChild(internsoption);
                 interneyearDropdown.appendChild(interneoption);
                 
                 curriculumsyearDropdown.appendChild(curriculumsoption);
                 curriculumeyearDropdown.appendChild(curriculumeoption);
+                
+                awardsyearDropdown.appendChild(awardsoption);
+                
+                globalexsyearDropdown.appendChild(globalexsoption);
+                globalexeyearDropdown.appendChild(globalexeoption);
             }
         });
 	</script>
