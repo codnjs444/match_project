@@ -1,4 +1,5 @@
 <!-- resume.jsp -->
+<%@page import="match.*"%>
 <%@page import="match.category.certificate_categoryBean"%>
 <%@page import="match.category.skill_categoryBean"%>
 <%@page import="java.util.Vector"%>
@@ -7,8 +8,32 @@
 <jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
 <jsp:useBean id="cMgr" class="match.category.certificate_categoryMgr"/>
 <jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
+<jsp:useBean id="uMgr" class="match.UserMgr"/>
+<jsp:useBean id="uBean" class="match.UserBean"/>
+
 <%
 	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
+	
+	String id = (String)session.getAttribute("idKey");
+	if(id==null){
+		response.sendRedirect("login.jsp");
+		return;
+	}
+	UserBean ubean = uMgr.getUser(id);
+	
+	int year = Integer.parseInt(ubean.getBirthday().substring(0, 4));
+	
+	String gender = "";
+	if(ubean.getUser_gender() == false)
+		gender = "남";
+	else
+		gender = "여";
+	
+	String SNS = "";
+	if(ubean.getSns() == null)
+		SNS = "없음";
+	else
+		SNS = ubean.getSns();
 %>
 <!DOCTYPE html>
 <html>
@@ -46,7 +71,7 @@
 			top: 155px;
 			right: 240px;
 			width: 200px;
-			height: 600px;
+			height: 600px; 
 			position: fixed;
 			display: flex;
 			justify-content: center;
@@ -70,6 +95,13 @@
 			margin-bottom: 20px;
 			border-radius: 5%;
 		}
+		.info-header{
+			font-size: 12px;
+			color: #767f8c;
+		}
+		.info-body{
+			padding-bottom: 5px;
+		}
 		.right-header{
 			margin-top: 12px;
 			font-size: 18px;
@@ -81,7 +113,7 @@
 			background-color: #fff;
 			border-radius: 10px/10px;
 		}
-		.right-btn{
+		.register-btn{
 			background-color: #fff;
 			border: none;
 			width: 60%;
@@ -111,6 +143,13 @@
 		.box{
 			width: 930px;
 			min-height: 100px;
+			border: 1px solid lightgrey;
+			border-radius: 10px/10px;
+			padding-bottom: 10px;
+		}
+		.box2{
+			width: 930px;
+			min-height: 57px;
 			border: 1px solid lightgrey;
 			border-radius: 10px/10px;
 			padding-bottom: 10px;
@@ -222,6 +261,9 @@
 			border-radius: 5px/5px;
 		}
 		.delete-btn{
+			padding-left: 6px;
+			padding-right: 6px;
+			width:  46px;
 			background-color: #fff;
 			color: #ff0000;
 			border: 1px solid;
@@ -315,30 +357,6 @@
 			overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
 			height: 68px;
 		}
-		/* 모달 스타일 */
-        .modal {
-            display: none; /* 기본적으로 숨김 */
-            position: fixed; /* 위치 설정 */
-            z-index: 1; /* 위로 배치 */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4); /* 배경색과 투명도 조절 */
-        }
-
-        /* 모달 콘텐츠 스타일 */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 모달 콘텐츠가 화면 중앙에 위치하도록 설정 */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 800px; /* 너비 설정 */
-            height: 350px; /* 높이 설정 */
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            position: relative; /* 닫기 버튼 위치 설정을 위해 상대 위치 지정 */
-            align-items: center;
-        }
 
         /* 모달 닫기 버튼 스타일 */
         .close {
@@ -374,12 +392,42 @@
         	color: #0066ff;
         	border-radius: 15px/15px;
         }
+        .modal-dialog{
+        	top:300px;
+        }
         .preffer-check{
         	width: 20px;
         	height: 20px;
         	margin-left: 13px;
         	margin-top: 16px;
         }
+        .right-content {
+		    background-color: white; /* 흰색 배경 */
+		    padding: 20px; /* 안쪽 여백 */
+		    border-radius: 10px; /* 모서리를 둥글게 */
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+		    max-width: 250px; /* 최대 너비 */
+		}
+		
+		.right-content ul {
+		    list-style-type: none; /* 기본 리스트 스타일 제거 */
+		    padding: 0; /* 패딩 제거 */
+		}
+		
+		.right-content ul li {
+		    margin-bottom: 10px; /* 리스트 아이템 사이의 여백 */
+		}
+		
+		.right-content ul li a {
+		    text-decoration: none; /* 밑줄 제거 */
+		    color: #333; /* 글자 색상 */
+		    font-weight: bold; /* 글자 두께 */
+		}
+		
+		.right-content ul li a:hover {
+		    color: #007bff; /* 링크 호버 색상 */
+		}
+		        
 	</style>
 </head>
 <body>
@@ -388,22 +436,74 @@
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">
 				<div class="left-img"></div>
-				<div class="left-name">한우진</div>
+				<div class="left-name"><%=ubean.getUser_name()%></div>
 				<div class="left-info">
-					
+					<table>
+						<tr>
+							<td class="info-header">
+								개인정보
+							</td>
+						</tr>
+						<tr>
+							<td class="info-body">
+								<%=year + "년생" + " (" + gender + ")"%>
+							</td>
+						</tr>
+						<tr>
+							<td class="info-header">
+								주소
+							</td>
+						</tr>
+						<tr>
+							<td class="info-body">
+								<%=ubean.getUser_address()%>
+							</td>
+						</tr>
+						<tr>
+							<td class="info-header">
+								이메일
+							</td>
+						</tr>
+						<tr>
+							<td class="info-body">
+								<%=ubean.getUser_email()%>
+							</td>
+						</tr>
+						<tr>
+							<td class="info-header">
+								연락처
+							</td>
+						</tr>
+						<tr>
+							<td class="info-body">
+								<%=ubean.getUser_address()%>
+							</td>
+						</tr>
+						<tr>
+							<td class="info-header">
+								SNS
+							</td>
+						</tr>
+						<tr>
+							<td class="info-body">
+								<%=SNS%>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 			
 			<div class="resume-center">
-				<div class="title">자기소개</div>
+				<div class="title" id="introInfo">자기소개</div>
 				<div class="stitle">당신은 어떤 사람인가요? (한 줄 소개)</div>
-				<input class="input-box" type="text" name="intro1">
+				<input class="input-box" type="text" id="intro1" name="intro1">
 				<div class="stitle">당신의 꿈, 목표와 비전에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" name="intro2">
+				<input class="input-box" type="text" id="intro2" name="intro2">
 				<div class="stitle">당신의 가치관에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" name="intro3">
+				<input class="input-box" type="text" id="intro3" name="intro3">
+				<input type="hidden" name="resume_name">
 				
-				<div class="title">학력</div>
+				<div class="title" id="eduInfo">학력</div>
 				<div class="box">
 					<div class="edu-box">
 						<div class="row">
@@ -459,7 +559,7 @@
 					</div>
 				</div>
 				
-				<div class="title">경력</div>
+				<div class="title" id="careerInfo">경력</div>
 				<div class="box">
 					<div class="career-box">
 						<div class="row">
@@ -493,7 +593,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addCareerBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">인턴, 대외 활동</div>
+				<div class="title" id="internInfo">인턴, 대외 활동</div>
 				<div class="box">
 					<div class="intern-box">
 						<div class="row">
@@ -536,7 +636,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addInternBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">교육 이수</div>
+				<div class="title" id="curriculumInfo">교육 이수</div>
 				<div class="box">
 					<div class="curriculum-box">
 						<div class="row">
@@ -565,7 +665,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addCurriculumBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">스킬</div>
+				<div class="title" id="skillInfo">스킬</div>
 				<div class="box">
 					<div class="skill-box">
 						<div class="row">
@@ -612,7 +712,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="title">자격증</div>
+				<div class="title" id="certificateInfo">자격증</div>
 				<div class="box">
 					<div class="certificate-box">
 						<div class="row">
@@ -643,7 +743,7 @@
 					</div>
 				</div>
         		
-				<div class="title">프로젝트</div>
+				<div class="title" id="projectInfo">프로젝트</div>
 				<div class="box">
 					<div class="project-box">
 						<div class="row">
@@ -657,6 +757,7 @@
 								<input type="file" class="box-style mbox-con" id="project_file1" name="project_file[]" placeholder="프로젝트 파일을 업로드해주세요.">
 								<input type="hidden" id="project_fname1" name="project_fname[]">
     							<input type="hidden" id="project_extension1" name="project_extension[]">
+    							
 							</div>
 						</div>
 						<div class="row">
@@ -680,32 +781,20 @@
 					</div>
 				</div>
 				
-				<div class="title">포트폴리오</div>
-				<div class="box">
-					<div class="portfolio-box1">
-						<div class="row">
-							<div class="box-style lbox p-0">
-								<textarea class="box-style lbox-con" id="portfolio_url[]" name="portfolui_url[]" placeholder="포트폴리오 url을 입력해주세요."></textarea>
-							</div>
-						</div>
-					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addPortfolioBox1(this)">추가하기</button>
-					</div>
-					<hr>
-					<div class="portfolio-box2">
+				<div class="title" id="portfolioInfo">포트폴리오</div>
+				<div class="box2">
+					<div class="portfolio-box" id="potofolio_Fields">
 					    <div class="row">
-					        <div class="box-style lbox p-0 ">
-								<input class="box-style lbox-con" type="file" id="" name="" placeholder="포트폴리오 파일을 업로드해주세요." readonly>
-					        </div>
+
 					    </div>
 					</div>
+					
 					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addPortfolioBox2(this)">추가하기</button>
+					<button class="add-btn mx-auto" type="button" id="addPortfolioButton">추가하기</button>					
 					</div>
 				</div>
 				
-				<div class="title">수상내역</div>
+				<div class="title" id="awardInfo">수상내역</div>
 				<div class="box">
 					<div class="award-box">
 						<div class="row">
@@ -730,7 +819,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addAwardBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">해외경험</div>
+				<div class="title" id="globalInfo">해외경험</div>
 				<div class="box">
 					<div class="globalex-box">
 						<div class="row">
@@ -756,7 +845,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addGlobalexBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">어학</div>
+				<div class="title" id="languageInfo">어학</div>
 				<div class="box">
 					<div class="language-box">
 						<div class="row">
@@ -772,7 +861,7 @@
 						<button class="add-btn mx-auto" type="button" onclick="addLanguageBox(this)">추가하기</button>
 					</div>
 				</div>
-				<div class="title">취업우대</div>
+				<div class="title" id="prefferInfo">취업우대</div>
 				<div class="box">
 					<div class="preffer-box">
 						<div class="row">
@@ -841,18 +930,76 @@
 			
 			<div class="fixed-right resume-side row me-0">
 				<div class="right-header">이력서 항목</div>
-				<div class="right-content"></div>
-				<button class="right-btn" type="submit" onclick="submitResume()">저장</button>
+				<div class="right-content">
+				    <ul>
+				        <li><a href="#introInfo">자기소개</a></li>
+				        <li><a href="#eduInfo">학력</a></li>
+				        <li><a href="#careerInfo">경력</a></li>
+				        <li><a href="#internInfo">인턴,대외 활동</a></li>
+				        <li><a href="#curriculumInfo">교육 이수</a></li>
+				        <li><a href="#skillInfo">스킬</a></li>
+				        <li><a href="#certificateInfo">자격증</a></li>
+				        <li><a href="#projectInfo">프로젝트</a></li>
+				        <li><a href="#portfolioInfo">포트폴리오</a></li>
+				        <li><a href="#awardInfo">수상내역</a></li>
+				        <li><a href="#globalInfo">해외경험</a></li>
+				        <li><a href="#languageInfo">어학</a></li>
+				        <li><a href="#prefferInfo">취업우대</a></li>
+				    </ul>
+				</div>
+				<button id="register-btn" class="register-btn" type="button">저장</button>
 			</div>
 		</form>
 	</div>
 	
-	
+		<!-- 등록 완료 모달 -->
+	<div class="modal fade" id="titleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">이력서 제목 입력</h5>
+	        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form id="titleForm" method="get" action="resumeProc.jsp">
+	        <div class="modal-body">
+	          <input type="text" class="form-control" id="resume_name_modal" name="resume_name" placeholder="제목 입력">
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="" data-bs-dismiss="modal">취소</button>
+	          <button type="button" class="btn btn-primary" onclick="submitResume()">확인</button>
+	        </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
+		document.getElementById("register-btn").addEventListener("click", function() {
+		    var selfIntro1 = document.getElementById("intro1").value.trim();
+		    var selfIntro2 = document.getElementById("intro2").value.trim();
+		    var selfIntro3 = document.getElementById("intro3").value.trim();
+		    var missingFields = []; // 비어 있는 필수 항목의 이름을 모을 배열 초기화
+	
+		    // 각 필수 항목을 검사하고 비어있다면 missingFields 배열에 추가
+		    if (selfIntro1 === "") missingFields.push("당신은 어떤 사람인가요? (한 줄 소개)");
+		    if (selfIntro2 === "") missingFields.push("당신의 꿈, 목표와 비전에 대해 기술해주세요.");
+		    if (selfIntro3 === "") missingFields.push("당신의 가치관에 대해 기술해주세요.");
+		    
+		    // missingFields 배열에 항목이 있다면 경고 메시지 생성
+		    if (missingFields.length > 0) {
+		        var message = "다음 필수 사항을 입력해주세요:\n" + missingFields.join("\n");
+		        alert(message);
+		    } else {
+		        // 모든 필수 입력이 완료된 경우 등록 완료 모달 표시
+		        $('#titleModal').modal('show');
+		    }
+		});
+		
 		document.addEventListener('DOMContentLoaded', function() {
 		    // 이미 존재하는 모든 파일 입력 요소에 대해 이벤트 리스너를 추가합니다.
 		    var existingFileInputs = document.querySelectorAll('input[type="file"]');
@@ -864,6 +1011,24 @@
 		        });
 		    });
 		});
+		
+		function updateFileNameAndExtension(inputElement, index) {
+            var fullPath = inputElement.value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+
+                var dotIndex = filename.lastIndexOf('.');
+                var fileName = filename.substring(0, dotIndex);
+                var fileExtension = filename.substring(dotIndex + 1);
+
+                document.getElementById('project_fname' + index).value = fileName;
+                document.getElementById('project_extension' + index).value = fileExtension;
+            }
+        }
 	
 		document.addEventListener("DOMContentLoaded", function() {
 		    // edu-box의 DOM 요소를 가져옴
@@ -1180,7 +1345,7 @@
                     input.id = newFileId; // 새로운 id 값으로 설정합니다.
                     // 이벤트 리스너를 여기에서 추가합니다.
                     input.addEventListener('change', function(e) {
-                        updateFileNameAndExtension(e.target, proidx);
+                        updateFileNameAndExtension1(e.target, proidx);
                     });
                 }
                 if (input.type === 'hidden') {
@@ -1207,7 +1372,7 @@
             newProjectBox.appendChild(deleteButtonContainer);
         }
         
-        function updateFileNameAndExtension(inputElement, index) {
+        function updateFileNameAndExtension1(inputElement, index) {
             var fullPath = inputElement.value;
             if (fullPath) {
                 var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
@@ -1231,84 +1396,60 @@
         	proidx--;
         }
         
-        
-        function addPortfolioBox1(button) {
-            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
-            var newPortfolioBox = document.createElement('div');
-            newPortfolioBox.className = 'portfolio-box1'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+        document.getElementById('addPortfolioButton').addEventListener('click', function() {
+            var container = document.getElementById('potofolio_Fields'); // 동적 필드를 추가할 부모 컨테이너 ID
 
-            // 시각적 구분을 위한 구분선 추가
-            var separator = document.createElement('hr');
-            newPortfolioBox.appendChild(separator);
+            var newDiv = document.createElement('div');
+            newDiv.className = 'row align-items-center mt-2';
 
-            var existingPortfolioBox = box.querySelector('.portfolio-box1');
-            var clonedPortfolioContent = existingPortfolioBox.cloneNode(true);
-            newPortfolioBox.appendChild(clonedPortfolioContent);
+            // 파일 입력 필드 생성
+            var newFileInput = document.createElement('input');
+            newFileInput.type = 'file';
+            newFileInput.className = 'box-style lbox p-0';
+            newFileInput.name = 'portfolio_file[]'; // 파일을 배열 형태로 서버에 전송
+            newDiv.appendChild(newFileInput);
 
-            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
-            var inputs = newPortfolioBox.querySelectorAll('input, textarea');
-            inputs.forEach(function(input) {
-                input.value = ''; // 모든 입력 필드를 비웁니다.
+            // 파일 이름을 저장할 숨김 필드 생성 (서버에서 처리 시 사용될 수 있음)
+            var newFileNameInput = document.createElement('input');
+            newFileNameInput.type = 'hidden';
+            newFileNameInput.name = 'portfolio_fname[]';
+            newDiv.appendChild(newFileNameInput);
+
+            // 파일 확장자를 저장할 숨김 필드 생성 (서버에서 처리 시 사용될 수 있음)
+            var newFileExtensionInput = document.createElement('input');
+            newFileExtensionInput.type = 'hidden';
+            newFileExtensionInput.name = 'portfolio_extension[]';
+            newDiv.appendChild(newFileExtensionInput);
+
+            // 파일 입력 필드에 이벤트 리스너 추가: 파일 선택 시 파일 이름, 확장자, 크기를 숨김 필드에 저장
+            newFileInput.addEventListener('change', function(e) {
+                if(e.target.files.length > 0) {
+                    var file = e.target.files[0];
+                    var fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+                    var fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
+
+                    newFileNameInput.value = fileName;
+                    newFileExtensionInput.value = fileExtension;
+                }
             });
 
-            box.insertBefore(newPortfolioBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
-
-            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
+         	// 삭제 버튼 컨테이너
             var deleteButtonContainer = document.createElement('div');
-            deleteButtonContainer.style.textAlign = 'center';
+            deleteButtonContainer.className = 'text-center'; // 중앙 정렬을 위한 클래스 추가
+
+            // 삭제 버튼 생성 및 설정
             var deleteButton = document.createElement('button');
-            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
-            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
-            deleteButton.onclick = function() {
-                deletePortfolioBox1(newPortfolioBox); // 커리큘럼 박스를 삭제하는 함수 호출
-            };
+            deleteButton.innerText = '삭제';
+            deleteButton.type = 'button';
+            deleteButton.className = 'delete-btn'; // 부트스트랩 클래스를 사용해 스타일 적용
+            deleteButton.onclick = function() { newDiv.remove(); };
             deleteButtonContainer.appendChild(deleteButton);
-            newPortfolioBox.appendChild(deleteButtonContainer);
-        }
 
-        // 커리큘럼 박스를 삭제하는 함수
-        function deletePortfolioBox1(portfolioBox) {
-            portfolioBox.parentNode.removeChild(portfolioBox);
-        }
-        
-        function addPortfolioBox2(button) {
-            var box = button.closest('.box'); // 가장 가까운 부모에서 'box' 클래스를 찾습니다.
-            var newPortfolioBox = document.createElement('div');
-            newPortfolioBox.className = 'portfolio-box2'; // 새로운 div에 'curriculum-box' 클래스를 추가합니다.
+            newDiv.appendChild(deleteButtonContainer);
 
-            // 시각적 구분을 위한 구분선 추가
-            var separator = document.createElement('hr');
-            newPortfolioBox.appendChild(separator);
+            container.appendChild(newDiv);
 
-            var existingPortfolioBox = box.querySelector('.portfolio-box2');
-            var clonedPortfolioContent = existingPortfolioBox.cloneNode(true);
-            newPortfolioBox.appendChild(clonedPortfolioContent);
-
-            // 새로운 커리큘럼 박스 내의 모든 입력 및 텍스트 영역 요소의 값을 지웁니다.
-            var inputs = newPortfolioBox.querySelectorAll('input, textarea');
-            inputs.forEach(function(input) {
-                input.value = ''; // 모든 입력 필드를 비웁니다.
-            });
-
-            box.insertBefore(newPortfolioBox, button.parentNode); // '추가하기' 버튼 전에 새로운 커리큘럼 박스를 삽입합니다.
-
-            // 새로운 커리큘럼 박스에 삭제 버튼을 추가합니다.
-            var deleteButtonContainer = document.createElement('div');
-            deleteButtonContainer.style.textAlign = 'center';
-            var deleteButton = document.createElement('button');
-            deleteButton.className = 'delete-btn'; // 삭제 버튼에 클래스 추가
-            deleteButton.textContent = '삭제'; // 버튼 텍스트 설정
-            deleteButton.onclick = function() {
-                deletePortfolioBox2(newPortfolioBox); // 커리큘럼 박스를 삭제하는 함수 호출
-            };
-            deleteButtonContainer.appendChild(deleteButton);
-            newPortfolioBox.appendChild(deleteButtonContainer);
-        }
-
-        // 커리큘럼 박스를 삭제하는 함수
-        function deletePortfolioBox2(portfolioBox) {
-            portfolioBox.parentNode.removeChild(portfolioBox);
-        }
+        });
         
         
         
@@ -1711,9 +1852,15 @@
 		    }
 		}
         
-        function submitResume(){
-        	document.resumeFrm.submit();
-        }
+		function submitResume() {
+			//var formData = new FormData(document.getElementById("companyForm"));
+			formData = document.resumeFrm;
+		    //formData.append("resume_name", document.getElementById("resume_name_modal").value);
+		    formData.resume_name.value = document.getElementById("resume_name_modal").value;
+		    formData.submit();
+			
+		    $('#titleModal').modal('hide'); // 모달 닫기
+		}
         
         document.addEventListener("DOMContentLoaded", function() {
             var internsyearDropdown = document.getElementById("intern_syear[]");

@@ -34,6 +34,29 @@ public class UserMgr {
 		return flag;
 	}
 	
+	public String getUserName(String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String user_name = "";
+		try {
+			con = pool.getConnection();
+			sql = "select user_name from user where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				user_name = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return user_name;
+	}
+	
 	public UserBean getUser(String user_id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;

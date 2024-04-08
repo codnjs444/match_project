@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 import match.resume.*;
 
@@ -329,29 +330,37 @@ public class ResumeMgr {
 		return flag;
 	}
 	
-	public boolean insertPortfolio(PortfolioBean bean) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		String sql = null;
-		boolean flag = false;
-		try {
-			con = pool.getConnection();
-			sql = "insert into portfolio values(?,?,?,?,?,now()";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, bean.getResume_idx());
-			pstmt.setString(2, bean.getPortfolio_name());
-			pstmt.setString(3, bean.getPortfolio_url());
-			pstmt.setString(4, bean.getPortfolio_fname());
-			pstmt.setString(5, bean.getPortfolio_extension());
-			
-			if(pstmt.executeUpdate() == 1)
-				flag = true;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			pool.freeConnection(con, pstmt);
-		}
-		return flag;
+	public void insertPortfolio(PortfolioBean bean) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    
+	    // 포트폴리오 정보를 삽입하는 SQL 쿼리
+	    String sql = "INSERT INTO portfolio (resume_idx, portfolio_name, portfolio_url, portfolio_fname, portfolio_extension, portfolio_udate) VALUES (?, null, null, ?, ?, NOW())";
+	    
+	    try {
+	        con = pool.getConnection(); // 데이터베이스 연결 획득
+	        pstmt = con.prepareStatement(sql); // SQL 문을 준비
+
+	        // PortfolioBean에서 각 리스트를 가져오기
+	        List<String> fnames = bean.getPortfolio_fname();
+	        List<String> extensions = bean.getPortfolio_extension();
+	        
+	        int resumeIdx = bean.getResume_idx(); // 이력서 인덱스 가져오기
+
+	        // 리스트의 크기만큼 반복하여 각 항목을 데이터베이스에 삽입
+	        for (int i = 0; i < fnames.size(); i++) {
+	            pstmt.setInt(1, resumeIdx);
+	            pstmt.setString(2, fnames.get(i));
+	            pstmt.setString(3, extensions.get(i));
+	            
+	            // 삽입 실행
+	            pstmt.executeUpdate();
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace(); // 예외 발생 시 예외 내용 로깅
+	    } finally {
+            pool.freeConnection(con);
+	    }
 	}
 }

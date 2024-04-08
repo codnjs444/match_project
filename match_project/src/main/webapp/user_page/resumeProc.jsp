@@ -1,4 +1,7 @@
 <!-- resumeProc.jsp -->
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="match.ResumeMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="uBean" class="match.UserBean"/>
@@ -38,7 +41,7 @@
 	String msg = "실패";
 	int generatedKey = 0;
 	String user_id = (String)session.getAttribute("idKey");
-	String resume_name = "임시";
+	String resume_name = request.getParameter("resume_name");
 	String self_intro1 = request.getParameter("intro1");
 	String self_intro2 = request.getParameter("intro2");
 	String self_intro3 = request.getParameter("intro3");
@@ -251,6 +254,25 @@
 			boolean project_result = rMgr.insertProject(proBean);
 		}
 	}
+	
+	// 파일 실제 이름 배열
+	String[] portfolioFnameArray = request.getParameterValues("portfolio_fname[]");
+	String[] portfolioExtensionArray = request.getParameterValues("portfolio_extension[]");
+/* 	String[] portfolioUdateArray = request.getParameterValues("portfolio_udates[]"); */
+
+	List<String> portfolioFnameList = (portfolioFnameArray != null) ? Arrays.asList(portfolioFnameArray) : new ArrayList<>();
+	List<String> portfolioExtensionList = (portfolioExtensionArray != null) ? Arrays.asList(portfolioExtensionArray) : new ArrayList<>();
+/* 	List<String> portfolioUdateList = (portfolioUdateArray != null) ? Arrays.asList(portfolioUdateArray) : new ArrayList<>(); */
+
+	// poBean에 파일 정보 설정
+	poBean.setResume_idx(generatedKey);
+	poBean.setPortfolio_fname(portfolioFnameList);
+	poBean.setPortfolio_extension(portfolioExtensionList);
+/* 	poBean.setPortfolio_udate(portfolioUdateList); */
+
+	rMgr.insertPortfolio(poBean);
+	
+
 %>
 <script>
 	location.href("resume.jsp");
