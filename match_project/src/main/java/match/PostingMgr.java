@@ -925,10 +925,8 @@ public class PostingMgr {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int count = 0; // Initialize the count of procedure_num to 0
-
 		try {
 			con = pool.getConnection(); // Assume pool is previously defined and accessible
-
 			String sql = "SELECT COUNT(procedure_num) AS count FROM `procedure` WHERE posting_idx=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, posting_idx);

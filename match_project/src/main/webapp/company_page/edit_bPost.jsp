@@ -1367,19 +1367,7 @@ document.getElementById('addadddocument_Fields').addEventListener('click', funct
 	        });
 	    }
 
-	    var dropdownButtonEdutype = document.getElementById('dropdownMenuButton3');
-	    if (edutype) {
-	        dropdownButtonEdutype.textContent = edutype;
-	    } else {
-	        dropdownButtonEdutype.textContent = "요구하는 지원자의 학력을 선택해주세요.";
-	    }
 
-	    var dropdownButtonGender = document.getElementById('dropdownMenuButton4');
-	    if (gender) {
-	        dropdownButtonGender.textContent = gender;
-	    } else {
-	        dropdownButtonGender.textContent = "성별을 선택하세요.";
-	    }
 
 	    // Set working day and working hour dropdowns
 	    var workingDay = '<%= eBean.getWorking_day() %>';

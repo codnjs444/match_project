@@ -3,8 +3,7 @@
 <%@page import="match.PostingMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="pMgr" class="match.PostingMgr"/>
-<jsp:useBean id="aMgr" class="match.application.applicationMgr"/>
-
+<jsp:useBean id="aMgr" class="match.application.ApplicationMgr"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,15 +15,199 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-	<link href="../../css/company_home_middle.css" rel="stylesheet" type="text/css">    
-	<link href="../css/company_home_middle.css" rel="stylesheet" type="text/css">    
-	
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <style>
 body {
     background-color: #F8F8F8;
 }
+	.custom-container {
+	    max-width: 1400px;
+	    margin: auto;	    
+	}
+	/*상단 부분 버튼*/
+	.top_btn {
+	    border: none; /* 테두리 제거 */
+	    background-color: transparent; /* 배경색 제거 */
+	    font-size: 18px; /* 폰트 사이즈 설정 */
+	    color: #606060; /* 폰트 색상 설정 */
+	    margin-right: 40px;
+	    font-weight: bold;
+	}
+	
+	.filt_btn {
+	    border: none; /* 테두리 제거 */
+	    background-color: transparent; /* 배경색 제거 */
+	    font-size: 15px; /* 폰트 사이즈 설정 */
+	    color: #606060; /* 폰트 색상 설정 */
+	    margin-top: 6px;
+	    margin-right: 20px;
+	    font-weight: bolder;
+	}	
+	.filt_btn2 {
+	    border: none; /* 테두리 제거 */
+	    background-color: transparent; /* 배경색 제거 */
+	    font-size: 15px; /* 폰트 사이즈 설정 */
+	    color: #606060; /* 폰트 색상 설정 */
+	    margin-top: 6px;
+	    font-weight: bolder;
+	}		
+	.top_btn:hover {
+	    color: #fff; /* 호버 시 폰트 색상 변경 */
+	    background-color: #606060; /* 호버 시 배경색 변경 */
+	}
+    .top_btn.active {
+        background-color: #4698EA; /* 배경색 */
+        color: #fff; /* 텍스트 색상 */
+        border-color: #4698EA; /* 테두리 색상, 필요한 경우 */
+    }
+
+	.filter-buttons {
+	    position: relative;
+	    margin-right: 10px;
+	    padding-bottom: 10px; 
+	}
+	
+	.buttons {
+    margin-left: 1100px; /* 왼쪽으로 20px만큼 이동 */
+	}
+	
+	.filter-buttons::after {
+	    content: "";
+	    position: absolute;
+	    bottom: 0;
+	    right: 0;
+	    width: 99%;
+	    height: 2px;
+	    background-color: #ccc;
+	}
+    /*공고 부분 스타일*/
+	.job-post {
+	    border: 1px solid #C4C4C4;
+	    padding: 20px;
+	    padding-top: 0; /* 상단 패딩 제거 */
+	    padding-bottom: 0; /* 상단 패딩 제거 */
+	    padding-right: 0; /* 상단 패딩 제거 */
+	    padding-left: 0; /* 상단 패딩 제거 */
+	    margin-bottom: 20px;
+	    margin-right: auto;
+	    margin-top: 0; /* 상단 마진 제거 */
+	    margin-bottom: 0; /* 상단 마진 제거 */
+	    margin-left: 0; /* 상단 마진 제거 */
+	    margin-right: 0; /* 상단 마진 제거 */
+	    min-height: 200px;
+	    width: 100%;
+	}
+
+	
+    /*공고 부분  구역 나누기 스타일*/
+    .section {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .top, .middle, .bottm {
+        flex: 1; /* 가로 공간을 동일하게 채움 */
+        color: white; /* 텍스트 색상을 흰색으로 설정 */
+    }
+
+    /* 개별 섹션의 높이를 다르게 설정 */
+    .top {
+        height: 30px; /* 상단 부분의 높이 */
+    }
+
+    .middle {
+        height: 160px; /* 중간 부분의 높이 */
+    }
+
+    .bottom {
+        height: 30px; /* 하단 부분의 높이 */
+    }
+	.procedure-box {
+	    display: inline-flex; /* 내용에 맞게 너비 조정 */
+	    justify-content: center;
+	    align-items: center;
+	    padding: 0 10px; /* 좌우 패딩 추가 */
+	    min-width: 100px; /* 최소 너비 설정 */
+	    height: 34px;
+	    background-color: white;
+	    color: black;
+	    margin: 15px auto;
+	    border: 1px solid #606060;
+	    border-radius: 5px;
+	    font-weight: bold;
+	    white-space: nowrap; /* 텍스트가 줄 바뀜 없이 한 줄로 표시 */
+	}
+
+	
+	.section.middle {
+	    height: 160px; /* 기존의 높이 설정 유지 */
+	    display: flex;
+	    flex-direction: column;
+	}
+	
+	.vertical-section {
+	    flex: 1; /* 부모 컨테이너의 높이에 따라 동일한 비율로 높이 설정 */
+	}
+    .middle-container {
+        display: flex; /* Flexbox를 사용하여 가로로 요소를 배치 */
+        height: 100%; /* 부모 컨테이너의 높이를 전부 차지 */
+    }
+    
+    .horizontal-section {
+        position: relative; /* 자식 요소인 .oval-shape를 절대 위치로 배치하기 위함 */
+        height: 100%;
+        display: flex;
+    }
+
+	.posting_type {
+		margin-left: 10px;
+	    position: absolute;
+	    width: 80px;
+	    height: 30px;
+	    background-color: white;
+	    border-radius: 30%;
+	    border: 2px solid #C4C4C4;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    color: #606060;
+	    font-size: 14px;
+	    font-weight: bold;
+	    left: 50%;
+	    top: 0; /* 타원을 상단에 위치시킴 */
+	    transform: translate(-50%, +100%); /* 왼쪽으로 50%, 위로 50% 이동하여 중앙 정렬 */
+	}    
+
+    .posting_name {
+    	margin-top: 22px;
+    	margin-left: 20px;
+        font-size: 18px;
+        font-weight: bolder;
+        color: black;
+        text-align: left; /* 좌측 정렬 */
+        margin-bottom: 8px; /* 이름과 날짜 사이에 여백 */
+    }
+
+    .posting_date, .posting_service {
+    	margin-left: 20px;
+        font-size: 14px;
+        color: #606060;
+        text-align: left; /* 좌측 정렬 */
+        margin-bottom: 8px; /* 날짜와 서비스 사이에 여백 */
+    }
+
+    .horizontal-section {
+        flex-direction: column; /* 세로로 쌓기 */
+        padding: 10px; /* 안쪽 여백 */
+    }
+
+	/*나머지 스타일*/
+    .row-between {
+        padding-right: 80px; /* 우측 간격을 늘립니다 */
+    }
+	
+
 </style>
 <body>
 
@@ -107,7 +290,9 @@ body {
 				              
 				            </div>
 				            <div class="horizontal-section" style="width: 62%;">
-							<div class="posting_name"><%= postingNames.get(i) %></div>
+			                    <a href="post_manage.jsp?posting_idx=<%= postIdxList.get(i) %>" class="posting_name" style="text-decoration: none; color: #000;">
+			                        <%= postingNames.get(i) %>
+			                    </a>
 				                <!-- 추가된 부분: 공고 이름과 날짜 정보 -->
             					<div class="posting_date"><%= dateRanges.get(i) %></div>
 				                <div class="posting_service">이용중이신 홍보 서비스가 없습니다.</div>
