@@ -74,7 +74,7 @@
 <body>
 
 <header class="header">
-  <div class="logo">Match</div>
+  <a class="logo" href="">Match</a>
   <div class="search-bar">
     <input type="text" placeholder="기업, 채용공고를 검색해주세요.">
     <img src="${pageContext.request.contextPath}/img/fi_search.png" alt="Search Icon">

@@ -19,21 +19,20 @@
 		response.sendRedirect("login.jsp");
 		return;
 	}
-	UserBean ubean = uMgr.getUser(id);
-	
-	int year = Integer.parseInt(ubean.getBirthday().substring(0, 4));
+	uBean = uMgr.getUser(id);
+	int year = Integer.parseInt(uBean.getBirthday().substring(0, 4));
 	
 	String gender = "";
-	if(ubean.getUser_gender() == false)
+	if(uBean.getUser_gender() == false)
 		gender = "남";
 	else
 		gender = "여";
 	
 	String SNS = "";
-	if(ubean.getSns() == null)
+	if(uBean.getSns() == null)
 		SNS = "없음";
 	else
-		SNS = ubean.getSns();
+		SNS = uBean.getSns();
 %>
 <!DOCTYPE html>
 <html>
@@ -431,12 +430,12 @@
 	</style>
 </head>
 <body>
-<%@ include file="top.jsp" %>
+<%@ include file="user_top.jsp" %>
 	<div class="resume">
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">
-				<div class="left-img"></div>
-				<div class="left-name"><%=ubean.getUser_name()%></div>
+				<input class="left-img" type="file">
+				<div class="left-name"><%=uBean.getUser_name()%></div>
 				<div class="left-info">
 					<table>
 						<tr>
@@ -456,7 +455,7 @@
 						</tr>
 						<tr>
 							<td class="info-body">
-								<%=ubean.getUser_address()%>
+								<%=uBean.getUser_address()%>
 							</td>
 						</tr>
 						<tr>
@@ -466,7 +465,7 @@
 						</tr>
 						<tr>
 							<td class="info-body">
-								<%=ubean.getUser_email()%>
+								<%=uBean.getUser_email()%>
 							</td>
 						</tr>
 						<tr>
@@ -476,7 +475,7 @@
 						</tr>
 						<tr>
 							<td class="info-body">
-								<%=ubean.getUser_address()%>
+								<%=uBean.getUser_address()%>
 							</td>
 						</tr>
 						<tr>

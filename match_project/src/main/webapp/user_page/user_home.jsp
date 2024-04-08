@@ -13,11 +13,11 @@
 </head>
 <body>
 
-<%@ include file="top.jsp" %>
+<%@ include file="user_top.jsp" %>
 
-<%@ include file="middle.jsp" %>
+<%@ include file="woojintest.jsp" %>
 
-<%@ include file="bottom.jsp" %>
+<%@ include file="user_bottom.jsp" %>
 
 </body>
 </html>

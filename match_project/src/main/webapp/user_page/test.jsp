@@ -383,7 +383,7 @@
 	</style>
 </head>
 <body>
-<%@ include file="top.jsp" %>
+<%@ include file="user_top.jsp" %>
 	<div class="resume">
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">

@@ -515,6 +515,9 @@
     		<th class="application-edate-head">지원 기간</th>
     		<th class="application-sdate-head">등록일</th>
     	</tr>
+    	<%for(int i = 0; i < 10; i++) 
+    		{
+    	%>
     	<tr class="list-body">
     		<td class="check-box-body">
     			<input class="check-box" type="checkbox">
@@ -527,8 +530,8 @@
     				<div class="col testcol">
     					[카카오] 카카오메이커스 콘텐츠 어시스턴트
     				</div>
-    				<div class="col testcol">
-    					상품분석
+    				<div>
+    					블라인드
     				</div>
     				<div class="col testcol">
     					<button class="scrab">스크랩</button>
@@ -556,6 +559,10 @@
     			2024-04-02
     		</td>
     	</tr>
+    	
+    	<%
+    		} 
+    	%>
     </table>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
