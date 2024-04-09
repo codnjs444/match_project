@@ -134,8 +134,8 @@
 					</tbody>
 				</table>
 				<div class="text-center mt-5 mb-5">
-					<button type="submit" class="btn btn-lg btn-primary" style="width: 30%;" >수정하기</button>
-					<button type="submit" class="btn btn-lg btn-secondary" style="width: 30%;">취소</button>
+					<button type="submit" id="btn-submit" class="btn btn-lg btn-primary" style="width: 30%;" >수정하기</button>
+					<button type="button" id="btn-cancel" class="btn btn-lg btn-secondary" style="width: 30%;">취소</button>
 				</div>
 			</form>
 		</div>
@@ -152,6 +152,16 @@
 						// email 선택
 						$("#input-email2").val(_this_val);
 					}
+				});
+				// 수정하기 버튼 이벤트 
+				$("#btn-submit").on("click", function() {
+					// todo. validate 
+					return false;
+				});
+				// 취소하기 버튼 이벤트 
+				$("#btn-cancel").on("click", function() {
+					// todo. 이전페이지 돌아가기
+					history.back();
 				});
 			});
 		</script>

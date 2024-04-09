@@ -3,6 +3,7 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="match.PostingMgr"%>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="pMgr" class="match.PostingMgr"/>
 <jsp:useBean id="aMgr" class="match.application.ApplicationMgr"/>
@@ -79,22 +80,29 @@
 	    margin-bottom: 0; /* 상단 마진 제거 */
 	    margin-left: 0; /* 상단 마진 제거 */
 	    margin-right: 0; /* 상단 마진 제거 */
-	    height: 100px;
+	    min-height: 100px;
+	    height: auto;
 	    width: 107%;
 	}	
 	
 	.applicant-info > div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    }
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    text-align: center;
+	    flex-wrap: wrap; /* 이 부분 추가 */
+	}
+
 	.fixed-button {
 	    position: fixed;
-	    bottom: 425px;
-	    right: 20px;
+	    bottom: 425px; /* 화면 하단에서의 위치 */
+	    right: 20px; /* 화면 우측에서의 위치 */
 	    z-index: 999;
+	    display: flex; /* Flexbox 레이아웃 사용 */
+	    flex-direction: column; /* 자식 요소를 세로로 나열 */
+	    align-items: center; /* 가운데 정렬 */
 	}
+
 	
 	.addbtn22 {
 	    width: 120px; /* 원하는 너비로 설정하세요 */
@@ -109,11 +117,34 @@
 	    cursor: pointer;
 	    text-align: center; /* 텍스트 가운데 정렬 */
 	}
+	.addbtn {
+	    width: 70px; /* 원하는 너비로 설정하세요 */
+	    height: 30px;
+	    background-color: white;
+	    color: #606060;
+	    border: 2px solid #606060;
+	    border-radius: 5px;
+	    font-size: 16px;
+	    font-weight: bolder;
+	    text-align: center; /* 텍스트 가운데 정렬 */
+	    align-items: center; /* 수직 가운데 정렬 */
+	}
 	.dropdown-toggle {
 	    padding: 2px 6px; /* 버튼 내부 여백 조절 */
 	    font-size: 12px; /* 아이콘 및 텍스트 크기 조절 */
 	    line-height: 1; /* 버튼 높이 조절 */
 	}
+	.modal-dialog {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100% - 60px); /* 모달이 화면 중앙에 위치하도록 설정 */
+    }
+
+    .modal-content {
+        width: 400px; /* 모달의 너비를 조절할 수 있습니다. */
+    }	
+
 </style>
 <body>
 
@@ -125,15 +156,46 @@
 	String postingName = pMgr.getPostingName(posting_idx);
 	// 채용 절차 수
 	int procedureNum = pMgr.countProcedureNum(posting_idx);
-	int procecount = 0;
+    // procecount 값 설정
+    int procecount = 0; // 기본값
+    String procecountParam = request.getParameter("procecount");
+    if (procecountParam != null && !procecountParam.isEmpty()) {
+        try {
+            procecount = Integer.parseInt(procecountParam);
+        } catch (NumberFormatException e) {
+            // 잘못된 값이 입력된 경우, procecount는 0으로 처리
+        }
+    }
 	// 채용 절차 출력하기 위한 파일 (상단 메뉴)
-	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procecount);
+	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
 	// x 절차의 user id의 정보를 담음
 	List<String> userIds = aMgr.searchUserId(posting_idx, procecount);
 	// user id의 순서에 맞게 저장된 resume_IDX값들
 	List<Integer> resumeIdxs = aMgr.getResumeIdxsByUserIds(posting_idx, userIds);
+	// user_id의 값에 맞게 저장된 user_name들
+	Map<String, String> userNames = aMgr.getUserNamesByUserIds(userIds);
+	// resume_idx에 맞게 저장된 경력 내용
+	List<String> careerStatus = aMgr.determineCareerStatusByResumeIdxs(resumeIdxs);
+	// user_id의 값에 맞게 저장된 user_gender들
+	Map<String, String> userGenders = aMgr.getUserGendersByUserIds(userIds);
+	// resume_idx에 맞게 저장된 학력 내용
+	List<String> eduMajorsList = aMgr.getEduMajorsByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 자격증 내용
+	Map<Integer, List<String>> certificateSNameList = aMgr.getCertificateSNamesByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 포토폴리오 내용
+	Map<Integer, List<String>> portfolioNameList = aMgr.getPortfolioNamesByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 스킬 내용
+	Map<Integer, List<String>> skillSNameMap = aMgr.getSkillSNamesByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 언어 실력 내용
+	List<String> languageNameList = aMgr.getLanguageNamesByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 좋아요 내용들
+	List<String> applicationLikes = aMgr.getApplicationLikesByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 제외 여부
+	List<String> applicationIgnoreList = aMgr.getApplicationIgnoreByResumeIdxs(resumeIdxs);
+	// resume_idx에 맞게 저장된 합격 상태
+	List<String> applicationSResultList = aMgr.getApplicationSResultByResumeIdxs(resumeIdxs);
 %>
-
+<form id="submitForm" action="post_manage_proc.jsp" method="POST">
 <div class="container-fluid custom-container"> <!-- fluid container for full width -->
 	<div style="padding-left: 10px;"> <!-- 여기에 내부 패딩 추가 -->
     <div class="row">
@@ -145,9 +207,12 @@
     </div>
     <div class="row">
 		<div class="col filter-buttons">
-		    <% for (procedureBean procedure : procedureList) { %>
-		        <a href="?posting_status" class="top_btn" style="margin-right: 80px; margin-left: 10px;"><%= procedure.getProcedure_name() %></a>
-		    <% } %>
+	        <% int index = 0; %>
+	        <% for (procedureBean procedure : procedureList) { %>
+	            <%-- 각 절차마다 링크에 procecount 값을 포함하여 설정 --%>
+	            <a href="?posting_idx=<%=posting_idx%>&procecount=<%=index%>" class="top_btn" style="margin-right: 80px; margin-left: 10px;"><%= procedure.getProcedure_name() %></a>
+	            <% index++; %>
+	        <% } %>
 		</div>
     </div>
     <div class="row mt-1">
@@ -163,67 +228,136 @@
 
  <div class="row top-menu justify-content-center">
         <% String[] words = {"순번", "찜", "신상", "경력", "전공", "자격증", "포토폴리오", "스킬", "어학", "간편메모", "평가", "합격여부"}; %>
-        <div class="col" style="flex: 0 0 5%; max-width: 5%; text-align: center;">순번</div>
-        <div class="col" style="flex: 0 0 1%; max-width: 1%; margin-right: 13px; text-align: center;">찜</div>
-	    <div class="col" style="flex: 0 0 10%; max-width: 10%; margin-right: 20px; overflow: hidden; text-align: center; margin-left: 5px;  text-overflow: ellipsis; white-space: nowrap;">신상</div>
-	    <div class="col" style="flex: 0 0 10%; max-width: 10%; margin-right: 10px; overflow: hidden; text-align: center; text-overflow: ellipsis; white-space: nowrap;">경력</div>
-	    <div class="col" style="flex: 0 0 10%; max-width: 10%; overflow: hidden; text-align: center; text-overflow: ellipsis; white-space: nowrap;">전공</div>
-	    <div class="col" style="flex: 0 0 11%; max-width: 11%; overflow: hidden; text-align: center; text-overflow: ellipsis; white-space: nowrap;">자격증</div>
-	    <div class="col" style="flex: 0 0 11%; max-width: 11%; overflow: hidden; text-align: center; text-overflow: ellipsis; white-space: nowrap;">포토폴리오</div>
-	    <div class="col" style="flex: 0 0 8%; max-width: 8%; overflow: hidden; text-align: center; text-overflow: ellipsis; white-space: nowrap;">스킬</div>
-	    <div class="col" style="flex: 0 0 8%; max-width: 8%; overflow: hidden; text-align: center;text-overflow: ellipsis; white-space: nowrap;">어학</div>
-	    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">간편메모</div>
-	    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">평가</div>
-	    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">합격여부</div>
+    <div class="col" style="flex: 0 0 5%; max-width: 5%; text-align: center;">순번</div>
+    <div class="col" style="flex: 0 0 1%; max-width: 1%; text-align: center;">찜</div>
+    <div class="col" style="flex: 0 0 8%; max-width: 8%; text-align: center;">신상</div>
+    <div class="col" style="flex: 0 0 5%; max-width: 5%; text-align: center;">경력</div>
+    <div class="col" style="flex: 0 0 12%; max-width: 12%; text-align: center;">전공</div>
+    <div class="col" style="flex: 0 0 13%; max-width: 13%; text-align: center;">자격증</div>
+    <div class="col" style="flex: 0 0 14%; max-width: 14%; text-align: center;">포토폴리오</div>
+    <div class="col" style="flex: 0 0 10%; max-width: 10%; text-align: center;">스킬</div>
+    <div class="col" style="flex: 0 0 8%; max-width: 8%; text-align: center;">어학</div>
+    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">간편메모</div>
+    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">평가</div>
+    <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">합격여부</div>
 	</div>
+	
 <%-- userIds 리스트의 수만큼 반복 --%>
 <% for(int i = 0; i < userIds.size(); i++) { %>
-	<div class="row applicant-info justify-content-center">
+    <%
+        // applicationIgnoreList에서 현재 인덱스의 값이 "yes"인지 확인하여 스타일을 결정합니다.
+        String ignoreStyle = "yes".equals(applicationIgnoreList.get(i)) ? "background-color: #606060; color: white;" : "";
+    %>
+	<div class="row applicant-info justify-content-center" style="<%= ignoreStyle %>" id="row_<%= resumeIdxs.get(i) %>">
+		<input type="hidden" name="application_ignored_<%= resumeIdxs.get(i) %>" id="application_ignored_<%= resumeIdxs.get(i) %>" value="<%= applicationIgnoreList.get(i) %>">
 	        <div class="col-1 d-flex align-items-center justify-content-center" style="flex: 0 0 5%; max-width: 5%;">
 	            <%= i + 1 %>
 	        </div>
-			<div class="col-1 d-flex align-items-center justify-content-center" style="flex: 0 0 1%; max-width: 1%;">
-			    <i class="far fa-star favorite-icon" onclick="toggleFavorite(this);"></i>
+		    <div class="col-1 d-flex align-items-center justify-content-center" style="flex: 0 0 1%; max-width: 1%;">
+		        <i class="<%= "like".equals(applicationLikes.get(i)) ? "fas" : "far" %> fa-star favorite-icon" style="<%= "like".equals(applicationLikes.get(i)) ? "color: black;" : "" %>" onclick="toggleFavorite(this, '<%= resumeIdxs.get(i) %>');" data-resume-idx="<%= resumeIdxs.get(i) %>"></i>
+		        <input type="hidden" id="application_like_<%= resumeIdxs.get(i) %>" name="application_like_<%= resumeIdxs.get(i) %>" value="<%= "like".equals(applicationLikes.get(i)) ? "like" : "normal" %>">
+		    </div>
+	        <div class="col" style="flex: 0 0 8%; max-width: 8%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+			    <a href="user_resume.jsp?resume_idx=<%= resumeIdxs.get(i) %>" style="text-decoration: none; color: inherit;" target="_blank">
+			        <%= userNames.get(userIds.get(i)) %>
+			        <input type="hidden" name="posting_idx" value="<%= posting_idx %>">
+			    </a>
+	            <br> <!-- 줄바꿈을 위해 사용 -->
+    			<span style="font-size: 13px;"> (<%= userGenders.get(userIds.get(i)) %>)</span>
+	        </div>
+			<div class="col" style="flex: 0 0 5%; min-width: 5%; white-space: normal; overflow: visible;">
+			    <%= careerStatus.get(i) %>
 			</div>
-	        <div class="col" style="flex: 0 0 10%; max-width: 10%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            사람이름<%= i + 1 %>
+	        <div class="col" style="flex: 0 0 12%; max-width: 12%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+	            <%= eduMajorsList.get(i) %>
 	        </div>
-			<div class="col" style="flex: 1; min-width: 10%; white-space: normal; overflow: visible;">
-			    경력내용<%= i + 1 %>
+			<div class="col" style="flex: 0 0 13%; max-width: 13%; flex-wrap: wrap;">
+				<% 
+				    List<String> certificates = certificateSNameList.get(resumeIdxs.get(i));
+				    if (certificates != null && !certificates.isEmpty()) {
+				        for (String certificate : certificates) {
+				%>
+				            <%= certificate %><br>
+				<%
+				        }
+				    } else {
+				        out.print("자격증 없음");
+				    }
+				%>
 			</div>
-	        <div class="col" style="flex: 0 0 10%; max-width: 10%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            학교이름<%= i + 1 %>
-	        </div>
-	        <div class="col" style="flex: 0 0 11%; max-width: 11%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            자격증이름<%= i + 1 %>
-	        </div>
-	        <div class="col" style="flex: 0 0 11%; max-width: 11%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            포토폴리오<%= i + 1 %>.pdf
-	        </div>
-	        <div class="col" style="flex: 0 0 10%; max-width: 10%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            스킬내용<%= i + 1 %>
+			<div class="col" style="flex: 0 0 14%; max-width: 14%; flex-wrap: wrap;">
+				<% 
+				    List<String> portfolios = portfolioNameList.get(resumeIdxs.get(i));
+				    if (portfolios != null && !portfolios.isEmpty()) {
+				        for (String portfolio : portfolios) {
+				%>
+				            <%= portfolio %><br>
+				<%
+				        }
+				    } else {
+				        out.print("포트폴리오 없음");
+				    }
+				%>
+
+			</div>
+	        <div class="col" style="flex: 0 0 10%; max-width: 10%; flex-wrap: wrap;">
+				<% 
+				    List<String> skills = skillSNameMap.get(resumeIdxs.get(i));
+				    if (skills != null && !skills.isEmpty()) {
+				        for (String skill : skills) {
+				%>
+				            <%= skill %><br>
+				<%
+				        }
+				    } else {
+				        out.print("해당 사항 없음");
+				    }
+				%>
 	        </div>
 	        <div class="col" style="flex: 0 0 8%; max-width: 8%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-	            언어능력<%= i + 1 %>
+	            <%= languageNameList.get(i)%>
 	        </div>
 	        <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">
-	            <button type="button" class="btn btn-info">메모</button>
+	            <button type="button" class="addbtn">메모</button>
 	        </div>
 	        <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">
-	            <button type="button" class="btn btn-primary">평가</button>
+	            <button type="button" class="addbtn">평가</button>
 	        </div>
 			<div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center; position: relative;">
-			    <button type="button" class="btn btn-success">합격</button>
+		        <div class="dropdown">
+		            <% 
+		                String applicationSResult = applicationSResultList.get(i);
+		                String dropdownLabel;
+		                switch(applicationSResult) {
+		                    case "합격":
+		                        dropdownLabel = "합격";
+		                        break;
+		                    case "불합격":
+		                        dropdownLabel = "불합격";
+		                        break;
+		                    default:
+		                        dropdownLabel = "미분류";
+		                }
+		            %>
+					<button type="button" class="addbtn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-resume-idx="<%= resumeIdxs.get(i) %>">
+					    <%= dropdownLabel %>
+					</button>
+		            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		                <a class="dropdown-item" href="javascript:setApplicationResult('<%= resumeIdxs.get(i) %>', '미분류');">미분류</a>
+		                <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:setApplicationResult('<%= resumeIdxs.get(i) %>', '불합격')">불합격</a>
+		                <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:setApplicationResult('<%= resumeIdxs.get(i) %>', '합격')">합격</a>
+		            </div>
+		                <input type="hidden" id="application_result_<%= resumeIdxs.get(i) %>" name="application_result_<%= resumeIdxs.get(i) %>" value="<%= applicationSResultList.get(i) %>">
+		        </div>
 			    <div class="menu-icon position-absolute" style="right: 0; top: 0;">
 			        <div class="dropdown">
 			            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			                <i class="fas fa-ellipsis-v" style="font-size: 8px;"></i> <!-- 인라인 스타일로 크기 조정 -->
 			            </button>
 			            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#"><i class="fas fa-edit"></i> 수정</a>
 							<a class="dropdown-item" href="#"><i class="fas fa-arrow-up"></i> 상단으로 이동</a>
 							<a class="dropdown-item" href="#"><i class="fas fa-arrow-down"></i> 하단으로 이동</a>
-							<a class="dropdown-item" href="#"><i class="fas fa-times"></i> 제외하기</a>
+							<a class="dropdown-item" href="javascript:void(0);" onclick="toggleIgnore(<%= resumeIdxs.get(i) %>);"><i class="fas fa-times"></i> 제외하기</a>
 							<a class="dropdown-item" href="#"><i class="far fa-save"></i> 인재 저장</a>
 			                <!-- 필요에 따라 추가 메뉴 아이템 -->
 			            </div>
@@ -235,36 +369,129 @@
     </div>
 </div>
 	<div class="fixed-button">
-	    <button type="button" class="addbtn22"><i class="fas fa-user-shield"></i> 권한 관리</button><br>
-	    <button type="button" class="addbtn22"><i class="fas fa-print"></i> 인쇄하기</button><br>
-	    <button type="button" class="addbtn22"><i class="fas fa-save"></i> 저장하기</button><br>
-	    <button type="button" class="addbtn22"><i class="fas fa-check"></i> 합격</button><br>
-	    <button type="button" class="addbtn22"><i class="fas fa-times"></i> 제외하기</button><br>
+	    <button type="button" class="addbtn22"><i class="fas fa-user-shield"></i> 권한 관리</button>
+	    <button type="button" class="addbtn22"><i class="fas fa-print"></i> 인쇄하기</button>
+	    <button type="button" class="addbtn22" id="sendBtn" onclick="submitForm();">
+		    <i class="fas fa-save"></i> 저장하기
+		</button>
+	    <button type="button" class="addbtn22" id="finalBtn"><i class="fas fa-check"></i>결과 발표</button>
 	    <button type="button" class="addbtn22"><i class="fas fa-arrow-up"></i> Top</button>
 	</div>
+</form>
 
 
 
-
-
+	<!-- 합격자 목록을 보여줄 모달 -->
+	<div class="modal fade" id="passModal" tabindex="-1" role="dialog" aria-labelledby="passModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="passModalLabel">합격자 및 불합격자 관리</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <!-- 여기에 합격자 정보가 출력됩니다 -->
+	        <p id="passList">선택된 항목이 없습니다.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <!-- 합격 처리 버튼 -->
+	        <button type="button" class="btn btn-success" id="processPass">합격 처리</button>
+	        <!-- 불합격 처리 버튼 -->
+	        <button type="button" class="btn btn-danger" id="processFail">불합격 처리</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.5/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-	function toggleFavorite(element) {
-	    // 'fas' 클래스가 있는지 확인하여 현재 상태 파악
-	    const isFavorited = element.classList.contains('fas');
-	    
-	    // 채워진 별과 채워지지 않은 별 아이콘 클래스를 토글
-	    element.classList.toggle('fas', !isFavorited);
-	    element.classList.toggle('far', isFavorited);
-	
-	    // 여기에 AJAX 요청을 추가하여 서버에 상태 변경을 알릴 수 있음
-	    // 예를 들어, isFavorited 상태를 서버에 전송
+
+	function toggleFavorite(icon, resumeIdx) {
+	    const input = document.getElementById('application_like_' + resumeIdx);
+	    if (icon.classList.contains('far')) {
+	        icon.classList.remove('far');
+	        icon.classList.add('fas');
+	        icon.style.color = 'black'; // 색칠된 별로 변경
+	        input.value = 'like'; // hidden input의 값을 'like'로 변경
+	    } else {
+	        icon.classList.remove('fas');
+	        icon.classList.add('far');
+	        icon.style.color = ''; // 기본 색으로 변경
+	        input.value = 'normal'; // hidden input의 값을 'normal'로 변경
+	    }
 	}
+	
+	function toggleIgnore(resumeIdx) {
+	    var row = document.getElementById("row_" + resumeIdx);
+	    var input = document.getElementById("application_ignored_" + resumeIdx);
+	    if (input.value === "no") {
+	        // 제외하기 처리
+	        row.style.backgroundColor = "#606060";
+	        row.style.color = "white";
+	        input.value = "yes";
+	    } else {
+	        // 제외 해제 처리
+	        row.style.backgroundColor = "";
+	        row.style.color = "";
+	        input.value = "no";
+	    }
+	}
+	
+	function setApplicationResult(resumeIdx, result) {
+	    // hidden input의 값을 변경합니다.
+	    var hiddenInput = document.getElementById("application_result_" + resumeIdx);
+	    hiddenInput.value = result;
+
+	    // 드롭다운 버튼의 텍스트를 업데이트합니다.
+	    var dropdownButton = document.querySelector('button[data-resume-idx="'+resumeIdx+'"]');
+	    if (dropdownButton) {
+	        dropdownButton.innerText = result; // 버튼의 텍스트를 변경합니다.
+	    }
+	}
+
+	function submitForm() {
+	    document.getElementById("submitForm").submit();
+	}
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    document.getElementById('finalBtn').addEventListener('click', function() {
+	        $('#passModal').modal('show');
+	    });
+
+	    document.getElementById('processPass').addEventListener('click', function() {
+	        processApplications('합격');
+	    });
+
+	    document.getElementById('processFail').addEventListener('click', function() {
+	        processApplications('불합격');
+	    });
+
+	    function processApplications(status) {
+	        var selectedApplicants = [];
+	        document.querySelectorAll('input[name^="application_result_"]').forEach(function(item) {
+	            if (item.value === status) {
+	                var resumeIdx = item.id.split('_')[2];
+	                selectedApplicants.push(resumeIdx);
+	            }
+	        });
+
+	        var passListElement = document.getElementById('passList');
+	        if (selectedApplicants.length > 0) {
+	            passListElement.innerHTML = status + '자 resume_idx: ' + selectedApplicants.join(', ');
+	        } else {
+	            passListElement.innerHTML = status + '자가 없습니다.';
+	        }
+	    }
+	});
+
 </script>
+
 
 </body>
 </html>

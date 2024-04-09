@@ -7,6 +7,7 @@ public class ApplicationBean {
 	private String user_id;
 	private String application_like;
 	private String application_ignored;
+	private String application_sresult;
 	private String application_datetime;
 	private String application_datetime2;
 	
@@ -24,6 +25,12 @@ public class ApplicationBean {
 	}
 	public int getResume_idx() {
 		return resume_idx;
+	}
+	public String getApplication_sresult() {
+		return application_sresult;
+	}
+	public void setApplication_sresult(String application_sresult) {
+		this.application_sresult = application_sresult;
 	}
 	public void setResume_idx(int resume_idx) {
 		this.resume_idx = resume_idx;
