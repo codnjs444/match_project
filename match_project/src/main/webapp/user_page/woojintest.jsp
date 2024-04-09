@@ -7,7 +7,7 @@
 <%@page import="match.PostingMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="pMgr" class="match.PostingMgr2"/>
-<jsp:useBean id="aMgr" class="match.application.applicationMgr"/>
+<jsp:useBean id="aMgr" class="match.application.ApplicationMgr"/>
 <jsp:useBean id="jcMgr" class="match.category.job_categoryMgr"/>
 
 
