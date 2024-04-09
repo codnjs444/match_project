@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-
+<%
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +16,7 @@
 
 <%@ include file="user_top.jsp" %>
 
-<%@ include file="woojintest.jsp" %>
+<%@ include file="user_middle.jsp" %>
 
 <%@ include file="user_bottom.jsp" %>
 

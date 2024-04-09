@@ -38,7 +38,6 @@
 <jsp:setProperty property="*" name="poBean"/>
 
 <%
-	String msg = "실패";
 	int generatedKey = 0;
 	String user_id = (String)session.getAttribute("idKey");
 	String resume_name = request.getParameter("resume_name");
@@ -272,8 +271,9 @@
 
 	rMgr.insertPortfolio(poBean);
 	
-
+	String msg = "이력서 등록에 성공했습니다.";
 %>
 <script>
-	location.href("resume.jsp");
+	alert("<%=msg%>");
+	location.href="../user_page/user_home.jsp";
 </script>

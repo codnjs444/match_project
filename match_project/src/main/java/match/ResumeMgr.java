@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import match.resume.*;
 
@@ -28,7 +30,7 @@ public class ResumeMgr {
 		int generatedKey = 0;
 		try {
 			con = pool.getConnection();
-			sql = "insert into resume values(null, ?, ?, ?, ?, ?)";
+			sql = "insert into resume values(null, ?, ?, ?, ?, ?, now())";
 			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, bean.getUser_id());
 			pstmt.setString(2, bean.getResume_name());
@@ -362,5 +364,32 @@ public class ResumeMgr {
 	    } finally {
             pool.freeConnection(con);
 	    }
+	}
+	
+	public Vector<ResumeBean> getResumeIdxList(String user_id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ResumeBean> vlist = new Vector<ResumeBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select resume_idx, resume_name, resume_datetime from resume where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				ResumeBean bean = new ResumeBean();
+				bean.setResume_idx(rs.getInt("resume_idx"));
+				bean.setResume_name(rs.getString("resume_name"));
+				bean.setResume_datetime(rs.getString("resume_datetime"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
 	}
 }

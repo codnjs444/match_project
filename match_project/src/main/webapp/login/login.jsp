@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<jsp:useBean id="ulogin" class="match.UserBean"/>
-<jsp:useBean id="mlogin" class="match.ManagerBean"/>
+<jsp:useBean id="uBean" class="match.UserBean"/>
+<jsp:useBean id="mBean" class="match.ManagerBean"/>
 <%
 	String id = (String)session.getAttribute("idKey");
 	String url = request.getParameter("url");

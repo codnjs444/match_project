@@ -11,29 +11,7 @@
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
 <jsp:useBean id="uBean" class="match.UserBean"/>
 
-<%
-	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
-	
-	String id = (String)session.getAttribute("idKey");
-	if(id==null){
-		response.sendRedirect("login.jsp");
-		return;
-	}
-	uBean = uMgr.getUser(id);
-	int year = Integer.parseInt(uBean.getBirthday().substring(0, 4));
-	
-	String gender = "";
-	if(uBean.getUser_gender() == false)
-		gender = "남";
-	else
-		gender = "여";
-	
-	String SNS = "";
-	if(uBean.getSns() == null)
-		SNS = "없음";
-	else
-		SNS = uBean.getSns();
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -431,6 +409,28 @@
 </head>
 <body>
 <%@ include file="user_top.jsp" %>
+<%
+	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
+	
+	if(id==null){
+		response.sendRedirect("../login.jsp");
+		return;
+	}
+	uBean = uMgr.getUser(id);
+	int year = Integer.parseInt(uBean.getBirthday().substring(0, 4));
+	
+	String gender = "";
+	if(uBean.getUser_gender() == false)
+		gender = "남";
+	else
+		gender = "여";
+	
+	String SNS = "";
+	if(uBean.getSns() == null)
+		SNS = "없음";
+	else
+		SNS = uBean.getSns();
+%>
 	<div class="resume">
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">
@@ -756,7 +756,6 @@
 								<input type="file" class="box-style mbox-con" id="project_file1" name="project_file[]" placeholder="프로젝트 파일을 업로드해주세요.">
 								<input type="hidden" id="project_fname1" name="project_fname[]">
     							<input type="hidden" id="project_extension1" name="project_extension[]">
-    							
 							</div>
 						</div>
 						<div class="row">
@@ -998,36 +997,6 @@
 		        $('#titleModal').modal('show');
 		    }
 		});
-		
-		document.addEventListener('DOMContentLoaded', function() {
-		    // 이미 존재하는 모든 파일 입력 요소에 대해 이벤트 리스너를 추가합니다.
-		    var existingFileInputs = document.querySelectorAll('input[type="file"]');
-		    existingFileInputs.forEach(function(fileInput, index) {
-		        // 첫 번째 프로젝트 박스의 인덱스는 1로 시작한다고 가정합니다.
-		        var currentIndex = index + 1;
-		        fileInput.addEventListener('change', function(e) {
-		            updateFileNameAndExtension(e.target, currentIndex);
-		        });
-		    });
-		});
-		
-		function updateFileNameAndExtension(inputElement, index) {
-            var fullPath = inputElement.value;
-            if (fullPath) {
-                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                var filename = fullPath.substring(startIndex);
-                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                    filename = filename.substring(1);
-                }
-
-                var dotIndex = filename.lastIndexOf('.');
-                var fileName = filename.substring(0, dotIndex);
-                var fileExtension = filename.substring(dotIndex + 1);
-
-                document.getElementById('project_fname' + index).value = fileName;
-                document.getElementById('project_extension' + index).value = fileExtension;
-            }
-        }
 	
 		document.addEventListener("DOMContentLoaded", function() {
 		    // edu-box의 DOM 요소를 가져옴
@@ -1321,10 +1290,41 @@
             curriculumBox.parentNode.removeChild(curriculumBox);
         }
         
+        function updateFileNameAndExtension(inputElement, index) {
+            var fullPath = inputElement.value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+
+                var dotIndex = filename.lastIndexOf('.');
+                var fileName = filename.substring(0, dotIndex);
+                var fileExtension = filename.substring(dotIndex + 1);
+
+                document.getElementById('project_fname' + index).value = fileName;
+                document.getElementById('project_extension' + index).value = fileExtension;
+            }
+        }
+		
+		document.addEventListener('DOMContentLoaded', function() {
+		    // 이미 존재하는 모든 파일 입력 요소에 대해 이벤트 리스너를 추가합니다.
+		    var existingFileInputs = document.querySelectorAll('input[type="file"]');
+		    existingFileInputs.forEach(function(fileInput, index) {
+		        // 첫 번째 프로젝트 박스의 인덱스는 1로 시작한다고 가정합니다.
+		        var currentIndex = index;
+		        fileInput.addEventListener('change', function(e) {
+		            updateFileNameAndExtension(e.target, currentIndex);
+		        });
+		    });
+		});
+        
         var proidx = 1;
         
         function addProjectBox(button) {
-            proidx++;
+        	proidx++;
+            console.log(proidx);
             var box = button.closest('.box');
             var newProjectBox = document.createElement('div');
             newProjectBox.className = 'project-box';
@@ -1344,7 +1344,7 @@
                     input.id = newFileId; // 새로운 id 값으로 설정합니다.
                     // 이벤트 리스너를 여기에서 추가합니다.
                     input.addEventListener('change', function(e) {
-                        updateFileNameAndExtension1(e.target, proidx);
+                        updateFileNameAndExtension(e.target, proidx);
                     });
                 }
                 if (input.type === 'hidden') {
@@ -1365,34 +1365,16 @@
             deleteButton.textContent = '삭제';
             deleteButton.onclick = function() {
                 deleteProjectBox(newProjectBox);
-                proidx--;
             };
             deleteButtonContainer.appendChild(deleteButton);
             newProjectBox.appendChild(deleteButtonContainer);
-        }
-        
-        function updateFileNameAndExtension1(inputElement, index) {
-            var fullPath = inputElement.value;
-            if (fullPath) {
-                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                var filename = fullPath.substring(startIndex);
-                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                    filename = filename.substring(1);
-                }
-
-                var dotIndex = filename.lastIndexOf('.');
-                var fileName = filename.substring(0, dotIndex);
-                var fileExtension = filename.substring(dotIndex + 1);
-
-                document.getElementById('project_fname' + index).value = fileName;
-                document.getElementById('project_extension' + index).value = fileExtension;
-            }
         }
 
         // 커리큘럼 박스를 삭제하는 함수
         function deleteProjectBox(ProjectBox) {
         	ProjectBox.parentNode.removeChild(ProjectBox);
         	proidx--;
+        	console.log(proidx);
         }
         
         document.getElementById('addPortfolioButton').addEventListener('click', function() {

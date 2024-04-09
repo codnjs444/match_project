@@ -675,30 +675,76 @@ public class PostingMgr2 {
 		return finalAcceptedCounts;
 	}
 
-	public ArrayList<Integer> getSortedPostIdxList(String manager_id, String posting_status, String sort) {
+	public ArrayList<Integer> getSortedPostIdxList(String posting_status, String[] env_types, String[] qual_edu_type, String[] qual_experience, String sort) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
 	    ArrayList<Integer> sortedPostIdxList = new ArrayList<>();
-	    String sql = "SELECT p.posting_idx FROM posting p ";
+	    ArrayList<String> parameters = new ArrayList<>();
+	    String sql = "SELECT p.posting_idx FROM posting p LEFT JOIN environment e ON e.posting_idx = p.posting_idx LEFT JOIN qualification q ON q.posting_idx = p.posting_idx WHERE 1=1 ";
+
+	    // posting_status 조건 추가
+	    if (posting_status != null && !posting_status.isEmpty()) {
+	        sql += "AND p.posting_status = ? ";
+	        parameters.add(posting_status);
+	    }
+	    
+	    // env_types 조건 추가
+	    if (env_types != null && env_types.length > 0) {
+	        sql += "AND e.environment_type IN (";
+	        for (int i = 0; i < env_types.length; i++) {
+	            sql += "?";
+	            parameters.add(env_types[i]);
+	            if (i < env_types.length - 1) {
+	                sql += ", ";
+	            }
+	        }
+	        sql += ") ";
+	    }
+
+	    // qual_edu_type 조건 추가
+	    if (qual_edu_type != null && qual_edu_type.length > 0) {
+	        sql += "AND q.qualification_edutype IN (";
+	        for (int i = 0; i < qual_edu_type.length; i++) {
+	            sql += "?";
+	            parameters.add(qual_edu_type[i]);
+	            if (i < qual_edu_type.length - 1) {
+	                sql += ", ";
+	            }
+	        }
+	        sql += ") ";
+	    }
+
+	    // qual_experience 조건 추가
+	    if (qual_experience != null && qual_experience.length > 0) {
+	        sql += "AND q.qualification_experience IN (";
+	        for (int i = 0; i < qual_experience.length; i++) {
+	            sql += "?";
+	            parameters.add(qual_experience[i]);
+	            if (i < qual_experience.length - 1) {
+	                sql += ", ";
+	            }
+	        }
+	        sql += ") ";
+	    }
 
 	    // 정렬 조건 추가
-	    sql += "WHERE p.manager_id = ? AND p.posting_status = ? ";
 	    if ("latest".equals(sort)) {
 	        sql += "ORDER BY p.posting_datetime DESC";
 	    } else if ("views".equals(sort)) {
-	        // 조회수를 숫자로 변환하여 정렬
 	        sql += "ORDER BY CAST(p.posting_view AS UNSIGNED) DESC";
 	    } else {
-	        // 기본 정렬(정렬 조건이 제공되지 않았을 때)
 	        sql += "ORDER BY p.posting_datetime DESC";
 	    }
 
 	    try {
 	        con = pool.getConnection();
 	        pstmt = con.prepareStatement(sql);
-	        pstmt.setString(1, manager_id);
-	        pstmt.setString(2, posting_status);
+	        int index = 1;
+	        for (String param : parameters) {
+	            pstmt.setString(index++, param);
+	        }
+	        
 	        rs = pstmt.executeQuery();
 
 	        while (rs.next()) {

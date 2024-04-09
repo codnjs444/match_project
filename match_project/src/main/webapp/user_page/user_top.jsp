@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-
+<%
+	String id = (String)session.getAttribute("idKey");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,18 +76,29 @@
 <body>
 
 <header class="header">
-  <a class="logo" href="">Match</a>
+  <a class="logo" href="../user_page/user_home.jsp">Match</a>
   <div class="search-bar">
     <input type="text" placeholder="기업, 채용공고를 검색해주세요.">
     <img src="${pageContext.request.contextPath}/img/fi_search.png" alt="Search Icon">
   </div>
+  <%
+  	if(id != null){
+  %>
   <div class="nav-links">
-    <a href="../login/login.jsp">로그인</a>
     <a href="../login/logout.jsp">로그아웃</a>
-    <a href="../login/signup.jsp">회원가입</a>
     <a href="resume.jsp">이력서 작성</a>
     <a href="/corporate-services">기업 서비스</a>
   </div>
+  <%
+  	}else{
+  %>
+  <div class="nav-links">
+    <a href="../login/login.jsp">로그인</a>
+    <a href="../login/signup.jsp">회원가입</a>
+  </div>
+  <%
+  	}
+  %>
 </header>
 
 <footer class="footer">

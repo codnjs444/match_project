@@ -7,7 +7,14 @@ public class ResumeBean {
 	private String self_intro1;
 	private String self_intro2;
 	private String self_intro3;
+	private String resume_datetime;
 	
+	public String getResume_datetime() {
+		return resume_datetime;
+	}
+	public void setResume_datetime(String resume_datetime) {
+		this.resume_datetime = resume_datetime;
+	}
 	public int getResume_idx() {
 		return resume_idx;
 	}
