@@ -1,4 +1,3 @@
-<!-- resume.jsp -->
 <%@page import="match.*"%>
 <%@page import="match.category.certificate_categoryBean"%>
 <%@page import="match.category.skill_categoryBean"%>

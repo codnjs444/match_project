@@ -236,7 +236,7 @@
 				%>
 					<tr>
 						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><span><%=rBean.getResume_name()%></span></td>
+						<td class="text-start"><button type="button" class="btn edit-btn" data-resume-idx="<%=rBean.getResume_idx()%>"><%=rBean.getResume_name()%></button></td>
 						<td><span><%=rBean.getResume_datetime().substring(0,10)%></span></td>
 						<td><button type="button" class="btn btn-primary">수정</button></td>
 						<td><button type="button" class="btn btn-light">인쇄</button></td>
@@ -246,24 +246,6 @@
 				<%
 				}
 				%>
-					<tr>
-						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><span>삼성전자 지원용</span></td>
-						<td><span>2024.04.12</span></td>
-						<td><button type="button" class="btn btn-primary">수정</button></td>
-						<td><button type="button" class="btn btn-light">인쇄</button></td>
-						<td><button type="button" class="btn btn-light">이메일전송</button></td>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><span>삼성전자 지원용</span></td>
-						<td><span>2024.04.12</span></td>
-						<td><button type="button" class="btn btn-primary">수정</button></td>
-						<td><button type="button" class="btn btn-light">인쇄</button></td>
-						<td><button type="button" class="btn btn-light">이메일전송</button></td>
-						<td>&nbsp;</td>
-					</tr>
 				</tbody>
 			</table>
 			<div class="">
@@ -302,6 +284,14 @@
 						
 					}
 				});
+			});
+			
+			$(document).ready(function() {
+			    // "수정" 버튼에 대한 클릭 이벤트 리스너를 추가합니다.
+			    $(".edit-btn").on("click", function() {
+			        var resumeIdx = $(this).data("resume-idx"); // data-resume-idx 속성에서 이력서 인덱스를 가져옵니다.
+			        window.location.href = "../user_page/edit_resume.jsp?resume_idx=" + resumeIdx; // 이력서 인덱스를 쿼리 파라미터로 사용하여 edit_resume.jsp 페이지로 이동합니다.
+			    });
 			});
 		</script>
 	</body>
