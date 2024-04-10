@@ -14,7 +14,7 @@
 	if ("블라인드".equals(postingType)) {
 	    response.sendRedirect("edit_bPost.jsp?posting_idx=" + postingIdx);
 	} else if ("일반채용".equals(postingType)) {
-	    response.sendRedirect("user_post_page.jsp?posting_idx=" + postingIdx);
+	    response.sendRedirect("edit_gPost.jsp?posting_idx=" + postingIdx);
 	} 
  	
 %>
