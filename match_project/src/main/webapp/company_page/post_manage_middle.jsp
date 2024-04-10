@@ -21,51 +21,13 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />   
-	
+	<link href="../css/post_manage_middle.css" rel="stylesheet" type="text/css"> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <style>
 	.custom-container {
 	    max-width: 1410px;
 	    margin: auto;	    
-	}
-	.top_btn {
-	    border: none;
-	    background-color: transparent;
-	    font-size: 18px;
-	    color: #606060;
-	    margin-right: 40px;
-	    font-weight: bold;
-	    text-decoration: none; /* 링크 밑줄 제거 */
-	}
-	.filter-buttons {
-	    position: relative;
-	    padding-bottom: 10px;
-	}
-	.filter-buttons::after {
-	    content: "";
-	    position: absolute;
-	    bottom: 0;
-	    right: -83px; /* 원하는 만큼 음수값으로 조정합니다. */
-	    width: 105%; /* 너비도 조정할 수 있습니다. */
-	    height: 2px;
-	    background-color: #ccc;
-	}
-	.top-menu {
-	    border: 1px solid #C4C4C4;
-	    padding: 20px;
-	    padding-top: 0; /* 상단 패딩 제거 */
-	    padding-bottom: 0; /* 상단 패딩 제거 */
-	    padding-right: 0; /* 상단 패딩 제거 */
-	    padding-left: 0; /* 상단 패딩 제거 */
-	    margin-bottom: 20px;
-	    margin-right: auto;
-	    margin-top: 0; /* 상단 마진 제거 */
-	    margin-bottom: 0; /* 상단 마진 제거 */
-	    margin-left: 0; /* 상단 마진 제거 */
-	    margin-right: 0; /* 상단 마진 제거 */
-	    height: 30px;
-	    width: 107%;
 	}
 	.applicant-info {
 	    border: 1px solid #C4C4C4;
@@ -84,7 +46,6 @@
 	    height: auto;
 	    width: 107%;
 	}	
-	
 	.applicant-info > div {
 	    display: flex;
 	    align-items: center;
@@ -92,50 +53,7 @@
 	    text-align: center;
 	    flex-wrap: wrap; /* 이 부분 추가 */
 	}
-
-	.fixed-button {
-	    position: fixed;
-	    bottom: 425px; /* 화면 하단에서의 위치 */
-	    right: 20px; /* 화면 우측에서의 위치 */
-	    z-index: 999;
-	    display: flex; /* Flexbox 레이아웃 사용 */
-	    flex-direction: column; /* 자식 요소를 세로로 나열 */
-	    align-items: center; /* 가운데 정렬 */
-	}
-
-	
-	.addbtn22 {
-	    width: 120px; /* 원하는 너비로 설정하세요 */
-	    background-color: white;
-	    color: #606060;
-	    border: 2px solid #606060;
-	    border-radius: 5px;
-	    padding: 10px;
-	    margin-bottom: 5px; /* 버튼 간 간격 조절 */
-	    font-size: 16px;
-	    font-weight: bolder;
-	    cursor: pointer;
-	    text-align: center; /* 텍스트 가운데 정렬 */
-	}
-	.addbtn {
-	    width: 70px; /* 원하는 너비로 설정하세요 */
-	    height: 30px;
-	    background-color: white;
-	    color: #606060;
-	    border: 2px solid #606060;
-	    border-radius: 5px;
-	    font-size: 16px;
-	    font-weight: bolder;
-	    text-align: center; /* 텍스트 가운데 정렬 */
-	    align-items: center; /* 수직 가운데 정렬 */
-	}
-	.dropdown-toggle {
-	    padding: 2px 6px; /* 버튼 내부 여백 조절 */
-	    font-size: 12px; /* 아이콘 및 텍스트 크기 조절 */
-	    line-height: 1; /* 버튼 높이 조절 */
-	}
-	
-	.modal-dialog {
+		.modal-dialog {
 	    position: fixed; /* 모달 위치 고정 */
 	    width: 700px;
 	    max-width: 600px; /* 최대 너비를 화면 너비의 90%로 설정 */
@@ -147,50 +65,50 @@
 	.modal-header {
     border-bottom: 1px solid #dee2e6; /* 모달 헤더의 하단 경계선 추가 */
     background-color: #f8f9fa; /* 모달 헤더 배경색 추가 */
-}
+	}
 
-.modal-title {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 제목 폰트 변경 */
-    font-weight: bold;
-    font-size: 20px; /* 제목 크기 조정 */
-    color: #333; /* 제목 색상 조정 */
-}
-
-.modal-body {
-    padding: 20px; /* 내용 영역의 패딩 조정 */
-}
-
-#emailSubject, #emailContent {
-    margin-top: 15px; /* 입력 필드 상단 마진 추가 */
-    border-radius: 5px; /* 입력 필드의 모서리 둥글게 */
-    border: 1px solid #ced4da; /* 입력 필드 경계선 스타일 */
-}
-
-label {
-    font-weight: bold; /* 라벨 폰트 굵게 */
-    margin-bottom: 5px; /* 라벨과 입력 필드 사이의 마진 */
-}
-
-.btn {
-    border-radius: 20px; /* 버튼 모서리 둥글게 */
-    padding: 10px 20px; /* 버튼 패딩 조정 */
-    font-weight: bold; /* 버튼 텍스트 굵게 */
-}
-
-#showPassed, #showFailed {
-    margin-right: 10px; /* 버튼 간격 조정 */
-    margin-bottom: 20px; /* 버튼과 입력 필드 사이의 간격 */
-}
-
-#confirmPublish {
-    background-color: #007bff; /* 발표하기 버튼 배경색 */
-    color: white; /* 발표하기 버튼 글자색 */
-}
-
-.modal-footer {
-    border-top: 1px solid #dee2e6; /* 모달 바닥의 상단 경계선 추가 */
-    background-color: #f8f9fa; /* 모달 바닥 배경색 추가 */
-}
+	.modal-title {
+	    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 제목 폰트 변경 */
+	    font-weight: bold;
+	    font-size: 20px; /* 제목 크기 조정 */
+	    color: #333; /* 제목 색상 조정 */
+	}
+	
+	.modal-body {
+	    padding: 20px; /* 내용 영역의 패딩 조정 */
+	}
+	
+	#emailSubject, #emailContent {
+	    margin-top: 15px; /* 입력 필드 상단 마진 추가 */
+	    border-radius: 5px; /* 입력 필드의 모서리 둥글게 */
+	    border: 1px solid #ced4da; /* 입력 필드 경계선 스타일 */
+	}
+	
+	label {
+	    font-weight: bold; /* 라벨 폰트 굵게 */
+	    margin-bottom: 5px; /* 라벨과 입력 필드 사이의 마진 */
+	}
+	
+	.btn {
+	    border-radius: 20px; /* 버튼 모서리 둥글게 */
+	    padding: 10px 20px; /* 버튼 패딩 조정 */
+	    font-weight: bold; /* 버튼 텍스트 굵게 */
+	}
+	
+	#showPassed, #showFailed {
+	    margin-right: 10px; /* 버튼 간격 조정 */
+	    margin-bottom: 20px; /* 버튼과 입력 필드 사이의 간격 */
+	}
+	
+	#confirmPublish {
+	    background-color: #007bff; /* 발표하기 버튼 배경색 */
+	    color: white; /* 발표하기 버튼 글자색 */
+	}
+	
+	.modal-footer {
+	    border-top: 1px solid #dee2e6; /* 모달 바닥의 상단 경계선 추가 */
+	    background-color: #f8f9fa; /* 모달 바닥 배경색 추가 */
+	}
 </style>
 <body>
 
@@ -398,7 +316,7 @@ label {
 			    <div class="menu-icon position-absolute" style="right: 0; top: 0;">
 			        <div class="dropdown">
 			            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			                <i class="fas fa-ellipsis-v" style="font-size: 8px;"></i> <!-- 인라인 스타일로 크기 조정 -->
+			                <i class="fas fa-ellipsis-v" style="font-size: 6px;"></i> <!-- 인라인 스타일로 크기 조정 -->
 			            </button>
 			            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="#"><i class="fas fa-arrow-up"></i> 상단으로 이동</a>
@@ -533,6 +451,11 @@ label {
 	document.getElementById('confirmPublish').addEventListener('click', function() {
 	    var emailSubject = document.getElementById('emailSubject').value; // 메일 제목
 	    var emailContent = document.getElementById('emailContent').value; // 메일 내용
+	    // JSP에서 JavaScript로 변수 값을 전달
+	    var postingIdx = '<%= posting_idx %>'; // JSP 변수
+	    var procedureNum = <%= procedureNum %>; // JSP 변수, 숫자이므로 따옴표 없이 삽입
+	    var procedureCount = <%= procecount %>; // JSP 변수, 숫자이므로 따옴표 없이 삽입
+	    var passedUserIds = collectApplicationResults().passedUserIds; // 합격자 ID 배열을 가져오는 함수의 결과
 	    
 	    // XMLHttpRequest 객체 생성
 	    var xhr = new XMLHttpRequest();
@@ -552,6 +475,9 @@ label {
 	    
 	    // 서버로 전송할 데이터에 메일 제목과 내용 추가
 	    var dataToSend = JSON.stringify({
+	        postingIdx: postingIdx,
+	        procedureNum: procedureNum,
+	        procedureCount: procedureCount,
 	        passedUserIds: passedUserIds,
 	        emailSubject: emailSubject, // 메일 제목
 	        emailContent: emailContent // 메일 내용
@@ -578,36 +504,18 @@ label {
 	    return { passedUserIds, failedUserIds };
 	}
 
-/* 	document.getElementById('finalBtn').addEventListener('click', function() {
-	    var { passedUserIds, failedUserIds } = collectApplicationResults();
-	    console.log("합격한 사용자 ID: ", passedUserIds);
-	    console.log("불합격한 사용자 ID: ", failedUserIds);
+	   $(document).ready(function() {
+	        // URL에서 쿼리 파라미터를 파싱하는 함수
+	        function getQueryParam(param) {
+	            var result = window.location.search.match(new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)"));
 
-	    if (confirm("결과를 정말로 발표하시겠습니까?")) {
-	        // XMLHttpRequest 객체 생성
-	        var xhr = new XMLHttpRequest();
-	        // 서버의 해당 경로로 POST 요청을 초기화합니다. 여기서는 예시로 '/api/getUserEmails' 경로를 사용했습니다.
-			xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
-			xhr.setRequestHeader("Content-Type", "application/json");
+	            return result ? result[3] : false;
+	        }
 
-	        
-	        // 요청이 완료되었을 때 실행될 함수를 설정합니다.
-	        xhr.onload = function() {
-	            if (xhr.status == 200) {
-	                // 서버로부터의 응답을 JSON으로 파싱합니다.
-	                var data = JSON.parse(xhr.responseText);
-	                console.log("합격한 사용자 이메일: ", data.emails);
-	            } else {
-	                // 오류 처리
-	                console.error("Error: ", xhr.statusText);
-	            }
-	        };
-	        
-	        // 서버로 데이터를 전송합니다.
-	        xhr.send(JSON.stringify({passedUserIds: passedUserIds}));
-	    }
-	}); */
-
+	        // 'procecount' 쿼리 파라미터를 가져와서 콘솔에 출력
+	        var procedure_num = getQueryParam('procecount');
+	        console.log('Current procedure_num: ', procedure_num);
+	    });
 
 
 

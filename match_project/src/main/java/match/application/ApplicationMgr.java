@@ -574,6 +574,32 @@ public class ApplicationMgr {
 		}
 	}
 
+	// 특정 게시물에 대한 지원서(이력서)의 개수를 찾는 매니저
+	public int countResumesForPost(int posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int resumeCount = 0;
+
+		try {
+			con = pool.getConnection();
+			String sql = "SELECT COUNT(resume_idx) AS total FROM application WHERE posting_idx = ?;";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, posting_idx);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				resumeCount = rs.getInt("total");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+
+		return resumeCount;
+	}
+
 	public List<String> getApplicationSResultByResumeIdxs(List<Integer> resumeIdxs) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -693,6 +719,165 @@ public class ApplicationMgr {
 		}
 
 		return userEmails; // 조회된 이메일 주소 리스트 반환
+	}
+
+	public void closePostingByPostingIdx(int postingIdx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = pool.getConnection();
+			String sql = "UPDATE posting SET posting_status='마감' WHERE posting_idx=?";
+
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, postingIdx); // 대상 posting_idx
+
+			int rowsAffected = pstmt.executeUpdate();
+			if (rowsAffected > 0) {
+				// 성공적으로 업데이트 됐을 때의 로직 (예: 로깅 또는 사용자에게 성공 메시지 전달)
+			} else {
+				// 해당하는 posting_idx가 없는 경우, 로직에 따라 처리 (예: 로깅 또는 오류 메시지 전달)
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					/* Ignored */ }
+			}
+			if (con != null)
+				pool.freeConnection(con);
+		}
+	}
+
+	public void insertApplicationResults(List<String> userIds, int postingIdx, int procedureNum) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = pool.getConnection();
+			// application_result 테이블에 새로운 레코드를 삽입하는 SQL 쿼리
+			String sql = "INSERT INTO application_result (user_id, posting_idx, procedure_num, result_status) VALUES (?, ?, ?, '심사중')";
+
+			// Auto-commit을 비활성화하여 모든 삽입이 성공적으로 수행된 후에만 커밋될 수 있도록 함
+			con.setAutoCommit(false);
+
+			pstmt = con.prepareStatement(sql);
+
+			// 각 사용자 ID마다 INSERT 쿼리 실행
+			for (String userId : userIds) {
+				pstmt.setString(1, userId);
+				pstmt.setInt(2, postingIdx);
+				pstmt.setInt(3, procedureNum + 1); // procedure_num의 +1
+
+				pstmt.addBatch(); // 배치에 추가
+			}
+
+			int[] rowsAffected = pstmt.executeBatch(); // 배치 실행
+
+			// 모든 삽입이 성공적으로 수행되었는지 확인
+			boolean allInserted = true;
+			for (int affected : rowsAffected) {
+				if (affected != 1) { // 삽입되지 않은 레코드가 있다면
+					allInserted = false;
+					break;
+				}
+			}
+
+			if (allInserted) {
+				con.commit(); // 모든 삽입이 성공했다면 커밋
+			} else {
+				con.rollback(); // 하나라도 실패했다면 롤백
+				// 삽입 실패 로직 처리 (예: 로깅)
+			}
+		} catch (Exception e) {
+			try {
+				if (con != null)
+					con.rollback(); // 예외 발생 시 롤백
+			} catch (SQLException ex) {
+				// 롤백 실패 처리 (예: 로깅)
+			}
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					/* Ignored */ }
+			}
+			if (con != null) {
+				try {
+					pool.freeConnection(con);
+				} catch (Exception e) {
+					/* Ignored */ }
+			}
+		}
+	}
+
+	public void updateApplicationResultsToFinalSelection(List<String> userIds, int postingIdx, int procedureNum) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = pool.getConnection();
+			// application_result 테이블의 레코드를 업데이트하는 SQL 쿼리
+			String sql = "UPDATE application_result SET result_status='최종 합격' WHERE user_id=? AND posting_idx=? AND procedure_num=?";
+
+			// Auto-commit을 비활성화하여 모든 업데이트가 성공적으로 수행된 후에만 커밋될 수 있도록 함
+			con.setAutoCommit(false);
+
+			pstmt = con.prepareStatement(sql);
+
+			// 각 사용자 ID마다 UPDATE 쿼리 실행
+			for (String userId : userIds) {
+				pstmt.setString(1, userId);
+				pstmt.setInt(2, postingIdx);
+				pstmt.setInt(3, procedureNum);
+
+				pstmt.addBatch(); // 배치에 추가
+			}
+
+			int[] rowsAffected = pstmt.executeBatch(); // 배치 실행
+
+			// 모든 업데이트가 성공적으로 수행되었는지 확인
+			boolean allUpdated = true;
+			for (int affected : rowsAffected) {
+				if (affected != 1) { // 업데이트되지 않은 레코드가 있다면
+					allUpdated = false;
+					break;
+				}
+			}
+
+			if (allUpdated) {
+				con.commit(); // 모든 업데이트가 성공했다면 커밋
+			} else {
+				con.rollback(); // 하나라도 실패했다면 롤백
+				// 업데이트 실패 로직 처리 (예: 로깅)
+			}
+		} catch (Exception e) {
+			try {
+				if (con != null)
+					con.rollback(); // 예외 발생 시 롤백
+			} catch (SQLException ex) {
+				// 롤백 실패 처리 (예: 로깅)
+			}
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					/* Ignored */ }
+			}
+			if (con != null) {
+				try {
+					pool.freeConnection(con);
+				} catch (Exception e) {
+					/* Ignored */ }
+			}
+		}
 	}
 
 }

@@ -1,0 +1,117 @@
+	.custom-container {
+	    max-width: 1410px;
+	    margin: auto;	    
+	}
+	.top_btn {
+	    border: none;
+	    background-color: transparent;
+	    font-size: 18px;
+	    color: #606060;
+	    margin-right: 40px;
+	    font-weight: bold;
+	    text-decoration: none; /* 링크 밑줄 제거 */
+	}
+	.filter-buttons {
+	    position: relative;
+	    padding-bottom: 10px;
+	}
+	.filter-buttons::after {
+	    content: "";
+	    position: absolute;
+	    bottom: 0;
+	    right: -83px; /* 원하는 만큼 음수값으로 조정합니다. */
+	    width: 105%; /* 너비도 조정할 수 있습니다. */
+	    height: 2px;
+	    background-color: #ccc;
+	}
+	.top-menu {
+	    border: 1px solid #C4C4C4;
+	    padding: 20px;
+	    padding-top: 0; /* 상단 패딩 제거 */
+	    padding-bottom: 0; /* 상단 패딩 제거 */
+	    padding-right: 0; /* 상단 패딩 제거 */
+	    padding-left: 0; /* 상단 패딩 제거 */
+	    margin-bottom: 20px;
+	    margin-right: auto;
+	    margin-top: 0; /* 상단 마진 제거 */
+	    margin-bottom: 0; /* 상단 마진 제거 */
+	    margin-left: 0; /* 상단 마진 제거 */
+	    margin-right: 0; /* 상단 마진 제거 */
+	    height: 30px;
+	    width: 107%;
+	}
+	.applicant-info {
+	    border: 1px solid #C4C4C4;
+	    padding: 20px;
+	    padding-top: 0; /* 상단 패딩 제거 */
+	    padding-bottom: 0; /* 상단 패딩 제거 */
+	    padding-right: 0; /* 상단 패딩 제거 */
+	    padding-left: 0; /* 상단 패딩 제거 */
+	    margin-bottom: 20px;
+	    margin-right: auto;
+	    margin-top: 0; /* 상단 마진 제거 */
+	    margin-bottom: 0; /* 상단 마진 제거 */
+	    margin-left: 0; /* 상단 마진 제거 */
+	    margin-right: 0; /* 상단 마진 제거 */
+	    min-height: 100px;
+	    height: auto;
+	    width: 107%;
+	}	
+	
+	.applicant-info > div {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    text-align: center;
+	    flex-wrap: wrap; /* 이 부분 추가 */
+	}
+
+	.fixed-button {
+	    position: fixed;
+	    bottom: 425px; /* 화면 하단에서의 위치 */
+	    right: 20px; /* 화면 우측에서의 위치 */
+	    z-index: 999;
+	    display: flex; /* Flexbox 레이아웃 사용 */
+	    flex-direction: column; /* 자식 요소를 세로로 나열 */
+	    align-items: center; /* 가운데 정렬 */
+	}
+
+	
+	.addbtn22 {
+	    width: 120px; /* 원하는 너비로 설정하세요 */
+	    background-color: white;
+	    color: #606060;
+	    border: 2px solid #606060;
+	    border-radius: 5px;
+	    padding: 10px;
+	    margin-bottom: 5px; /* 버튼 간 간격 조절 */
+	    font-size: 16px;
+	    font-weight: bolder;
+	    cursor: pointer;
+	    text-align: center; /* 텍스트 가운데 정렬 */
+	}
+	.addbtn {
+	    width: 70px; /* 원하는 너비로 설정하세요 */
+	    height: 30px;
+	    background-color: white;
+	    color: #606060;
+	    border: 2px solid #606060;
+	    border-radius: 5px;
+	    font-size: 16px;
+	    font-weight: bolder;
+	    text-align: center; /* 텍스트 가운데 정렬 */
+	    align-items: center; /* 수직 가운데 정렬 */
+	}
+	.dropdown-toggle {
+	    padding: 2px 6px; /* 버튼 내부 여백 조절 */
+	    font-size: 12px; /* 아이콘 및 텍스트 크기 조절 */
+	    line-height: 1; /* 버튼 높이 조절 */
+	}
+    .menu-icon .btn {
+        padding: 0.25rem 0.5rem; /* 상하 패딩을 0.25rem, 좌우 패딩을 0.5rem로 조정 */
+        font-size: 0.7rem; /* 버튼 내 텍스트 크기를 0.7rem으로 조정 */
+    }
+
+    .menu-icon .fas {
+        font-size: 12px; /* 아이콘 크기를 12px로 조정 */
+    }

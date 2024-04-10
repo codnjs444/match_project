@@ -34,8 +34,17 @@ public class GetUserEmailsServlet extends HttpServlet {
 		try {
 			JSONObject json = (JSONObject) parser.parse(body);
 			JSONArray userIdsJson = (JSONArray) json.get("passedUserIds");
-			String emailSubject = (String) json.get("emailSubject"); // 메일 제목 받기
-			String emailContent = (String) json.get("emailContent"); // 메일 내용 받기
+			String emailSubject = (String) json.get("emailSubject");
+			String emailContent = (String) json.get("emailContent");
+			int postingIdx = Integer.parseInt((String) json.get("postingIdx"));
+			int procedureNum = ((Long) json.get("procedureNum")).intValue();
+			int procedureCount = ((Long) json.get("procedureCount")).intValue();
+
+			System.out.println("ProcedureNum: " + postingIdx);
+			System.out.println("ProcedureNum: " + postingIdx);
+			System.out.println("ProcedureNum: " + procedureNum);
+			System.out.println("ProcedureCount: " + procedureCount);
+
 			List<String> userIds = new ArrayList<>();
 			for (Object userIdObj : userIdsJson) {
 				userIds.add((String) userIdObj);
@@ -43,6 +52,14 @@ public class GetUserEmailsServlet extends HttpServlet {
 
 			ApplicationMgr aMgr = new ApplicationMgr();
 			List<String> userEmails = aMgr.searchPassedUserEmails(userIds);
+
+			if (procedureCount + 1 < procedureNum) {
+				aMgr.insertApplicationResults(userIds, postingIdx, procedureCount);
+			} else {
+				// 마지막 절차 이후의 로직: 최종 합격자 업데이트 및 공고 마감 처리
+				aMgr.closePostingByPostingIdx(postingIdx);
+				aMgr.updateApplicationResultsToFinalSelection(userIds, postingIdx, procedureCount);
+			}
 
 			try {
 				SendEmail.sendMail(userEmails, emailSubject, emailContent);

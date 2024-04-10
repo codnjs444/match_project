@@ -311,7 +311,7 @@ body {
 				                </div>
 				                <!-- 지원자 및 합격자 수 표시 박스 -->
 				                <div style="border: 1px solid #C4C4C4; color: #606060; font-weight: bold; padding: 10px; width: 270px; border-radius: 8px; text-align: center; margin-left: 115px;">
-				                    <span style="margin-right: 28px;">지원자 : <%= resumeNume.get(i) %>명</span>
+									<span style="margin-right: 28px;">지원자 : <%= aMgr.countResumesForPost(postingIdx) %>명</span>
                         			<span>최종 합격 : <%= finalAcceptedCounts.get(i) %>명</span>
 				                </div>
 				            </div>
