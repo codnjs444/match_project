@@ -81,7 +81,6 @@
             <div class="stitle">어떤 일을 담당할 직원을 찾으시나요</div>
             <div class="box">
                 <!-- 기업명 텍스트와 텍스트 필드 -->
-
                     <div class="row align-items-center">
                         <div class="col">
                             <label for="companyName" class="question">모집분야명</label>

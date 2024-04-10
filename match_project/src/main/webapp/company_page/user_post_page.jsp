@@ -198,8 +198,10 @@ body {
     }
     
 	.Postsidebar {
-	    position: sticky; /* 스크롤 시에도 사이드바가 고정되도록 설정 */
-    	top: 0; /* 상단부터 0px의 위치에 고정 */
+	    position: fixed; /* 스크롤 시에도 사이드바가 고정되도록 설정 */
+    	bottom: 400px;    /* 하단에서 20px의 여백 */
+    	left: 70px;     /* 우측에서 20px의 여백 */
+    	z-index: 1000;   /* 다른 요소들 위에 표시 */
 	    background-color: white; /* 흰색 배경 */
 	    padding: 20px; /* 안쪽 여백 */
 	    border-radius: 10px; /* 모서리를 둥글게 */
@@ -226,6 +228,41 @@ body {
 	.Postsidebar ul li a:hover {
 	    color: #007bff; /* 링크 호버 색상 */
 	}
+	.question {
+   	 	font-size: 18px; /* 라벨 텍스트 크기 조정 */
+    	margin-bottom: 10px; /* 라벨 아래 여백 조정 */
+    	font-weight: bolder;
+	}
+.box-day {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.icon i {
+    color: #007bff;
+    font-size: 24px;
+}
+
+.label {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.d-day {
+    font-size: 24px;
+    color: red;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.dates .start-date, .dates .end-date {
+    font-size: 14px;
+    color: #666;
+}
 </style>
 
 <title>Announcement Form with Bootstrap</title>
@@ -259,7 +296,7 @@ body {
 			
 			<!-- 추가 정보를 넣을 새로운 box -->
         <div class="box">
-			<div class="category">
+			<div class="category" id="MycompanyInfo">
 			    <i class="fas fa-check"></i> <span class="category-label">담당업무</span>
 			    <div class="category-content">
 			        <div class="category-title">모집 분야</div>
@@ -288,7 +325,7 @@ body {
 			        </ul>
 			    </div>
 			</div>
-			<div class="category">
+			<div class="category" id="MyworkEnvironment">
 			    <i class="fas fa-check"></i> <span class="category-label" style="font-size: 18px; font-weight: bold;">근무 환경</span>
 			    <div class="category-content">
 			        <div class="category-title">근무 환경</div>
@@ -300,7 +337,7 @@ body {
 			        </ul>
 			    </div>
 			</div>
-			<div class="category">
+			<div class="category" id="MywelfareBenefits">
 			    <i class="fas fa-check"></i> <span class="category-label" style="font-size: 18px; font-weight: bold;">복지 및 혜택</span>
 			    <div class="category-content">
 			        <ul class="details-list">
@@ -314,7 +351,7 @@ body {
 			        </ul>
 			    </div>
 			</div>
-			<div class="category">
+			<div class="category" id="MyhiringProcess"> 
 			    <i class="fas fa-check"></i> <span class="category-label">채용 절차</span>
 			    <div class="category-content">
 			        <ul class="timeline">
@@ -338,7 +375,7 @@ body {
 			        </ul>
 			    </div>
 			</div>
-			<div class="category">
+			<div class="category" id="MyadditionalSubmission"> 
 			    <i class="fas fa-check"></i> <span class="category-label" style="font-size: 18px; font-weight: bold;">추가 작성 사항</span>
 			    <div class="category-content">
 			    	<div class="category-title">질문 사항</div>
@@ -356,17 +393,38 @@ body {
 			    </div>
 			</div>
        </div>
-
-
-
-
-        
+       
+		<div class="col">
+		    <label for="companyName" class="question">접수기간</label>
+		</div>
+		<div class="box-day">
+		    <div class="icon"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+		    <div class="label">남은 기간</div>
+		    <div id="d-day" class="d-day">D-<span></span></div>
+		    <div class="dates">
+		        <div class="start-date">시작일: <span><%= apBean.getApplication_sdatetime() %></span></div>
+		        <div class="end-date">마감일: <span><%= apBean.getApplication_edatetime() %></span></div>
+		    </div>
+		</div>
+		<label for="companyName" class="question"></label>
+		<div class="col">
+		    <label for="companyName" class="question">기업정보</label>
+		</div>
+		<div class="box-day">
+		    <div class="icon"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+		    <div class="label">남은 기간</div>
+		    <div id="d-day" class="d-day">D-<span></span></div>
+		    <div class="dates">
+		        <div class="start-date">시작일: <span><%= apBean.getApplication_sdatetime() %></span></div>
+		        <div class="end-date">마감일: <span><%= apBean.getApplication_edatetime() %></span></div>
+		    </div>
+		</div>		
 
 			<div class="container">
 			    <div class="row justify-content-center mt-4">
 			        <div class="col-auto">
 			            <!-- 등록하기 버튼 -->
-			            <button id="registerButton" type="button" class="addbtn_rlast" onclick="submitForm()">수정하기</button>
+			            <button id="registerButton" type="button" class="addbtn_rlast" onclick="submitForm()">지원하기</button>
 			        </div>
 			        <div class="col-auto">
 			            <!-- 취소하기 버튼 -->
@@ -379,22 +437,20 @@ body {
               
         </div> <!-- 왼쪽 컨테이너 -->
         <!-- 우측 레이아웃 -->
-		<div class="col-md-2 d-flex flex-column align-items-center justify-content-center fixed-bottom-right">  
+		<div class="col-md-3 d-flex flex-column align-items-center justify-content-center fixed-bottom-right">  
 		    <div class="Postsidebar">  
 			    <ul>
-			        <li><a href="#MycompanyInfo">기업 정보</a></li>
-			        <li><a href="#MyrecruitmentInfo">모집 정보</a></li>
-			        <li><a href="#Myqualification">지원 자격 요건</a></li>
+			        <li><a href="#MycompanyInfo">담당업무</a></li>
+			        <li><a href="#Myqualification">자격 요건</a></li>
 			        <li><a href="#MyworkEnvironment">근무 환경</a></li>
 			        <li><a href="#MywelfareBenefits">복리후생</a></li>
 			        <li><a href="#MyhiringProcess">채용 절차</a></li>
-			        <li><a href="#MyadditionalSubmission">추가 제출 사항</a></li>
+			        <li><a href="#MyadditionalSubmission">추가 사항</a></li>
 			    </ul>
 			</div>		    
 		</div>
    </div>
 </div>
-
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -402,10 +458,33 @@ body {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
+	// 우측 메뉴바
+	document.querySelectorAll('.Postsidebar a').forEach(link => {
+	    link.addEventListener('click', function(e) {
+	        e.preventDefault();
+	        var targetId = this.getAttribute('href');
+	        var targetElement = document.querySelector(targetId);
+	        targetElement.scrollIntoView({ behavior: 'smooth' });
 
-	
-	
+	        // 선택적으로 특정 입력 필드에 포커스를 맞춥니다. 예를 들어:
+	        if (targetId === '#companyInfo') {
+	            document.getElementById('posting_cname').focus();
+	        }
+	    });
+	});
+	document.addEventListener('DOMContentLoaded', function() {
+	    var endDateElement = document.getElementById('end-date');
+	    if (endDateElement) {
+	        var endDateText = endDateElement.textContent.trim();
+	        // 날짜와 시간 사이에 'T' 문자를 삽입하여 형식을 조정합니다.
+	        var formattedEndDateText = endDateText.replace(' ', 'T');
+	        var endDateTime = new Date(formattedEndDateText).getTime();
+	        var now = new Date().getTime();
+	        var distance = endDateTime - now;
+	        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	        document.getElementById('d-day').getElementsByTagName('span')[0].textContent = days >= 0 ? days : '기간 만료';
+	    }
+	});
 	</script>
-
 </body>
 </html>
