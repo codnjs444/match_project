@@ -1,4 +1,3 @@
-
 <%@page import="match.posting.procedureBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.HashMap"%>
@@ -135,19 +134,6 @@
 	    font-size: 12px; /* 아이콘 및 텍스트 크기 조절 */
 	    line-height: 1; /* 버튼 높이 조절 */
 	}
-	
-	.modal-dialog {
-	    display: flex;
-	    justify-content: center;
-	    align-items: center;
-	    min-height: calc(100% - 60px); /* 모달이 화면 중앙에 위치하도록 설정 */
-	}
-	
-	.modal-dialog {
-	    position: fixed;
-	    margin-right: 300px; /* 기본 마진 제거 */
-	    margin-top: 300px; /* 기본 마진 제거 */
-	}
 </style>
 <body>
 
@@ -251,8 +237,7 @@
         // applicationIgnoreList에서 현재 인덱스의 값이 "yes"인지 확인하여 스타일을 결정합니다.
         String ignoreStyle = "yes".equals(applicationIgnoreList.get(i)) ? "background-color: #606060; color: white;" : "";
     %>
-	<div class="row applicant-info justify-content-center" style="<%= ignoreStyle %>" id="row_<%= resumeIdxs.get(i) %>">
-		<input type="hidden" id="user_id_<%= resumeIdxs.get(i) %>" value="<%= userIds.get(i) %>">
+	<div class="row applicant-info justify-content-center" style="<%= ignoreStyle %>" id="row_<%= resumeIdxs.get(i) %>" data-user-id="<%= userIds.get(i) %>">
 		<input type="hidden" name="application_ignored_<%= resumeIdxs.get(i) %>" id="application_ignored_<%= resumeIdxs.get(i) %>" value="<%= applicationIgnoreList.get(i) %>">
 	        <div class="col-1 d-flex align-items-center justify-content-center" style="flex: 0 0 5%; max-width: 5%;">
 	            <%= i + 1 %>
@@ -385,36 +370,6 @@
 
 
 
-<!-- 결과 관리 모달 -->
-<div class="modal fade" id="passModal" tabindex="-1" role="dialog" aria-labelledby="passModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document">
-
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="passModalLabel">결과 관리</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- 합격자 및 불합격자 버튼 -->
-                <div class="btn-group" role="group" aria-label="합격/불합격 처리">
-                    <button type="button" class="btn btn-outline-success" id="showPassCount">합격자</button>
-                    <button type="button" class="btn btn-outline-danger" id="showFailCount">불합격자</button>
-                </div>
-                <p id="totalCount">총 합격자: 0명, 총 불합격자: 0명</p> <!-- 총 인원 수 출력 -->
-                <div style="height: 50px; overflow-y: auto;" id="userIdList">
-                    <!-- 사용자 ID 나열 (스크롤 가능) -->
-                </div>
-                <textarea class="form-control mt-3" id="notificationContent" style="height: 200px;" placeholder="통보 내용 입력..."></textarea> <!-- 통보 내용 입력 필드 -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="sendNotification">결과 통보</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -465,111 +420,54 @@
 	        dropdownButton.innerText = result; // 버튼의 텍스트를 변경합니다.
 	    }
 	}
-
+	
 	function submitForm() {
 	    document.getElementById("submitForm").submit();
 	}
 	
-	document.addEventListener('DOMContentLoaded', function() {
-	    document.getElementById('finalBtn').addEventListener('click', function() {
-	        $('#passModal').modal('show');
-	    });
+	function collectApplicationResults() {
+	    var passedUserIds = []; // 합격한 사용자의 ID를 저장할 배열
+	    var failedUserIds = []; // 불합격한 사용자의 ID를 저장할 배열
 
-	    document.getElementById('processPass').addEventListener('click', function() {
-	        processApplications('합격');
-	    });
+	    document.querySelectorAll('.applicant-info').forEach(function(applicantInfoElement) {
+	        var applicationResult = applicantInfoElement.querySelector('input[name^="application_result_"]').value;
+	        var userId = applicantInfoElement.getAttribute('data-user-id');
 
-	    document.getElementById('processFail').addEventListener('click', function() {
-	        processApplications('불합격');
-	    });
-
-	    function processApplications(status) {
-	        var selectedApplicants = [];
-	        var userIds = [];
-	        document.querySelectorAll('input[name^="application_result_"]').forEach(function(item) {
-	            if (item.value === status) {
-	                var resumeIdx = item.id.split('_')[2];
-	                var userId = document.getElementById("user_id_" + resumeIdx).value; // user_id 가져오기
-	                selectedApplicants.push(resumeIdx);
-	                userIds.push(userId); // userIds 배열에 추가
-	            }
-	        });
-
-	        var passListElement = document.getElementById('passList');
-	        if (selectedApplicants.length > 0) {
-	            var displayText = status + '자 resume_idx: ' + selectedApplicants.join(', ') + '<br>' + 'user_ids: ' + userIds.join(', ');
-	            passListElement.innerHTML = displayText;
-	        } else {
-	            passListElement.innerHTML = status + '자가 없습니다.';
+	        if (applicationResult === '합격') {
+	            passedUserIds.push(userId);
+	        } else if (applicationResult === '불합격') {
+	            failedUserIds.push(userId);
 	        }
-	    }
-	});
-	document.addEventListener('DOMContentLoaded', function() {
-	    var totalCountElement = document.getElementById('totalCount');
-	    var userIdListElement = document.getElementById('userIdList');
-	    var notificationContentElement = document.getElementById('notificationContent');
-	    var passMessage = "축하합니다! 합격하셨습니다. 다음 일정은 아래와 같습니다.\n면접 일정: [면접 일자 및 시간]\n면접 장소: [면접 장소]\n기타 사항: [추가 정보]\n추가적인 문의나 정보가 필요하신 경우 연락주세요.\n감사합니다!";
-	    var failMessage = "안타깝게도 불합격하셨습니다.\n\n지원해 주셔서 감사합니다. 불합격 결과에 대해 추가적인 피드백이 필요하신 경우 언제든지 연락 주시기 바랍니다.\n\n더 나은 기회가 찾아올 것을 기대합니다.\n\n감사합니다.";
- 
-	    document.getElementById('showPassCount').addEventListener('click', function() {
-	        processApplications('합격');
-	        document.getElementById('notificationContent').value = passMessage; // 합격 메시지로 업데이트
 	    });
 
-	    document.getElementById('showFailCount').addEventListener('click', function() {
-	        processApplications('불합격');
-	        document.getElementById('notificationContent').value = failMessage; // 불합격 메시지로 업데이트
-	    });
-	    
-	    // 합격자 및 불합격자 버튼 클릭 이벤트 처리
-	    document.getElementById('showPassCount').addEventListener('click', function() {
-	        processApplications('합격');
-	    });
+	    return { passedUserIds, failedUserIds };
+	}
 
-	    document.getElementById('showFailCount').addEventListener('click', function() {
-	        processApplications('불합격');
-	    });
+	document.getElementById('finalBtn').addEventListener('click', function() {
+	    var { passedUserIds, failedUserIds } = collectApplicationResults();
+	    console.log("합격한 사용자 ID: ", passedUserIds);
+	    console.log("불합격한 사용자 ID: ", failedUserIds);
 
-	    // 결과 통보 버튼 클릭 이벤트
-	    document.getElementById('sendNotification').addEventListener('click', function() {
-	        // AJAX 요청으로 서버에 결과 통보
-	        sendNotification(notificationContentElement.value);
-	    });
-
-	    // 합격 및 불합격 처리를 위한 함수
-	    function processApplications(status) {
-	        userIdListElement.innerHTML = ''; // 목록 초기화
-	        var selectedUserIds = []; // 선택된 사용자 ID 저장
-
-	        document.querySelectorAll('input[name^="application_result_"]').forEach(function(item) {
-	            if (item.value === status) {
-	                var userId = document.getElementById("user_id_" + item.id.split('_')[2]).value;
-	                selectedUserIds.push(userId);
-	            }
-	        });
-
-	        selectedUserIds.forEach(function(userId) {
-	            var item = document.createElement('div');
-	            item.innerText = userId;
-	            userIdListElement.appendChild(item);
-	        });
-
-	        // 합격자 또는 불합격자 수 업데이트
-	        totalCountElement.innerText = `총 ${status}자: ${selectedUserIds.length}명`;
-	    }
-
-	    // 결과 통보를 위한 AJAX 요청 함수
-	    function sendNotification(notificationContent) {
-	        console.log('결과 통보 내용:', notificationContent);
-	        // AJAX 요청을 통한 서버 통신 코드 작성 위치
-	        // 예: $.ajax({...});
-	    }
-
-	    // 모달 표시
-	    document.getElementById('finalBtn').addEventListener('click', function() {
-	        $('#passModal').modal('show');
+	    // AJAX 요청으로 서버에 합격한 사용자 ID 목록 전송 및 이메일 주소 조회
+	    fetch('/api/getUserEmails', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify({passedUserIds: passedUserIds})
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        console.log("합격한 사용자 이메일: ", data.emails);
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
 	    });
 	});
+
+
+
+
 </script>
 
 

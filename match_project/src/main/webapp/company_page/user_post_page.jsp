@@ -407,6 +407,7 @@ body {
 		    </div>
 		</div>
 		<label for="companyName" class="question"></label>
+		<label for="companyName" class="question"></label>
 		<div class="col">
 		    <label for="companyName" class="question">기업정보</label>
 		</div>

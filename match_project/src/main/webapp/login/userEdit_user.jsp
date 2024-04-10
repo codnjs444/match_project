@@ -1,6 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%
-// 회원정보 수정		
+// 회원정보 수정	
+										
 %>
 
 <!DOCTYPE html> 
@@ -26,7 +27,7 @@
 		<div style="margin-left: 50px; width: 1400px;">
 			<h2> 회원정보 수정 </h2>
 			<p class="text-secondary"> 회원님의 정보를 수정/확인할 수 있습니다.</p>
-			<form id="frm" name="frm" method="POST">
+			<form id="frm" name="frm" method="POST" action="user_Edit_proc.jsp">
 				<table class="table table-bordered border-dark">
 					<colgroup>
 						<col style="width: 30%;" />
@@ -36,13 +37,14 @@
 						<tr>
 							<th> 아이디 </th>
 							<td><%=uBean.getUser_id()%></td>
+							    
 						</tr>
 						<tr>
 							<th> 
 								이름
 								<span class="text-danger">*</span> 
 							</th>
-							<td> <input type="text" class="form-control" value="<%=uBean.getUser_name()%>"></td>
+							<td>  <input type="text" class="form-control" name="user_name" value="<%=uBean.getUser_name()%>">
 						</tr>
 						<tr>
 							<th> 생년월일/성별 </th>
@@ -50,30 +52,33 @@
 								<div class="row ">
 									<div class="row col-8">
 										<div class="col-4">
-											<select class="form-select" id="year-select">
+											<select class="form-select" id="year-select" name="birth_year">
 												<option value="">출생년도</option>
+												
 											</select>
 										</div>
 										<div class="col-4">
-											<select class="form-select" id="month-select">
+											<select class="form-select" id="month-select" name="birth_month">
 												<option value="">월</option>
 											</select>
 										</div>
 										<div class="col-4">
-											<select class="form-select" id="day-select">
+											<select class="form-select" id="day-select" name="birth_day">
 												<option value="">일</option>
 											</select>
 										</div>
 									</div>
 									<div class="row col-4 ps-5 pt-2">
 										<div class="form-check col-auto">
-										  <input class="form-check-input" type="radio" name="flexRadioDefault" id="gender1">
+											<input class="form-check-input" type="radio" name="flexRadioDefault" id="gender1" <%= (uBean.getUser_gender()) ? "checked" : "" %> value="1">
 										  <label class="form-check-label" for="gender1">
 										    남
 										  </label>
 										</div>
 										<div class="form-check col-auto">
-										  <input class="form-check-input" type="radio" name="flexRadioDefault" id="gender2">
+											<input class="form-check-input" type="radio" name="flexRadioDefault" id="gender1" <%= (uBean.getUser_gender()) ? "checked" : "" %> value="0">
+
+										  <input type="hidden" name="user_id" value="<%=uBean.getUser_id()%>">
 										  <label class="form-check-label" for="gender2">
 										    여
 										  </label>
@@ -96,11 +101,11 @@
 									</div>
 									<span class="col-1">-</span>
 									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4' value="<%=uBean.getUser_phonenum().substring(4,8)%>">
+										<input type="text" class="form-control" name="phone_number2" maxlength='4' value="<%=uBean.getUser_phonenum().substring(4,8)%>">
 									</div>
 									<span class="col-1">-</span>
 									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4' value="<%=uBean.getUser_phonenum().substring(9,13)%>">
+										<input type="text" class="form-control" name="phone_number3" maxlength='4' value="<%=uBean.getUser_phonenum().substring(9,13)%>">
 									</div>
 								</div> 
 							</td>
@@ -117,19 +122,19 @@
 							%>
 								<div class="row">
 									<div class="col-4">
-										<input type="text" class="form-control" value="<%=email.substring(0, index)%>">
+										<input type="text" class="form-control" name="email_part1" value="<%=email.substring(0, index)%>">
 									</div>
 									<span class="col-1">@</span>
 									<div class="col-7">
 										<div class="row">
 											<div class="col-6 p-0 pe-1">
-												<input type="text" class="form-control" id="input-email2" value="<%=email.substring(index+1)%>">
+												<input type="text" class="form-control" id="input-email2"  name="email_part2"  value="<%=email.substring(index+1)%>">
 											</div>
 											<div class="col-6 p-0 ps-1">
 												<select class="form-select" id="select-email2">
 													<option value="">직접입력</option>
 													<option value="gmail.com">gmail.com</option>
-													<option value="naver.com">anver.com</option>
+													<option value="naver.com">naver.com</option>
 												</select>
 											</div>
 										</div>
@@ -142,7 +147,7 @@
 							<td>
 								<div class="row"> 
 									<div class="col-8">
-										<input type="text" class="form-control" value="<%=uBean.getSns()%>">
+										<input type="text" class="form-control" name="sns" value="<%=uBean.getSns()%>">
 									</div> 
 									<small class="col-4 text-end" > ( 블로그, SNS, Github 등 ) </small>
 								</div>
@@ -153,10 +158,10 @@
 							<td>
 								<div class="row g-3">
 									<div class="col-auto">
-										<input type="text" class="form-control" id="user_postcode" readonly value="<%=uBean.getPostal_code()%>">
+										<input type="text" class="form-control" id="user_postcode" name="user_postcode" readonly value="<%=uBean.getPostal_code()%>">
 									</div>
 									<div class="col-auto">
-										<button type="button" class="btn btn-primary" id="btn-address-search" onClick="execDaumPostcode()"> 주소검색 </button>
+										<button type="button" class="btn btn-primary" id="btn-address-search"  onClick="execDaumPostcode()"> 주소검색 </button>
 									</div>
 								</div>
 							</td>
@@ -165,7 +170,7 @@
 							<th> 주소 </th>
 							<td> 
 								<div class="row">
-									<div class="col-6"><input type="text" class="form-control" id="user_address" readonly value="<%=uBean.getUser_address()%>"></div>
+									<div class="col-6"><input type="text" class="form-control" id="user_address" name="user_address" readonly value="<%=uBean.getUser_address()%>"></div>
 								</div>
 							</td>
 						</tr>
@@ -217,8 +222,7 @@
 				});
 				// 수정하기 버튼 이벤트 
 				$("#btn-submit").on("click", function() {
-					// todo. validate 
-					return false;
+
 				});
 				// 취소하기 버튼 이벤트 
 				$("#btn-cancel").on("click", function() {

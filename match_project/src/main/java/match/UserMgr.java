@@ -6,10 +6,11 @@ import java.sql.ResultSet;
 
 public class UserMgr {
 	private DBConnectionMgr pool;
+
 	public UserMgr() {
 		pool = DBConnectionMgr.getInstance();
 	}
-	
+
 	public boolean loginUser(String user_id, String user_pwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -23,7 +24,7 @@ public class UserMgr {
 			pstmt.setString(1, user_id);
 			pstmt.setString(2, user_pwd);
 			rs = pstmt.executeQuery();
-			if(rs.next())
+			if (rs.next())
 				flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +34,7 @@ public class UserMgr {
 		System.out.println("유저 로그인 " + flag);
 		return flag;
 	}
-	
+
 	public String getUserName(String user_id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -46,7 +47,7 @@ public class UserMgr {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, user_id);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				user_name = rs.getString(1);
 			}
 		} catch (Exception e) {
@@ -56,7 +57,7 @@ public class UserMgr {
 		}
 		return user_name;
 	}
-	
+
 	public UserBean getUser(String user_id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -69,7 +70,7 @@ public class UserMgr {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, user_id);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				bean.setUser_name(rs.getString(1));
 				bean.setUser_id(rs.getString(2));
 				bean.setUser_pwd(rs.getString(3));
@@ -88,8 +89,8 @@ public class UserMgr {
 		}
 		return bean;
 	}
-	
-	public boolean signUpUser(UserBean bean){
+
+	public boolean signUpUser(UserBean bean) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -108,7 +109,7 @@ public class UserMgr {
 			pstmt.setString(8, bean.getPostal_code());
 			pstmt.setString(9, bean.getUser_address());
 			pstmt.setString(10, bean.getSns());
-			if(pstmt.executeUpdate() == 1)
+			if (pstmt.executeUpdate() == 1)
 				flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,4 +118,32 @@ public class UserMgr {
 		}
 		return flag;
 	}
+
+	public boolean updateUserInformation(String user_id, String user_email, String user_postal_code,
+			String user_address, String sns) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean updateSuccess = false;
+		try {
+			con = pool.getConnection();
+			String sql = "UPDATE user SET user_email = ?, postal_code = ?, user_address = ?, sns = ? WHERE user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_email);
+			pstmt.setString(2, user_postal_code);
+			pstmt.setString(3, user_address);
+			pstmt.setString(4, sns);
+			pstmt.setString(5, user_id);
+
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows > 0) {
+				updateSuccess = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return updateSuccess;
+	}
+
 }
