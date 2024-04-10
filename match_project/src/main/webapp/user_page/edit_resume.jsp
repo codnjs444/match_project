@@ -1,22 +1,54 @@
+<%@page import="match.resume.CareerBean"%>
+<%@page import="match.resume.EduBean"%>
+<%@page import="java.util.List"%>
 <%@page import="match.*"%>
 <%@page import="match.category.certificate_categoryBean"%>
 <%@page import="match.category.skill_categoryBean"%>
 <%@page import="java.util.Vector"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <jsp:useBean id="sMgr" class="match.category.skill_categoryMgr"/>
-<jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
+<jsp:useBean id="scBean" class="match.category.skill_categoryBean"/>
 <jsp:useBean id="cMgr" class="match.category.certificate_categoryMgr"/>
 <jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
 <jsp:useBean id="uBean" class="match.UserBean"/>
+<jsp:useBean id="rBean" class="match.ResumeBean"/>
+<jsp:useBean id="rMgr" class="match.ResumeMgr"/>
 
+<jsp:useBean id="eBean" class="match.resume.EduBean"/>
+<jsp:useBean id="caBean" class="match.resume.CareerBean"/>
+<jsp:useBean id="iBean" class="match.resume.InternshipBean"/>
+<jsp:useBean id="cuBean" class="match.resume.CurriculumBean"/>
+<jsp:useBean id="sBean" class="match.resume.SkillBean"/>
+<jsp:useBean id="ceBean" class="match.resume.CertificateBean"/>
+<jsp:useBean id="aBean" class="match.resume.AwardBean"/>
+<jsp:useBean id="gBean" class="match.resume.GlobalexBean"/>
+<jsp:useBean id="lBean" class="match.resume.LanguageBean"/>
+<jsp:useBean id="preBean" class="match.resume.PrefferBean"/>
+<jsp:useBean id="proBean" class="match.resume.ProjectBean"/>
+<jsp:useBean id="poBean" class="match.resume.PortfolioBean"/>
+
+<jsp:setProperty property="*" name="uBean"/>
+<jsp:setProperty property="*" name="rBean"/>
+<jsp:setProperty property="*" name="eBean"/>
+<jsp:setProperty property="*" name="caBean"/>
+<jsp:setProperty property="*" name="iBean"/>
+<jsp:setProperty property="*" name="cuBean"/>
+<jsp:setProperty property="*" name="sBean"/>
+<jsp:setProperty property="*" name="ceBean"/>
+<jsp:setProperty property="*" name="aBean"/>
+<jsp:setProperty property="*" name="gBean"/>
+<jsp:setProperty property="*" name="lBean"/>
+<jsp:setProperty property="*" name="preBean"/>
+<jsp:setProperty property="*" name="proBean"/>
+<jsp:setProperty property="*" name="poBean"/>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>이력서 작성</title>
+	<title>이력서 수정</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
@@ -429,6 +461,10 @@
 		SNS = "없음";
 	else
 		SNS = uBean.getSns();
+	int resume_idx = Integer.parseInt(request.getParameter("resume_idx"));
+	rBean = rMgr.getResumeIntro(resume_idx);
+	List<EduBean> eduList = rMgr.getEduList(resume_idx);
+	List<CareerBean> careerList = rMgr.getCareerList(resume_idx);
 %>
 	<div class="resume">
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
@@ -494,21 +530,24 @@
 			<div class="resume-center">
 				<div class="title" id="introInfo">자기소개</div>
 				<div class="stitle">당신은 어떤 사람인가요? (한 줄 소개)</div>
-				<input class="input-box" type="text" id="intro1" name="intro1">
+				<input class="input-box" type="text" id="intro1" name="intro1" value="<%=rBean.getSelf_intro1()%>">
 				<div class="stitle">당신의 꿈, 목표와 비전에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" id="intro2" name="intro2">
+				<input class="input-box" type="text" id="intro2" name="intro2" value="<%=rBean.getSelf_intro2()%>">
 				<div class="stitle">당신의 가치관에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" id="intro3" name="intro3">
+				<input class="input-box" type="text" id="intro3" name="intro3" value="<%=rBean.getSelf_intro3()%>">
 				<input type="hidden" name="resume_name">
 				
 				<div class="title" id="eduInfo">학력</div>
 				<div class="box">
+				<%
+					for(EduBean edu : eduList){
+				%>
 					<div class="edu-box">
 						<div class="row">
 							<div class="box-style sbox p-0">
 								<div class="dropdown">
-						            <button class="box-style sbox-con dropdown-toggle" type="button" id="edu-type-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-						                학력 유형 선택
+						            <button class="box-style sbox-con dropdown-toggle" type="button" id="edu-type-dropdown" data-bs-toggle="dropdown" aria-expanded="false" value="<%=edu.getEdu_type()%>">
+						                <%= edu.getEdu_type() == null ? "학력 유형 선택" : edu.getEdu_type() %>
 						            </button>
 						            <div class="dropdown-menu">
 						                <a class="dropdown-item" href="#" onclick="selectEdu('검정고시', event)">검정고시</a>
@@ -517,41 +556,42 @@
 						                <a class="dropdown-item" href="#" onclick="selectEdu('대학교 졸업(4년)', event)">대학교 졸업(4년)</a>
 						                <a class="dropdown-item" href="#" onclick="selectEdu('대학원 졸업(석사)', event)">대학원 졸업(석사)</a>
 						                <a class="dropdown-item" href="#" onclick="selectEdu('대학원 졸업(박사)', event)">대학원 졸업(박사)</a>
-						                <input type="hidden" id="edu_type[]" name="edu_type[]" value="">
+						                <input type="hidden" id="edu_type[]" name="edu_type[]">
 						            </div>
 						        </div>
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="edu_school[]" name="edu_school[]" placeholder="학교명">
+								<input class="box-style mbox-con" type="text" id="edu_school[]" name="edu_school[]" placeholder="학교명" value="<%=edu.getEdu_school()%>">
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="edu_major[]" name="edu_major[]" placeholder="전공명">
+								<input class="box-style mbox-con" type="text" id="edu_major[]" name="edu_major[]" placeholder="전공명" value="<%=edu.getEdu_major()%>">
 							</div>
 						</div>
 						<div class="row">
 							<span class="stext">입학년월</span>
 							<div class="box-style msbox p-0">
-								<input type="datetime-Local" id="edu_syear[]" name="edu_syear[]" class="box-style msbox-con">
+								<input type="month" id="edu_syear[]" name="edu_syear[]" class="box-style msbox-con" value="<%=edu.getEdu_syear()%>">
 							</div>
 							<span class="stext">졸업년월</span>
 							<div class="box-style msbox p-0">
-								<input type="datetime-Local" id="edu_eyear[]" name="edu_eyear[]" class="box-style msbox-con">
+								<input type="month" id="edu_eyear[]" name="edu_eyear[]" class="box-style msbox-con" value="<%=edu.getEdu_eyear()%>">
 							</div>
 							<div class="box-style sbox p-0">
 								<div class="dropdown">
 						            <button class="box-style sbox-con dropdown-toggle" type="button" id="status-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-						                재학 상태 선택
+						                <%= edu.getEdu_status() == null ? "재학 상태 선택" : edu.getEdu_status() %>
 						            </button>
 						            <div class="dropdown-menu">
 						                <a class="dropdown-item" href="#" onclick="selectStatus('재학', event)">재학</a>
 						                <a class="dropdown-item" href="#" onclick="selectStatus('졸업 예정', event)">졸업 예정</a>
 						                <a class="dropdown-item" href="#" onclick="selectStatus('졸업', event)">졸업</a>
-						                <input type="hidden" id="status[]" name="status[]" value="">
+						                <input type="hidden" id="status[]" name="status[]" value="<%=edu.getEdu_status()%>">
 						            </div>
 						        </div>
 							</div>
 						</div>
 					</div>
+					<%} %>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addEduBox(this)">추가하기</button>
 					</div>
@@ -559,34 +599,36 @@
 				
 				<div class="title" id="careerInfo">경력</div>
 				<div class="box">
+				<%for(CareerBean career : careerList) {%>
 					<div class="career-box">
 						<div class="row">
 							<div class="box-style sbox p-0">
-								<input class="box-style sbox-con" type="text" id="career_cname[]" name="career_cname[]" placeholder="회사명">
+								<input class="box-style sbox-con" type="text" id="career_cname[]" name="career_cname[]" placeholder="회사명" value="<%=career.getCareer_cname()%>">
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="career_dep[]" name="career_dep[]" placeholder="부서명">
+								<input class="box-style mbox-con" type="text" id="career_dep[]" name="career_dep[]" placeholder="부서명" value="<%=career.getCareer_dep()%>">
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="career_job[]" name="career_job[]" placeholder="담당 직무">
+								<input class="box-style mbox-con" type="text" id="career_job[]" name="career_job[]" placeholder="담당 직무" value="<%=career.getCareer_job()%>">
 							</div>
 						</div>
 						<div class="row">
 							<span class="stext">입사년월</span>
 							<div class="box-style msbox p-0">
-								<input type="datetime-Local" id="career_syear[]" name="career_syear[]" class="box-style msbox-con">
+								<input type="month" id="career_syear[]" name="career_syear[]" class="box-style msbox-con" value="<%=career.getCareer_syear()%>">
 							</div>
 							<span class="stext">퇴사년월</span>
 							<div class="box-style msbox p-0">
-								<input type="datetime-Local" id="career_eyear[]" name="career_eyear[]" class="box-style msbox-con">
+								<input type="month" id="career_eyear[]" name="career_eyear[]" class="box-style msbox-con" value="<%=career.getCareer_eyear()%>">
 							</div>
 						</div>
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<textarea class="lbox-con box-style" id="career_duty[]" name="career_duty[]" placeholder="담당 업무"></textarea>
+								<textarea class="lbox-con box-style" id="career_duty[]" name="career_duty[]" placeholder="담당 업무"><%=career.getCareer_duty()	%></textarea>
 							</div>
 						</div>
 					</div>
+					<%} %>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addCareerBox(this)">추가하기</button>
 					</div>
@@ -690,7 +732,7 @@
 						                <%
 						                Vector<skill_categoryBean> vlist = sMgr.skillsnameList(skillname[j]);
 						                for(int i = 0; i < vlist.size(); i++){
-						                	sBean = vlist.get(i);
+						                	scBean = vlist.get(i);
 						                %>
 						                	<button class="scategory scategory1" type="button"><%=sBean.getSkill_sname()%></button>
 						                <%

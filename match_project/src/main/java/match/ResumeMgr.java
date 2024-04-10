@@ -392,4 +392,97 @@ public class ResumeMgr {
 		}
 		return vlist;
 	}
+	
+	public ResumeBean getResumeIntro(int resume_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		ResumeBean bean = new ResumeBean();
+		try {
+			con = pool.getConnection();
+			sql = "select self_intro1, self_intro2, self_intro3 from resume where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setSelf_intro1(rs.getString("self_intro1"));
+				bean.setSelf_intro2(rs.getString("self_intro2"));
+				bean.setSelf_intro3(rs.getString("self_intro3"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
+	public List<EduBean> getEduList(int resume_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<EduBean> eduList = new ArrayList<>(); // 결과를 저장할 리스트 초기화
+
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT edu_type, edu_school, edu_major, edu_syear, edu_eyear, edu_status FROM edu WHERE resume_idx=?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, resume_idx);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            // 각 레코드(행)에 대해 EduBean 객체 생성 및 데이터 설정
+	            EduBean edu = new EduBean();
+	            edu.setResume_idx(resume_idx); // resume_idx 설정
+	            edu.setEdu_type(rs.getString("edu_type"));
+	            edu.setEdu_school(rs.getString("edu_school"));
+	            edu.setEdu_major(rs.getString("edu_major"));
+	            edu.setEdu_syear(rs.getString("edu_syear"));
+	            edu.setEdu_eyear(rs.getString("edu_eyear"));
+	            edu.setEdu_status(rs.getString("edu_status"));
+
+	            // 설정된 EduBean 객체를 리스트에 추가
+	            eduList.add(edu);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+
+	    return eduList; // 조회된 교육 정보 리스트 반환
+	}
+	
+	public List<CareerBean> getCareerList(int resume_idx){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<CareerBean> careerList = new ArrayList<>();
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "select career_cname, career_dep, career_job, career_syear, career_eyear, career_duty from career where resume_idx=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CareerBean career = new CareerBean();
+				career.setResume_idx(resume_idx);
+				career.setCareer_cname(rs.getString("career_cname"));
+				career.setCareer_dep(rs.getString("career_dep"));
+				career.setCareer_job(rs.getString("career_job"));
+				career.setCareer_syear(rs.getString("career_syear"));
+				career.setCareer_eyear(rs.getString("career_eyear"));
+				career.setCareer_duty(rs.getString("career_duty"));
+				
+				careerList.add(career);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return careerList;
+	}
 }

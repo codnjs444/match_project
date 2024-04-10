@@ -3,6 +3,8 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <jsp:useBean id="rMgr" class="match.ResumeMgr"/>
 <jsp:useBean id="rBean" class="match.ResumeBean"/>
+<jsp:useBean id="uMgr" class="match.UserMgr"/>
+<jsp:useBean id="uBean" class="match.UserBean"/>
 
 <!DOCTYPE html>
 <html>
@@ -148,6 +150,7 @@
 				return;
 			}
 			Vector<ResumeBean> rvlist = rMgr.getResumeIdxList(id);
+			
 		%>
 		<div class="col">
 		    <div class="row">
@@ -158,7 +161,7 @@
 		            			<div class="id-picture px-0"></div>
 		            		</div>
 		            		<div class="col name border-0 bg-body px-0">
-		            			<input class="name border-0 bg-body" type="text" disabled placeholder="한우진">
+		            			<input class="name border-0 bg-body" type="text" disabled placeholder="<%=uMgr.getUserName(id)%>">
 		            		</div>
 		            		<div class="col px-0">
 		            			<button class="info border-light-subtitle bg-body" onclick="location.href='../login/logout.jsp'">
@@ -206,7 +209,7 @@
 	    </div>
 		
 		<div class="applist-body">
-			<h2> 이력서 관리 </h2>
+			<h2 style="font-weight: bold;"> 이력서 관리 </h2>
 			
 			<table class="table text-center text-nowrap">
 				
@@ -236,9 +239,9 @@
 				%>
 					<tr>
 						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><button type="button" class="btn edit-btn" data-resume-idx="<%=rBean.getResume_idx()%>"><%=rBean.getResume_name()%></button></td>
+						<td class="text-start"><button type="button" class="btn"><%=rBean.getResume_name()%></button></td>
 						<td><span><%=rBean.getResume_datetime().substring(0,10)%></span></td>
-						<td><button type="button" class="btn btn-primary">수정</button></td>
+						<td><button type="button" class="btn btn-primary edit-btn" data-resume-idx="<%=rBean.getResume_idx()%>">수정</button></td>
 						<td><button type="button" class="btn btn-light">인쇄</button></td>
 						<td><button type="button" class="btn btn-light">이메일전송</button></td>
 						<td>&nbsp;</td>
@@ -287,10 +290,11 @@
 			});
 			
 			$(document).ready(function() {
-			    // "수정" 버튼에 대한 클릭 이벤트 리스너를 추가합니다.
 			    $(".edit-btn").on("click", function() {
-			        var resumeIdx = $(this).data("resume-idx"); // data-resume-idx 속성에서 이력서 인덱스를 가져옵니다.
-			        window.location.href = "../user_page/edit_resume.jsp?resume_idx=" + resumeIdx; // 이력서 인덱스를 쿼리 파라미터로 사용하여 edit_resume.jsp 페이지로 이동합니다.
+			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
+			        var resumeIdx = $(this).data("resume-idx");
+			        // URL에 이력서 idx 값을 포함시켜 edit_resume.jsp 페이지로 이동합니다.
+			        window.location.href = "../user_page/edit_resume.jsp?resume_idx=" + resumeIdx;
 			    });
 			});
 		</script>

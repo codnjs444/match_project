@@ -86,7 +86,7 @@
   %>
   <div class="nav-links">
     <a href="../login/logout.jsp">로그아웃</a>
-    <a href="resume.jsp">이력서 작성</a>
+    <a href="../user_page/resume.jsp">이력서 작성</a>
     <a href="/corporate-services">기업 서비스</a>
   </div>
   <%
