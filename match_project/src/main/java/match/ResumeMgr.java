@@ -463,7 +463,7 @@ public class ResumeMgr {
 		try {
 			con = pool.getConnection();
 			sql = "select career_cname, career_dep, career_job, career_syear, career_eyear, career_duty from career where resume_idx=?";
-			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql); 
 			pstmt.setInt(1, resume_idx);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
