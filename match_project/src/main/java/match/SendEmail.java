@@ -13,7 +13,8 @@ import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
 
-	public static void sendMail(List<String> recipientEmails) throws MessagingException {
+	public static void sendMail(List<String> recipientEmails, String emailSubject, String emailContent)
+			throws MessagingException {
 		String host = "smtp.gmail.com"; // 이메일 서버 (Gmail의 경우)
 		final String user = "rldrhd131@gmail.com"; // 발신자의 이메일 주소
 		final String password = "yino trwo uvqd bbzy"; // 발신자 이메일의 비밀번호
@@ -40,11 +41,11 @@ public class SendEmail {
 				message.setFrom(new InternetAddress(user));
 				message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
-				// 메일 제목
-				message.setSubject("합격을 축하드립니다!");
+				// 메일 제목 - 매개변수로 받은 값 사용
+				message.setSubject(emailSubject);
 
-				// 메일 내용
-				message.setText("귀하가 지원하신 포지션에 대해 합격하셨음을 알려드립니다.");
+				// 메일 내용 - 매개변수로 받은 값 사용
+				message.setText(emailContent);
 
 				// 메일 전송
 				Transport.send(message);

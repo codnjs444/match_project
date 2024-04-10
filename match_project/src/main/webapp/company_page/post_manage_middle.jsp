@@ -392,6 +392,14 @@
         <button id="showPassed" class="btn btn-success">합격자 보기</button>
         <button id="showFailed" class="btn btn-danger">불합격자 보기</button>
         <div id="resultsList"></div>
+         <div>
+        <label for="emailSubject">메일 제목:</label>
+        <input type="text" id="emailSubject" class="form-control">
+    </div>
+    <div>
+        <label for="emailContent">메일 내용:</label>
+        <textarea id="emailContent" class="form-control"></textarea>
+    </div>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-primary" id="confirmPublish">발표하기</button>
@@ -475,6 +483,9 @@
 	});
 
 	document.getElementById('confirmPublish').addEventListener('click', function() {
+	    var emailSubject = document.getElementById('emailSubject').value; // 메일 제목
+	    var emailContent = document.getElementById('emailContent').value; // 메일 내용
+	    
 	    // XMLHttpRequest 객체 생성
 	    var xhr = new XMLHttpRequest();
 	    xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
@@ -482,16 +493,22 @@
 	    
 	    xhr.onload = function() {
 	        if (xhr.status == 200) {
-	            var data = JSON.parse(xhr.responseText);
-	            console.log("합격한 사용자 이메일: ", data.emails);
-	            alert('결과 발표를 완료했습니다.');
+	            // 성공 시 처리
 	            $('#resultsModal').modal('hide');
+	            alert('결과 발표를 완료했습니다.');
 	        } else {
+	            // 실패 시 처리
 	            console.error("Error: ", xhr.statusText);
 	        }
 	    };
 	    
-	    xhr.send(JSON.stringify({passedUserIds: passedUserIds}));
+	    // 서버로 전송할 데이터에 메일 제목과 내용 추가
+	    var dataToSend = JSON.stringify({
+	        passedUserIds: passedUserIds,
+	        emailSubject: emailSubject, // 메일 제목
+	        emailContent: emailContent // 메일 내용
+	    });
+	    xhr.send(dataToSend);
 	});
 	
 	

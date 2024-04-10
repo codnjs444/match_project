@@ -23,7 +23,6 @@ public class GetUserEmailsServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// 요청 본문에서 JSON 데이터를 읽어옵니다.
 		StringBuilder builder = new StringBuilder();
 		String line;
 		while ((line = request.getReader().readLine()) != null) {
@@ -31,24 +30,22 @@ public class GetUserEmailsServlet extends HttpServlet {
 		}
 		String body = builder.toString();
 
-		// JSON 파싱
 		JSONParser parser = new JSONParser();
-		List<String> userEmails = new ArrayList<>();
 		try {
 			JSONObject json = (JSONObject) parser.parse(body);
-			JSONArray userIdsJson = (JSONArray) json.get("passedUserIds"); // "passedUserIds"라는 키에 대한 배열을 가져옵니다.
+			JSONArray userIdsJson = (JSONArray) json.get("passedUserIds");
+			String emailSubject = (String) json.get("emailSubject"); // 메일 제목 받기
+			String emailContent = (String) json.get("emailContent"); // 메일 내용 받기
 			List<String> userIds = new ArrayList<>();
 			for (Object userIdObj : userIdsJson) {
 				userIds.add((String) userIdObj);
 			}
 
-			// ApplicationMgr을 사용하여 user_id에 해당하는 이메일 주소를 조회
 			ApplicationMgr aMgr = new ApplicationMgr();
-			userEmails = aMgr.searchPassedUserEmails(userIds);
+			List<String> userEmails = aMgr.searchPassedUserEmails(userIds);
 
-			// 이메일 전송
 			try {
-				SendEmail.sendMail(userEmails);
+				SendEmail.sendMail(userEmails, emailSubject, emailContent);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write("{\"message\":\"Emails sent successfully.\"}");
