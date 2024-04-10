@@ -299,7 +299,7 @@ body {
 			<div class="category" id="MycompanyInfo">
 			    <i class="fas fa-check"></i> <span class="category-label">담당업무</span>
 			    <div class="category-content">
-			        <div class="category-title">모집 분야</div>
+			        <div class="category-title">모집 ddd분야</div>
 			        <ul class="details-list">
 			            <li>모집분야 : [<%=opBean.getOpenposition_name()%>]</li>
 			            <li>담당업무 : [<%=opBean.getOpenposition_duty()%>]</li>
