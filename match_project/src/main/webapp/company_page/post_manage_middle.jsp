@@ -138,11 +138,59 @@
 	.modal-dialog {
 	    position: fixed; /* 모달 위치 고정 */
 	    width: 700px;
-	    max-width: 90%; /* 최대 너비를 화면 너비의 90%로 설정 */
+	    max-width: 600px; /* 최대 너비를 화면 너비의 90%로 설정 */
 	    top: 50%; /* 상단에서 50% 위치 */
 	    left: 50%; /* 좌측에서 50% 위치 */
 	    transform: translate(-50%, -50%); /* 정확한 중앙 정렬을 위해 변환 적용 */
 	}
+	
+	.modal-header {
+    border-bottom: 1px solid #dee2e6; /* 모달 헤더의 하단 경계선 추가 */
+    background-color: #f8f9fa; /* 모달 헤더 배경색 추가 */
+}
+
+.modal-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 제목 폰트 변경 */
+    font-weight: bold;
+    font-size: 20px; /* 제목 크기 조정 */
+    color: #333; /* 제목 색상 조정 */
+}
+
+.modal-body {
+    padding: 20px; /* 내용 영역의 패딩 조정 */
+}
+
+#emailSubject, #emailContent {
+    margin-top: 15px; /* 입력 필드 상단 마진 추가 */
+    border-radius: 5px; /* 입력 필드의 모서리 둥글게 */
+    border: 1px solid #ced4da; /* 입력 필드 경계선 스타일 */
+}
+
+label {
+    font-weight: bold; /* 라벨 폰트 굵게 */
+    margin-bottom: 5px; /* 라벨과 입력 필드 사이의 마진 */
+}
+
+.btn {
+    border-radius: 20px; /* 버튼 모서리 둥글게 */
+    padding: 10px 20px; /* 버튼 패딩 조정 */
+    font-weight: bold; /* 버튼 텍스트 굵게 */
+}
+
+#showPassed, #showFailed {
+    margin-right: 10px; /* 버튼 간격 조정 */
+    margin-bottom: 20px; /* 버튼과 입력 필드 사이의 간격 */
+}
+
+#confirmPublish {
+    background-color: #007bff; /* 발표하기 버튼 배경색 */
+    color: white; /* 발표하기 버튼 글자색 */
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6; /* 모달 바닥의 상단 경계선 추가 */
+    background-color: #f8f9fa; /* 모달 바닥 배경색 추가 */
+}
 </style>
 <body>
 
@@ -394,11 +442,11 @@
         <div id="resultsList"></div>
          <div>
         <label for="emailSubject">메일 제목:</label>
-        <input type="text" id="emailSubject" class="form-control">
+        <input type="text" id="emailSubject" class="form-control" value="축하합니다! 합격을 알려드립니다">
     </div>
     <div>
         <label for="emailContent">메일 내용:</label>
-        <textarea id="emailContent" class="form-control"></textarea>
+        <textarea id="emailContent" class="form-control">귀하가 지원하신 포지션에 대해 합격하셨음을 알려드립니다. 다음 1차 면접 발표 날짜는 xx월 xx일 입니다. 자세한 사항은 문자를 참고해주시기 바랍니다.</textarea>
     </div>
       </div>
       <div class="modal-footer">
