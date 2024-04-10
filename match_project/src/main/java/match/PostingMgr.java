@@ -1049,4 +1049,79 @@ public class PostingMgr {
 		return postingName; // Return the posting name
 	}
 
+	public String getManagerId(String posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String managerId = ""; // Initialize the string to store the manager id
+
+		try {
+			con = pool.getConnection(); // Assume pool is previously defined and accessible
+
+			String sql = "SELECT manager_id FROM posting WHERE posting_idx=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, posting_idx);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				managerId = rs.getString("manager_id"); // Retrieve the manager id
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs); // Ensure resources are freed
+		}
+		return managerId; // Return the manager id
+	}
+
+	public int getCompanyIdx(String manager_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int companyIdx = 0; // Initialize the integer to store the company index
+
+		try {
+			con = pool.getConnection(); // Assume pool is previously defined and accessible
+
+			String sql = "SELECT company_idx FROM manager WHERE manager_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, manager_id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				companyIdx = rs.getInt("company_idx"); // Retrieve the company index
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs); // Ensure resources are freed
+		}
+		return companyIdx; // Return the company index
+	}
+
+	public String getCompanyName(int company_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String companyName = ""; // Initialize the string to store the company name
+
+		try {
+			con = pool.getConnection(); // Assume pool is previously defined and accessible
+
+			String sql = "SELECT company_name FROM company WHERE company_idx=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, company_idx);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				companyName = rs.getString("company_name"); // Retrieve the company name
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs); // Ensure resources are freed
+		}
+		return companyName; // Return the company name
+	}
+
 }
