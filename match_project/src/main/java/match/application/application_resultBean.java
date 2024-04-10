@@ -4,7 +4,6 @@ public class application_resultBean {
 	private int result_idx;
 	private int posting_idx;
 	private int procedure_num;
-	private String procedure_name;
 	private String user_id;
 	private String result_status;
 	private String result_day;
@@ -26,12 +25,6 @@ public class application_resultBean {
 	}
 	public void setProcedure_num(int procedure_num) {
 		this.procedure_num = procedure_num;
-	}
-	public String getProcedure_name() {
-		return procedure_name;
-	}
-	public void setProcedure_name(String procedure_name) {
-		this.procedure_name = procedure_name;
 	}
 	public String getUser_id() {
 		return user_id;

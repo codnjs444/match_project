@@ -393,7 +393,7 @@ public class ResumeMgr {
 		return vlist;
 	}
 	
-	public ResumeBean getResumeIntro(int resume_idx) {
+	public ResumeBean getResume(int resume_idx) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -401,11 +401,12 @@ public class ResumeMgr {
 		ResumeBean bean = new ResumeBean();
 		try {
 			con = pool.getConnection();
-			sql = "select self_intro1, self_intro2, self_intro3 from resume where resume_idx = ?";
+			sql = "select resume_name, self_intro1, self_intro2, self_intro3 from resume where resume_idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, resume_idx);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
+				bean.setResume_name(rs.getString("resume_name"));
 				bean.setSelf_intro1(rs.getString("self_intro1"));
 				bean.setSelf_intro2(rs.getString("self_intro2"));
 				bean.setSelf_intro3(rs.getString("self_intro3"));
@@ -484,5 +485,160 @@ public class ResumeMgr {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return careerList;
+	}
+	
+	public List<InternshipBean> getInternList(int resume_idx){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		List<InternshipBean> internList = new ArrayList<>();
+		try {
+			con = pool.getConnection();
+			sql = "select internship_type, internship_cname, internship_syear, internship_eyear, internship_duty from internship where resume_idx=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				InternshipBean bean = new InternshipBean();
+				bean.setResume_idx(resume_idx);
+				bean.setInternship_type(rs.getString("internship_type"));
+				bean.setInternship_cname(rs.getString("internship_cname"));
+				bean.setInternship_syear(rs.getString("internship_syear"));
+				bean.setInternship_eyear(rs.getString("internship_eyear"));
+				bean.setInternship_duty(rs.getString("internship_duty"));
+				
+				internList.add(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return internList;
+	}
+	
+	public List<CurriculumBean> getCurriculumList(int resume_idx){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		List<CurriculumBean> curriculumList = new ArrayList<>();
+		try {
+			con = pool.getConnection();
+			sql = "select curriculum_name, curriculum_cname, curriculum_syear, curriculum_eyear, curriculum_content from curriculum where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CurriculumBean bean = new CurriculumBean();
+				bean.setResume_idx(resume_idx);
+				bean.setCurriculum_name(rs.getString("curriculum_name"));
+				bean.setCurriculum_cname(rs.getString("curriculum_cname"));
+				bean.setCurriculum_syear(rs.getString("curriculum_syear"));
+				bean.setCurriculum_eyear(rs.getString("curriculum_eyear"));
+				bean.setCurriculum_content(rs.getString("curriculum_content"));
+				
+				curriculumList.add(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return curriculumList;
+	}
+	
+	public List<SkillBean> getSkillList(int resume_idx){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		List<SkillBean> skillList = new ArrayList<>();
+		try {
+			con = pool.getConnection();
+			sql = "select skill_sname from skill where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				SkillBean bean = new SkillBean();
+				bean.setResume_idx(resume_idx);
+				bean.setSkill_sname(rs.getString("skill_sname"));
+				
+				skillList.add(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return skillList;
+	}
+	
+	public List<CertificateBean> getCertificateList(int resume_idx){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		List<CertificateBean> certificateList = new ArrayList<>();
+		try {
+			con = pool.getConnection();
+			sql = "select certificate_sname from certificate where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CertificateBean bean = new CertificateBean();
+				bean.setResume_idx(resume_idx);
+				bean.setCertificate_sname(rs.getString("certificate_sname"));
+				certificateList.add(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return certificateList;
+	}
+	
+	public void updateResume(ResumeBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update resume set resume_name=?, self_intro1=?, self_intro2=?, self_intro3=? where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getResume_name());
+			pstmt.setString(2, bean.getSelf_intro1());
+			pstmt.setString(3, bean.getSelf_intro2());
+			pstmt.setString(4, bean.getSelf_intro3());
+			pstmt.setInt(5, bean.getResume_idx());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	public void getResumeName(int Resume_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "select resume_name from resume where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, Resume_idx);
+			rs = pstmt.executeQuery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
 	}
 }

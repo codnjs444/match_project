@@ -1,3 +1,7 @@
+<%@page import="match.resume.CertificateBean"%>
+<%@page import="match.resume.SkillBean"%>
+<%@page import="match.resume.CurriculumBean"%>
+<%@page import="match.resume.InternshipBean"%>
 <%@page import="match.resume.CareerBean"%>
 <%@page import="match.resume.EduBean"%>
 <%@page import="java.util.List"%>
@@ -444,7 +448,7 @@
 	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
 	
 	if(id==null){
-		response.sendRedirect("../login.jsp");
+		response.sendRedirect("../login/login.jsp");
 		return;
 	}
 	uBean = uMgr.getUser(id);
@@ -462,12 +466,17 @@
 	else
 		SNS = uBean.getSns();
 	int resume_idx = Integer.parseInt(request.getParameter("resume_idx"));
-	rBean = rMgr.getResumeIntro(resume_idx);
+	rBean = rMgr.getResume(resume_idx);
 	List<EduBean> eduList = rMgr.getEduList(resume_idx);
 	List<CareerBean> careerList = rMgr.getCareerList(resume_idx);
+	List<InternshipBean> internList = rMgr.getInternList(resume_idx);
+	List<CurriculumBean> curriculumList = rMgr.getCurriculumList(resume_idx);
+	List<SkillBean> skillList = rMgr.getSkillList(resume_idx);
+	List<CertificateBean> certificateList = rMgr.getCertificateList(resume_idx);
 %>
 	<div class="resume">
-		<form name="resumeFrm" method="post" action="resumeProc.jsp">
+		<form name="resumeFrm" method="get" action="resumeUpdateProc.jsp">
+		<input type="hidden" name="resume_idx" value="<%= resume_idx %>">
 			<div class="fixed-left resume-side row ms-0">
 				<input class="left-img" type="file">
 				<div class="left-name"><%=uBean.getUser_name()%></div>
@@ -591,6 +600,7 @@
 							</div>
 						</div>
 					</div>
+					<hr>
 					<%} %>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addEduBox(this)">추가하기</button>
@@ -628,6 +638,7 @@
 							</div>
 						</div>
 					</div>
+					<hr>
 					<%} %>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addCareerBox(this)">추가하기</button>
@@ -635,12 +646,15 @@
 				</div>
 				<div class="title" id="internInfo">인턴, 대외 활동</div>
 				<div class="box">
+				<%
+					for(InternshipBean intern : internList){
+				%>
 					<div class="intern-box">
 						<div class="row">
 							<div class="box-style sbox p-0">
 								<div class="dropdown">
 						            <button class="box-style sbox-con dropdown-toggle" type="button" id="intern-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-						                활동 구분
+						                <%= intern.getInternship_type() == null ? "재학 상태 선택" : intern.getInternship_type() %>
 						            </button>
 						            <div class="dropdown-menu">
 						                <a class="dropdown-item" href="#" onclick="selectIntern('인턴',event)">인턴</a>
@@ -650,57 +664,68 @@
 						                <a class="dropdown-item" href="#" onclick="selectIntern('사회활동',event)">사회활동</a>
 						                <a class="dropdown-item" href="#" onclick="selectIntern('교내활동',event)">교내활동</a>
 						                <a class="dropdown-item" href="#" onclick="selectIntern('기타',event)">기타</a>
-						                <input type="hidden" id="intern_type[]" name="intern_type[]" value="">
+						                <input type="hidden" id="intern_type[]" name="intern_type[]" value="<%=intern.getInternship_type()%>">
 						            </div>
 						        </div>
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="intern_cname[]" name="intern_cname[]" placeholder="기관 이름">
+								<input class="box-style mbox-con" type="text" id="intern_cname[]" name="intern_cname[]" placeholder="기관 이름" value="<%=intern.getInternship_cname()%>">
 							</div>
 							<span class="sstext p-0">시작연도</span>
-							<select id="intern_syear[]" name="intern_syear[]" class="box-style ssbox p-0">
+							<select name="intern_syear[]" class="box-style ssbox p-0 intern-syear">
 								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
 							</select>
 							<span class="sstext p-0">종료연도</span>
-							<select id="intern_eyear[]" name="intern_eyear[]" class="box-style ssbox p-0">
+							<select name="intern_eyear[]" class="box-style ssbox p-0 intern-eyear">
 								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
 							</select>
 						</div>
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<textarea class="lbox-con box-style" id="intern_duty[]" name="intern_duty[]" placeholder="활동 내용 (직무와 관련된 경험에 대해 작성해주세요.)"></textarea>
+								<textarea class="lbox-con box-style" id="intern_duty[]" name="intern_duty[]" placeholder="활동 내용 (직무와 관련된 경험에 대해 작성해주세요.)"><%=intern.getInternship_duty()%></textarea>
 							</div>
 						</div>			
 					</div>
+					<hr>
+					<%
+					}
+					%>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addInternBox(this)">추가하기</button>
 					</div>
 				</div>
 				<div class="title" id="curriculumInfo">교육 이수</div>
 				<div class="box">
+				<%
+					for(CurriculumBean curriculum : curriculumList){
+				%>
 					<div class="curriculum-box">
 						<div class="row">
 							<div class="box-style sbox p-0">
-								<input class="box-style sbox-con" type="text" id="curriculum_name[]" name="curriculum_name[]" placeholder="교육 명">
+								<input class="box-style sbox-con" type="text" id="curriculum_name[]" name="curriculum_name[]" placeholder="교육 명" value="<%=curriculum.getCurriculum_name()%>">
 							</div>
 							<div class="box-style mbox p-0">
-								<input class="box-style mbox-con" type="text" id="curriculum_cname[]" name="curriculum_cname[]" placeholder="기관 이름">
+								<input class="box-style mbox-con" type="text" id="curriculum_cname[]" name="curriculum_cname[]" placeholder="기관 이름" value="<%=curriculum.getCurriculum_cname()%>">
 							</div>
 							<span class="sstext p-0">시작연도</span>
-							<select id="curriculum_syear[]" name="curriculum_syear[]" class="box-style ssbox p-0">
+							<select name="curriculum_syear[]" class="box-style ssbox p-0 curriculum-syear">
 								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
 							</select>
 							<span class="sstext p-0">종료연도</span>
-							<select id="curriculum_eyear[]" name="curriculum_eyear[]" class="box-style ssbox p-0">
+							<select name="curriculum_eyear[]" class="box-style ssbox p-0 curriculum-eyear">
 								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
 							</select>
 						</div>
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<textarea class="lbox-con box-style" id="curriculum_content[]" name="curriculum_content[]" placeholder="활동 내용 (이수하신 교육 과정에 대해 작성해주세요.)"></textarea>
+								<textarea class="lbox-con box-style" id="curriculum_content[]" name="curriculum_content[]" placeholder="활동 내용 (이수하신 교육 과정에 대해 작성해주세요.)"><%=curriculum.getCurriculum_content()%></textarea>
 							</div>
 						</div>	
 					</div>
+					<hr>
+					<%
+					}
+					%>
 					<div class="row m-0">
 						<button class="add-btn mx-auto" type="button" onclick="addCurriculumBox(this)">추가하기</button>
 					</div>
@@ -734,7 +759,7 @@
 						                for(int i = 0; i < vlist.size(); i++){
 						                	scBean = vlist.get(i);
 						                %>
-						                	<button class="scategory scategory1" type="button"><%=sBean.getSkill_sname()%></button>
+						                	<button class="scategory scategory1" type="button"><%=scBean.getSkill_sname()%></button>
 						                <%
 						                }
 						                %>
@@ -747,7 +772,16 @@
 						</div>
 						<div class="row">
 							<div class="box-style lbox">
-								<div class="col form-content1"></div>
+								<div class="col form-content1">
+								<%
+									for(SkillBean skill : skillList){
+								%>
+										<input type="hidden" name="skill_sname[]" value="<%=skill.getSkill_sname()%>">
+										<button class="form-content-btn1"><%=skill.getSkill_sname()%></button>
+								<%
+									}
+								%>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -777,7 +811,16 @@
 						</div>
 						<div class="row">
 							<div class="box-style lbox">
-								<div class="col form-content2"></div>
+								<div class="col form-content2">
+								<%
+									for(CertificateBean certificate : certificateList){
+								%>
+										<input type="hidden" name="certificate_sname[]" value="<%=certificate.getCertificate_sname()%>">
+										<button class="form-content-btn2"><%=certificate.getCertificate_sname()%></button>
+								<%
+									}
+								%>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1001,9 +1044,9 @@
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
-	      <form id="titleForm" method="get" action="resumeProc.jsp">
+	      <form id="titleForm" method="get" action="resumeUpdateProc.jsp">
 	        <div class="modal-body">
-	          <input type="text" class="form-control" id="resume_name_modal" name="resume_name" placeholder="제목 입력">
+	          <input type="text" class="form-control" id="resume_name_modal" name="resume_name" placeholder="제목 입력" value="">
 	        </div>
 	        <div class="modal-footer">
 	          <button type="button" class="" data-bs-dismiss="modal">취소</button>
@@ -1885,10 +1928,6 @@
 		}
         
         document.addEventListener("DOMContentLoaded", function() {
-            var internsyearDropdown = document.getElementById("intern_syear[]");
-            var interneyearDropdown = document.getElementById("intern_eyear[]");
-            var curriculumsyearDropdown = document.getElementById("curriculum_syear[]");
-            var curriculumeyearDropdown = document.getElementById("curriculum_eyear[]");
             var projectsyearDropdown = document.getElementById("project_syear[]");
             var projecteyearDropdown = document.getElementById("project_eyear[]");
             var awardsyearDropdown = document.getElementById("award_syear[]");
@@ -1899,27 +1938,11 @@
             var currentYear = new Date().getFullYear();
 
             for (var i = currentYear - 60; i <= currentYear; i++) {
-                var internsoption = document.createElement("option");
-                var interneoption = document.createElement("option");
-                var curriculumsoption = document.createElement("option");
-                var curriculumeoption = document.createElement("option");
                 var projectsoption = document.createElement("option");
                 var projecteoption = document.createElement("option");
                 var awardsoption = document.createElement("option")
                 var globalexsoption = document.createElement("option");
                 var globalexeoption = document.createElement("option")
-                
-                internsoption.text = i;
-                internsoption.value = i;
-                
-                interneoption.text = i;
-                interneoption.value = i;
-                
-                curriculumsoption.text = i;
-                curriculumsoption.value = i;
-                
-                curriculumeoption.text = i;
-                curriculumeoption.value = i;
                 
                 awardsoption.text = i;
                 awardsoption.value = i;
@@ -1930,18 +1953,72 @@
                 globalexeoption.text = i;
                 globalexeoption.value = i;
                 
-                internsyearDropdown.appendChild(internsoption);
-                interneyearDropdown.appendChild(interneoption);
-                
-                curriculumsyearDropdown.appendChild(curriculumsoption);
-                curriculumeyearDropdown.appendChild(curriculumeoption);
-                
                 awardsyearDropdown.appendChild(awardsoption);
                 
                 globalexsyearDropdown.appendChild(globalexsoption);
                 globalexeyearDropdown.appendChild(globalexeoption);
             }
         });
-	</script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 현재 연도를 가져옵니다.
+            var currentYear = new Date().getFullYear();
+
+            // 문서에서 모든 시작연도와 종료연도 선택 요소를 찾습니다.
+            var startYearSelects = document.querySelectorAll(".intern-syear");
+            var endYearSelects = document.querySelectorAll(".intern-eyear");
+
+            // 각 시작연도 선택 요소에 대해 실행합니다.
+            startYearSelects.forEach(function(selectElement) {
+                // 지난 60년간의 연도를 추가합니다.
+                for (var i = currentYear - 60; i <= currentYear; i++) {
+                    var option = document.createElement("option");
+                    option.text = i;
+                    option.value = i;
+                    selectElement.appendChild(option);
+                }
+            });
+
+            // 각 종료연도 선택 요소에 대해 실행합니다.
+            endYearSelects.forEach(function(selectElement) {
+                // 지난 60년간의 연도를 추가합니다.
+                for (var i = currentYear - 60; i <= currentYear; i++) {
+                    var option = document.createElement("option");
+                    option.text = i;
+                    option.value = i;
+                    selectElement.appendChild(option);
+                }
+            });
+        });	
+        document.addEventListener("DOMContentLoaded", function() {
+            // 현재 연도를 가져옵니다.
+            var currentYear = new Date().getFullYear();
+
+            // 문서에서 모든 시작연도와 종료연도 선택 요소를 찾습니다.
+            var startYearSelects = document.querySelectorAll(".curriculum-syear");
+            var endYearSelects = document.querySelectorAll(".curriculum-eyear");
+
+            // 각 시작연도 선택 요소에 대해 실행합니다.
+            startYearSelects.forEach(function(selectElement) {
+                // 지난 60년간의 연도를 추가합니다.
+                for (var i = currentYear - 60; i <= currentYear; i++) {
+                    var option = document.createElement("option");
+                    option.text = i;
+                    option.value = i;
+                    selectElement.appendChild(option);
+                }
+            });
+
+            // 각 종료연도 선택 요소에 대해 실행합니다.
+            endYearSelects.forEach(function(selectElement) {
+                // 지난 60년간의 연도를 추가합니다.
+                for (var i = currentYear - 60; i <= currentYear; i++) {
+                    var option = document.createElement("option");
+                    option.text = i;
+                    option.value = i;
+                    selectElement.appendChild(option);
+                }
+            });
+        });	
+        </script>
 </body>
 </html>

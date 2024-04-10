@@ -138,6 +138,9 @@
 			   	border: none;
 			   	background-color: white;
 			}
+			.modal-dialog{
+	        	top:300px;
+	        }
 		</style>	
 	</head>
 	<body>
@@ -183,7 +186,7 @@
 				%>
 					<tr>
 						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><button type="button" class="btn"><%=rBean.getResume_name()%></button></td>
+						<td class="text-start"><button type="button" class="btn view-btn" data-resume-idx="<%=rBean.getResume_idx()%>"><%=rBean.getResume_name()%></button></td>
 						<td><span><%=rBean.getResume_datetime().substring(0,10)%></span></td>
 						<td><button type="button" class="btn btn-primary edit-btn" data-resume-idx="<%=rBean.getResume_idx()%>">수정</button></td>
 						<td><button type="button" class="btn btn-light">인쇄</button></td>
@@ -233,6 +236,14 @@
 				});
 			});
 			
+			$(document).ready(function() {
+			    $(".view-btn").on("click", function() {
+			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
+			        var resumeIdx = $(this).data("resume-idx");
+			        // URL에 이력서 idx 값을 포함시켜 edit_resume.jsp 페이지로 이동합니다.
+			        window.location.href = "../user_page/viewResume.jsp?resume_idx=" + resumeIdx;
+			    });
+			});
 			$(document).ready(function() {
 			    $(".edit-btn").on("click", function() {
 			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
