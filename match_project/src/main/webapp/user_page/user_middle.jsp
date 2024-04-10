@@ -605,7 +605,7 @@
 			    		<td class="posting-name-body">
 			    			<div class="row testrow">
 			    				<div class="col testcol">
-			    					<%=postingNames.get(i)%>
+			    					<button class="view-post" data-posting-idx="<%= postIdxList.get(i) %>"><%=postingNames.get(i)%></button>
 			    				</div>
 			    				<div>
 			    					<%=postTypes.get(i)%>
@@ -927,7 +927,20 @@
 		        }
 		    });
 		});
-	
+		document.addEventListener('DOMContentLoaded', function() {
+		    // 'view-post' 클래스를 가진 모든 버튼에 대해 이벤트 리스너를 추가합니다.
+		    var viewPostButtons = document.querySelectorAll('.view-post');
+
+		    viewPostButtons.forEach(function(button) {
+		        button.addEventListener('click', function() {
+		            // 클릭된 버튼에서 'data-posting-idx' 속성 값을 읽습니다.
+		            var postingIdx = button.getAttribute('data-posting-idx');
+
+		            // 해당 'postingIdx'를 사용하여 URL을 구성하고 페이지를 이동시킵니다.
+		            window.location.href = "viewPosting.jsp?posting_idx=" + postingIdx;
+		        });
+		    });
+		});
 	</script>
 </body>
 </html>
