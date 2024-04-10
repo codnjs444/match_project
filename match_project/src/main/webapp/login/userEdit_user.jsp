@@ -20,7 +20,10 @@
 	</head>
 	
 	<body>
-		<div class="container">
+		<%@include file="../user_page/user_top.jsp" %>
+		<%@include file="../user_page/user_sidebar.jsp" %>
+		<%uBean = uMgr.getUser((String)session.getAttribute("idKey")); %>
+		<div style="margin-left: 50px; width: 1400px;">
 			<h2> 회원정보 수정 </h2>
 			<p class="text-secondary"> 회원님의 정보를 수정/확인할 수 있습니다.</p>
 			<form id="frm" name="frm" method="POST">
@@ -32,14 +35,14 @@
 					<tbody class="text-center">
 						<tr>
 							<th> 아이디 </th>
-							<td> hwj5614 </td>
+							<td><%=uBean.getUser_id()%></td>
 						</tr>
 						<tr>
 							<th> 
 								이름
 								<span class="text-danger">*</span> 
 							</th>
-							<td> <input type="text" class="form-control"> </td>
+							<td> <input type="text" class="form-control" value="<%=uBean.getUser_name()%>"></td>
 						</tr>
 						<tr>
 							<th> 생년월일/성별 </th>
@@ -47,21 +50,18 @@
 								<div class="row ">
 									<div class="row col-8">
 										<div class="col-4">
-											<select class="form-select">
+											<select class="form-select" id="year-select">
 												<option value="">출생년도</option>
-												<option value="2024">2024</option>
 											</select>
 										</div>
 										<div class="col-4">
-											<select class="form-select">
+											<select class="form-select" id="month-select">
 												<option value="">월</option>
-												<option value="01">1</option>
 											</select>
 										</div>
 										<div class="col-4">
-											<select class="form-select">
+											<select class="form-select" id="day-select">
 												<option value="">일</option>
-												<option value="01">01</option>
 											</select>
 										</div>
 									</div>
@@ -96,32 +96,11 @@
 									</div>
 									<span class="col-1">-</span>
 									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4'>
+										<input type="text" class="form-control" maxlength='4' value="<%=uBean.getUser_phonenum().substring(4,8)%>">
 									</div>
 									<span class="col-1">-</span>
 									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4'>
-									</div>
-								</div> 
-							</td>
-						</tr>
-						<tr>
-							<th> 전화번호 </th>
-							<td>  
-								<div class="row">
-									<div class="col-3">
-										<select class="form-select">
-											<option value=""> 지역번호 선택 </option>
-											<option value="02"> 02 </option>
-										</select>
-									</div>
-									<span class="col-1">-</span>
-									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4'>
-									</div>
-									<span class="col-1">-</span>
-									<div class="row col-3">
-										<input type="text" class="form-control" maxlength='4'>
+										<input type="text" class="form-control" maxlength='4' value="<%=uBean.getUser_phonenum().substring(9,13)%>">
 									</div>
 								</div> 
 							</td>
@@ -132,20 +111,25 @@
 								<span class="text-danger">*</span> 
 							</th>
 							<td>
+							<%
+								String email = uBean.getUser_email();
+								int index = email.indexOf('@');
+							%>
 								<div class="row">
 									<div class="col-4">
-										<input type="text" class="form-control">
+										<input type="text" class="form-control" value="<%=email.substring(0, index)%>">
 									</div>
 									<span class="col-1">@</span>
 									<div class="col-7">
 										<div class="row">
 											<div class="col-6 p-0 pe-1">
-												<input type="text" class="form-control" id="input-email2">
+												<input type="text" class="form-control" id="input-email2" value="<%=email.substring(index+1)%>">
 											</div>
 											<div class="col-6 p-0 ps-1">
 												<select class="form-select" id="select-email2">
 													<option value="">직접입력</option>
 													<option value="gmail.com">gmail.com</option>
+													<option value="naver.com">anver.com</option>
 												</select>
 											</div>
 										</div>
@@ -158,7 +142,7 @@
 							<td>
 								<div class="row"> 
 									<div class="col-8">
-										<input type="text" class="form-control">
+										<input type="text" class="form-control" value="<%=uBean.getSns()%>">
 									</div> 
 									<small class="col-4 text-end" > ( 블로그, SNS, Github 등 ) </small>
 								</div>
@@ -169,10 +153,10 @@
 							<td>
 								<div class="row g-3">
 									<div class="col-auto">
-										<input type="text" class="form-control">
+										<input type="text" class="form-control" id="user_postcode" readonly value="<%=uBean.getPostal_code()%>">
 									</div>
 									<div class="col-auto">
-										<button type="button" class="btn btn-primary" id="btn-address-search"> 주소검색 </button>
+										<button type="button" class="btn btn-primary" id="btn-address-search" onClick="execDaumPostcode()"> 주소검색 </button>
 									</div>
 								</div>
 							</td>
@@ -181,8 +165,7 @@
 							<th> 주소 </th>
 							<td> 
 								<div class="row">
-									<div class="col-6"><input type="text" class="form-control" readonly></div>
-									<div class="col-6"><input type="text" class="form-control" readonly placeholder="상세주소를 입력하세요."></div>
+									<div class="col-6"><input type="text" class="form-control" id="user_address" readonly value="<%=uBean.getUser_address()%>"></div>
 								</div>
 							</td>
 						</tr>
@@ -213,7 +196,7 @@
 				</div>
 			</form>
 		</div>
-		
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script>
 			$(document).ready(function() {
 				// 주소 검색 
@@ -243,6 +226,82 @@
 					history.back();
 				});
 			});
-		</script>
+			$(document).ready(function() {
+		        // 서버에서 가져온 생년월일 값을 JavaScript 변수로 설정
+		        var birthday = '<%= uBean.getBirthday() %>';
+		        var birthYear = parseInt(birthday.substring(0, 4), 10);
+		        var birthMonth = parseInt(birthday.substring(5, 7), 10);
+		        var birthDay = parseInt(birthday.substring(8, 10), 10);
+
+		        // 출생년도 선택지 설정
+		        var currentYear = new Date().getFullYear();
+		        for (var year = currentYear; year >= currentYear - 100; year--) {
+		            $('<option>', {
+		                value: year,
+		                text: year,
+		                selected: year === birthYear // 출생년도를 기본값으로 선택
+		            }).appendTo('#year-select'); // 'year-select'는 출생년도 선택 select 태그의 id입니다.
+		        }
+
+		        // 월 설정
+		        for (var month = 1; month <= 12; month++) {
+		            $('<option>', {
+		                value: month < 10 ? '0' + month : month,
+		                text: month,
+		                selected: month === birthMonth // 출생월을 기본값으로 선택
+		            }).appendTo('#month-select'); // 'month-select'는 월 선택 select 태그의 id입니다.
+		        }
+
+		        // 월 선택에 따른 일수 자동 설정 함수
+		        function setDays() {
+		            var year = $('#year-select').val();
+		            var month = $('#month-select').val();
+		            var daysInMonth = new Date(year, month, 0).getDate();
+
+		            $('#day-select').empty(); // 'day-select'는 일 선택 select 태그의 id입니다.
+		            for (var day = 1; day <= daysInMonth; day++) {
+		                $('<option>', {
+		                    value: day < 10 ? '0' + day : day,
+		                    text: day,
+		                    selected: day === birthDay // 출생일을 기본값으로 선택
+		                }).appendTo('#day-select');
+		            }
+		        }
+
+		        // 월 선택 시 일수 업데이트
+		        $('#month-select').change(function() {
+		            setDays();
+		        });
+
+		        // 초기 일수 설정
+		        setDays();
+		        
+		     // 서버에서 가져온 성별 정보를 JavaScript 변수로 설정
+		        var userGender = parseInt('<%= uBean.getUser_gender() %>', 10); // 문자열을 정수로 변환
+
+		        // 성별에 따라 해당 라디오 버튼 선택
+		        if (userGender === 0) {
+		            $('#gender1').prop('checked', true);
+		        } else if (userGender === 1) {
+		            $('#gender2').prop('checked', true);
+		        }
+		    })
+		    function execDaumPostcode() {
+			    new daum.Postcode({
+			        oncomplete: function(data) {
+			            var addr = '';
+			
+			            if (data.userSelectedType === 'R') {
+			                addr = data.roadAddress;
+			            } else {
+			                addr = data.jibunAddress;
+			            }
+			
+		                document.getElementById('user_postcode').value = data.zonecode;
+		                document.getElementById("user_address").value = addr;
+			        }
+			    }).open();
+			}
+	    </script>
 	</body>
 </html>

@@ -3,8 +3,6 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <jsp:useBean id="rMgr" class="match.ResumeMgr"/>
 <jsp:useBean id="rBean" class="match.ResumeBean"/>
-<jsp:useBean id="uMgr" class="match.UserMgr"/>
-<jsp:useBean id="uBean" class="match.UserBean"/>
 
 <!DOCTYPE html>
 <html>
@@ -144,6 +142,7 @@
 	</head>
 	<body>
 		<%@include file="../user_page/user_top.jsp" %>
+		<%@include file="../user_page/user_sidebar.jsp" %>
 		<%
 			if(id == null){
 				response.sendRedirect("login.jsp");
@@ -152,61 +151,6 @@
 			Vector<ResumeBean> rvlist = rMgr.getResumeIdxList(id);
 			
 		%>
-		<div class="col">
-		    <div class="row">
-		        <div class="col">
-		            <div class="fixed-div1 border border-light-subtitle">
-		            	<div class="row" style="width:300px;">
-		            		<div class="col">
-		            			<div class="id-picture px-0"></div>
-		            		</div>
-		            		<div class="col name border-0 bg-body px-0">
-		            			<input class="name border-0 bg-body" type="text" disabled placeholder="<%=uMgr.getUserName(id)%>">
-		            		</div>
-		            		<div class="col px-0">
-		            			<button class="info border-light-subtitle bg-body" onclick="location.href='../login/logout.jsp'">
-	            					로그 아웃
-		            			</button>
-		            			<button class="info border-light-subtitle bg-body">
-		            				회원 정보 수정
-		            			</button>
-		            			<button class="info border-light-subtitle bg-body">
-		            				채용 공고 설정
-		            			</button>
-		            		</div>
-		            	</div>
-		            </div>
-		            <div class="fixed-div2">
-		            	<div class="row justify-content-center align-items-center">
-	            			<div class="my-btn-div px-0 border-end border-light-subtitle" onclick="location.href='../login/applicationList.jsp'">
-	           					<button class="my-btn-icon1 my-btn-icon"></button>
-	           					<p class="my-btn-text">이력서 관리</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-light-subtitle">
-	            				<button class="my-btn-icon2 my-btn-icon"></button>
-	           					<p class="my-btn-text">이력서 열람</p>
-	            			</div>
-	            			<div class="my-btn-div px-0">
-	            				<button class="my-btn-icon3 my-btn-icon"></button>
-	           					<p class="my-btn-text">입사지원 현황</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
-	            				<button class="my-btn-icon4 my-btn-icon"></button>
-	           					<p class="my-btn-text">최근 본 공고</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
-	            				<button class="my-btn-icon5 my-btn-icon"></button>
-	           					<p class="my-btn-text">스크랩 공고</p>
-	            			</div>
-	            			<div class="my-btn-div px-0 border-top border-light-subtitle">
-	            				<button class="my-btn-icon6 my-btn-icon"></button>
-	           					<p class="my-btn-text">문의</p>
-	            			</div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
 		
 		<div class="applist-body">
 			<h2 style="font-weight: bold;"> 이력서 관리 </h2>

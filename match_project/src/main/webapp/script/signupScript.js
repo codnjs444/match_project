@@ -127,6 +127,7 @@ function execDaumPostcode(userType) {
         }
     }).open();
 }
+
 function inputCheck(userType){
 	if(userType === 'user'){
 		if(document.userRegFrm.user_name.value==""){
