@@ -134,6 +134,15 @@
 	    font-size: 12px; /* 아이콘 및 텍스트 크기 조절 */
 	    line-height: 1; /* 버튼 높이 조절 */
 	}
+	
+	.modal-dialog {
+	    position: fixed; /* 모달 위치 고정 */
+	    width: 700px;
+	    max-width: 90%; /* 최대 너비를 화면 너비의 90%로 설정 */
+	    top: 50%; /* 상단에서 50% 위치 */
+	    left: 50%; /* 좌측에서 50% 위치 */
+	    transform: translate(-50%, -50%); /* 정확한 중앙 정렬을 위해 변환 적용 */
+	}
 </style>
 <body>
 
@@ -368,6 +377,31 @@
 	</div>
 </form>
 
+<!-- 결과 발표 모달 -->
+<!-- 결과 발표 모달 -->
+<div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultsModalLabel">결과 발표</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <button id="showPassed" class="btn btn-success">합격자 보기</button>
+        <button id="showFailed" class="btn btn-danger">불합격자 보기</button>
+        <div id="resultsList"></div>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-primary" id="confirmPublish">발표하기</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
 
@@ -425,6 +459,42 @@
 	    document.getElementById("submitForm").submit();
 	}
 	
+	
+	document.getElementById('finalBtn').addEventListener('click', function() {
+	    $('#resultsModal').modal('show');
+	});
+
+	var { passedUserIds, failedUserIds } = collectApplicationResults();
+
+	document.getElementById('showPassed').addEventListener('click', function() {
+	    document.getElementById('resultsList').innerHTML = '합격자 ID: <br>' + passedUserIds.join('<br>');
+	});
+
+	document.getElementById('showFailed').addEventListener('click', function() {
+	    document.getElementById('resultsList').innerHTML = '불합격자 ID: <br>' + failedUserIds.join('<br>');
+	});
+
+	document.getElementById('confirmPublish').addEventListener('click', function() {
+	    // XMLHttpRequest 객체 생성
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
+	    xhr.setRequestHeader("Content-Type", "application/json");
+	    
+	    xhr.onload = function() {
+	        if (xhr.status == 200) {
+	            var data = JSON.parse(xhr.responseText);
+	            console.log("합격한 사용자 이메일: ", data.emails);
+	            alert('결과 발표를 완료했습니다.');
+	            $('#resultsModal').modal('hide');
+	        } else {
+	            console.error("Error: ", xhr.statusText);
+	        }
+	    };
+	    
+	    xhr.send(JSON.stringify({passedUserIds: passedUserIds}));
+	});
+	
+	
 	function collectApplicationResults() {
 	    var passedUserIds = []; // 합격한 사용자의 ID를 저장할 배열
 	    var failedUserIds = []; // 불합격한 사용자의 ID를 저장할 배열
@@ -443,27 +513,35 @@
 	    return { passedUserIds, failedUserIds };
 	}
 
-	document.getElementById('finalBtn').addEventListener('click', function() {
+/* 	document.getElementById('finalBtn').addEventListener('click', function() {
 	    var { passedUserIds, failedUserIds } = collectApplicationResults();
 	    console.log("합격한 사용자 ID: ", passedUserIds);
 	    console.log("불합격한 사용자 ID: ", failedUserIds);
 
-	    // AJAX 요청으로 서버에 합격한 사용자 ID 목록 전송 및 이메일 주소 조회
-	    fetch('/api/getUserEmails', {
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json',
-	        },
-	        body: JSON.stringify({passedUserIds: passedUserIds})
-	    })
-	    .then(response => response.json())
-	    .then(data => {
-	        console.log("합격한 사용자 이메일: ", data.emails);
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
-	    });
-	});
+	    if (confirm("결과를 정말로 발표하시겠습니까?")) {
+	        // XMLHttpRequest 객체 생성
+	        var xhr = new XMLHttpRequest();
+	        // 서버의 해당 경로로 POST 요청을 초기화합니다. 여기서는 예시로 '/api/getUserEmails' 경로를 사용했습니다.
+			xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+	        
+	        // 요청이 완료되었을 때 실행될 함수를 설정합니다.
+	        xhr.onload = function() {
+	            if (xhr.status == 200) {
+	                // 서버로부터의 응답을 JSON으로 파싱합니다.
+	                var data = JSON.parse(xhr.responseText);
+	                console.log("합격한 사용자 이메일: ", data.emails);
+	            } else {
+	                // 오류 처리
+	                console.error("Error: ", xhr.statusText);
+	            }
+	        };
+	        
+	        // 서버로 데이터를 전송합니다.
+	        xhr.send(JSON.stringify({passedUserIds: passedUserIds}));
+	    }
+	}); */
 
 
 
