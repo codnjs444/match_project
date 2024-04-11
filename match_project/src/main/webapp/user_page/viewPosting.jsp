@@ -23,6 +23,7 @@
 		<jsp:useBean id="sMgr" class="match.category.skill_categoryMgr"/>
 		<jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
 		<jsp:useBean id="rMgr" class="match.ResumeMgr"/>
+		<jsp:useBean id="coMgr" class="match.CompanyMgr"/>
 		<jsp:useBean id="rBean" class="match.ResumeBean"/>
 		<jsp:useBean id="pMgr" class="match.PostingMgr" scope="request"/>
 		
@@ -35,6 +36,7 @@
 		<jsp:useBean id="prBean" class="match.posting.procedureBean"/>
 		<jsp:useBean id="adqBean" class="match.posting.addquestionBean"/>
 		<jsp:useBean id="addBean" class="match.posting.adddocumentBean"/>
+		<jsp:useBean id="coBean" class="match.CompanyBean"/>
 		
 		
 		<jsp:setProperty property="*" name="pBean"/>
@@ -48,30 +50,6 @@
 		<jsp:setProperty property="*" name="addBean"/>
 		<jsp:setProperty property="*" name="rBean"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<%
-			String posting_idx = request.getParameter("posting_idx");
-			String posting_name = pMgr.getPostingName(posting_idx);
-			String manager_id = pMgr.getManagerId(posting_idx);
-			int company_idx = pMgr.getCompanyIdx(manager_id);
-			String company_name = pMgr.getCompanyName(company_idx);
-			
-			pBean = pMgr.searchPostingInfo(posting_idx);	
-			opBean = pMgr.searchOpenPositionInfo(posting_idx); // 수정됨
-			quBean = pMgr.searchQualificationInfo(posting_idx);
-			eBean = pMgr.searchEnvironmentInfo(posting_idx);
-			int procedureNum = pMgr.countProcedureNum(posting_idx);
-			List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
-			List<WelfareBean> wBeanList = pMgr.searchWelfareInfo(posting_idx);
-			apBean = pMgr.searchperiodInfo(posting_idx);
-			String selectedJobCategoryName = opBean.getOpenposition_name();
-			List<String> addQuestionQuestions = pMgr.getAddQuestionQuestions(posting_idx);
-			List<String> addDocumentDocuments = pMgr.getAddDuestionDuestions(posting_idx);
-			List<WelfareBean> welfareList = pMgr.searchWelfareInfo(posting_idx);
-			OpenPositionBean openPosition = pMgr.searchOpenPositionInfo(posting_idx);
-			String openpositionName = openPosition.getOpenposition_name();
-		
-		
-		%>
 		<style>
 			body {
 			    background-color: #F8F8F8;
@@ -281,9 +259,48 @@
 			.fas.fa-heart {
 			    color: #e83e8c; /* 하트 색상 설정 */
 			}
+			.heart-filled {
+    color: #e83e8c; /* 핑크색 */
+}
+			
 			
 		</style>
+<%
+			String user_id = (String)session.getAttribute("idKey");
+			String posting_idx = request.getParameter("posting_idx");
+			String posting_name = pMgr.getPostingName(posting_idx);
+			String manager_id = pMgr.getManagerId(posting_idx);
+			int company_idx = pMgr.getCompanyIdx(manager_id);
+			coBean = coMgr.getCompanyLocation(company_idx);
+			Double company_latitude = coBean.getCompany_latitude();
+			Double company_longitude = coBean.getCompany_longitude();
+			String company_type = coBean.getCompany_type();
+			String company_head = coBean.getCompany_head();
+			String company_address = coBean.getCompany_address();
+			String company_name = pMgr.getCompanyName(company_idx);
+			
+
+			
+			pBean = pMgr.searchPostingInfo(posting_idx);	
+			opBean = pMgr.searchOpenPositionInfo(posting_idx); // 수정됨
+			quBean = pMgr.searchQualificationInfo(posting_idx);
+			eBean = pMgr.searchEnvironmentInfo(posting_idx);
+			int procedureNum = pMgr.countProcedureNum(posting_idx);
+			List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
+			List<WelfareBean> wBeanList = pMgr.searchWelfareInfo(posting_idx);
+			apBean = pMgr.searchperiodInfo(posting_idx);
+			String selectedJobCategoryName = opBean.getOpenposition_name();
+			List<String> addQuestionQuestions = pMgr.getAddQuestionQuestions(posting_idx);
+			List<String> addDocumentDocuments = pMgr.getAddDuestionDuestions(posting_idx);
+			List<WelfareBean> welfareList = pMgr.searchWelfareInfo(posting_idx);
+			OpenPositionBean openPosition = pMgr.searchOpenPositionInfo(posting_idx);
+			String openpositionName = openPosition.getOpenposition_name();
 		
+			  Boolean isBookmarkedObj = (Boolean) request.getAttribute("isBookmarked");
+			    boolean isBookmarked = (isBookmarkedObj != null) ? isBookmarkedObj : false;
+		    request.setAttribute("isBookmarked", isBookmarked);
+		
+		%>
 		<title><%=posting_name%></title>
 		<!-- 최신 버전의 부트스트랩 CSS 추가 -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -301,7 +318,8 @@
 					    <div class="left-side">
 					        <div class="icons" style="margin-top: 10px;"> <!-- 아이콘들을 위로 이동 -->
 								<!-- 찜 아이콘과 텍스트 -->
-								<i class="fas fa-heart"></i> <span class="icon-label">찜</span>
+								<i class="far fa-heart" id="favoriteIcon"></i> <span class="icon-label">찜</span>
+
 					            <i class="fas fa-exclamation-circle"></i> <span class="icon-label">신고</span>
 					            <i class="fas fa-share-alt"></i> <span class="icon-label">공유</span>
 					        </div>
@@ -334,7 +352,7 @@
 					<div class="Mycategory" style="text-align: left;">
 					    <i class="fas fa-check"></i> <span class="Mycategory-label" style="font-size: 18px; font-weight: bold;">자격요건</span>
 					    <div class="Mycategory-content">
-					        <div class="Mycategory-title">자격요건</div>
+					        <div class="Mycategory-title"  id="Myqualification">자격요건</div>
 					        <ul class="details-list">
 					            <li>학력 : [<%= quBean != null ? quBean.getQualification_edutype() : "" %>]</li>
 					            <li>성별 : [<%= quBean != null ? quBean.getQualification_gender() : "" %>]</li>
@@ -389,7 +407,7 @@
 					            <li class="Mytimeline-item">
 					                <div class="Myinfo">      
 					                    <div class="Mycategory-title"><%= procedure.getProcedure_name()%></div>
-		 			                    <%= procedure.getProcedure_sdatetime()%> ~ <%= procedure.getProcedure_edatetime()%>
+		 			                     ~ <%= procedure.getProcedure_edatetime()%>
 					                </div>
 					            <%}%>
 					            </li>
@@ -425,22 +443,26 @@
 				    <div id="d-day" class="d-day">D-<span></span></div>
 				    <div class="Mydates">
 				        <div class="Mystart-date">시작일: <span><%= apBean.getApplication_sdatetime() %></span></div>
-				        <div class="Myend-date">마감일: <span><%= apBean.getApplication_edatetime() %></span></div>
+						<div class="Myend-date">마감일: <span id="end-date"><%= apBean.getApplication_edatetime() %></span></div>
 				    </div>
 				</div>
 				<div class="col">
 				    <label for="companyName" id="Myinfo" class="question">기업정보</label>
 				</div>
-				<div class="box-day">
-				    <div class="icon"><i class="fa fa-calendar" aria-hidden="true"></i></div>
-				    <div class="label">남은 기간</div>
-				    <div id="d-day" class="d-day">D-<span></span></div>
-				    <div class="Mydates">
-				        <div class="Mystart-date">시작일: <span><%= apBean.getApplication_sdatetime() %></span></div>
-				        <div class="Myend-date">마감일: <span><%= apBean.getApplication_edatetime() %></span></div>
+				<div class="box-day" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+				    <!-- 지도 영역 -->
+				    <div id="map" style="width: 50%; height: 400px; margin-right: 20px;"></div>
+				
+				    <!-- 회사 정보 영역 -->
+				    <div class="company-info" style="width: 45%; padding: 20px;margin-top: 80px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+				        <h3 id="companyName" style="color: #333; margin-bottom: 20px;">회사 이름: <span style="font-weight: normal;"><%=company_name%></span></h3>
+				        <p id="companyType" style="margin-bottom: 10px;">회사 타입: <span style="font-weight: normal;"><%=company_type%></span></p>
+				        <p id="companyOwner" style="margin-bottom: 10px;">회사 오너: <span style="font-weight: normal;"><%=company_head%></span></p>
+				        <p id="companyAddress" style="margin-bottom: 10px;">회사 주소: <span style="font-weight: normal;"><%=company_address%></span></p>
 				    </div>
-				</div>		
-		
+				</div>
+
+
 					<div class="container" >
 					    <div class="row justify-content-center mt-4">
 					        <div class="col-auto">
@@ -458,7 +480,7 @@
 		              
 		        </div> <!-- 왼쪽 컨테이너 -->
 		        <!-- 우측 레이아웃 -->
-				<div class="col-md-3 d-flex flex-column align-items-center justify-content-center fixed-bottom-right">  
+				<div class="col-md-5 d-flex flex-column align-items-center justify-content-center fixed-bottom-right">  
 				    <div class="Postsidebar">  
 					    <ul>
 					        <li><a href="#MycompanyInfo">담당업무</a></li>
@@ -510,7 +532,9 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.5/dist/umd/popper.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-	
+		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b28368048064031cb16c46ec4323c355"></script>
+
+		
 		<script>
 		document.addEventListener("DOMContentLoaded", function() {
 		    // 모든 이력서 선택 버튼에 대해 이벤트 리스너 추가
@@ -553,6 +577,63 @@
 		        document.getElementById('d-day').getElementsByTagName('span')[0].textContent = days >= 0 ? days : '기간 만료';
 		    }
 		});
-		</script>
+		
+		// 찜하기 기능
+document.addEventListener("DOMContentLoaded", function() {
+    var favoriteIcon = document.getElementById("favoriteIcon");
+
+    var isBookmarked = <%= isBookmarked %>; // "true" 또는 "false" 문자열을 사용하지 않고, 바로 true 또는 false를 사용합니다.
+
+    if (isBookmarked) {
+        favoriteIcon.classList.add("fas");
+        favoriteIcon.classList.remove("far");
+    } else {
+        favoriteIcon.classList.add("far");
+        favoriteIcon.classList.remove("fas");
+    }
+
+    favoriteIcon.addEventListener("click", function() {
+        var isFilled = favoriteIcon.classList.contains("fas");
+        favoriteIcon.classList.toggle("fas");
+        favoriteIcon.classList.toggle("far");
+
+        var action = isFilled ? "delete" : "insert"; // 상태에 따라 액션 결정
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/match_project/BookmarkServlet", true); // 서블릿 URL
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        var data = "postingId=<%=posting_idx%>&userId=<%=user_id%>&action=" + action;
+        xhr.send(data);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+                // 필요한 경우 추가적인 클라이언트 측 로직 구현
+            }
+        };
+    });
+});
+
+
+
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	    center: new kakao.maps.LatLng(<%=company_latitude%>, <%=company_longitude%>), // 지도의 중심좌표 동적 값으로 변경
+	        level: 3 // 지도의 확대 레벨
+	    };
+
+	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+	// 마커가 표시될 위치입니다 
+	var markerPosition  = new kakao.maps.LatLng(<%=company_latitude%> , <%=company_longitude%>); 
+
+	// 마커를 생성합니다
+	var marker = new kakao.maps.Marker({
+	    position: markerPosition
+	});
+
+	// 마커가 지도 위에 표시되도록 설정합니다
+	marker.setMap(map);	
+	</script>
 	</body>
 </html>

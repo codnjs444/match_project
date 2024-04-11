@@ -12,12 +12,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LogIn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="../css/loginstyle.css" rel="stylesheet" type="text/css">
+        <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .main-tab {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column; /* 변경됨: 항목을 세로로 정렬합니다. */
+        }
+        .form-signin {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo span {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .login-button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .login-form .input-text input {
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        #footer-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .sep-line {
+            margin: 0 10px;
+            color: #bbbbbb;
+        }
+        .logo button {
+		    border: none; /* 테두리 제거 */
+		    background: none; /* 배경 제거 */
+		    padding: 0; /* 패딩 제거 */
+		    margin: 0; /* 마진 제거 */
+		    box-shadow: none; /* 박스 그림자 제거 */
+		}
+		.logo span {
+	        font-size: 2rem;
+	        font-weight: bold;
+	        color: #007bff;
+	        background-color: #ffffff; /* 배경색 추가 */
+	        padding: 10px 20px; /* 텍스트 주변의 패딩 추가 */
+	        border-radius: 8px; /* 둥근 모서리 추가 */
+	        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 추가 */
+	        display: inline-block; /* 필요한 만큼의 공간만 차지하도록 설정 */
+	    }
+    </style>
 </head>
 <body class="main-tab"> 
 	<div class="logo">
-		<button type="button" onclick="redirectTo('../user_page/user_home.jsp')">
-			<img src="../img/logo.png" width="210" height="50">
+		<button type="button" style="font-size: 20px" onclick="redirectTo('../user_page/user_home.jsp')">
+			<span>Match</span>
 		</button>
 	</div>
 	<main class="form-signin">

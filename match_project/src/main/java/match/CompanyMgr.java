@@ -33,4 +33,98 @@ public class CompanyMgr {
 		}
 		return company_idx;
 	}
+	
+	public CompanyBean getCompanyLocation(int company_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    CompanyBean bean = new CompanyBean();
+	    try {
+	        // Assuming you have a similar connection pooling mechanism as in the previous method
+	        con = pool.getConnection(); 
+	        String sql = "SELECT company_name, company_type, company_head, company_address, company_latitude, company_longitude FROM company WHERE company_idx = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, company_idx);
+	        rs = pstmt.executeQuery();
+	        if(rs.next()) {
+	        	bean.setCompany_name(rs.getString("company_name"));
+	        	bean.setCompany_type(rs.getString("company_type"));
+	        	bean.setCompany_head(rs.getString("company_head"));
+	        	bean.setCompany_address(rs.getString("company_address"));
+	            bean.setCompany_latitude(rs.getDouble("company_latitude"));
+	            bean.setCompany_longitude(rs.getDouble("company_longitude"));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (pool != null) {
+	            pool.freeConnection(con, pstmt, rs);
+	        }
+	    }
+	    return bean;
+	}
+	
+	
+	public void insertBookmark(String user_id, int posting_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = "INSERT INTO bookmark_posting (user_id, posting_idx) VALUES (?, ?)";
+	    try {
+	        con = pool.getConnection();
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, user_id);
+	        pstmt.setInt(2, posting_idx);
+	        pstmt.executeUpdate(); // executeQuery() 대신 executeUpdate() 사용
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+	
+	public void deleteBookmark(String user_id, int posting_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    String sql = "DELETE FROM bookmark_posting WHERE user_id = ? AND posting_idx = ?";
+	    try {
+	        con = pool.getConnection();
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, user_id);
+	        pstmt.setInt(2, posting_idx);
+	        pstmt.executeUpdate(); // executeQuery() 대신 executeUpdate() 사용
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+	
+	public boolean searchBookmark(String user_id, int posting_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    boolean exists = false; // 즐겨찾기가 존재하는지 여부
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT COUNT(*) FROM bookmark_posting WHERE user_id = ? AND posting_idx = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, user_id);
+	        pstmt.setInt(2, posting_idx);
+
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            // COUNT(*) 결과가 1 이상이면 해당 즐겨찾기가 존재함을 의미
+	            exists = rs.getInt(1) > 0;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+	    return exists;
+	}
+
+
+
+
 }

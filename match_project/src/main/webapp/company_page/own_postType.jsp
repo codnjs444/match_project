@@ -14,8 +14,16 @@
 <jsp:useBean id="jBean" class="match.category.job_categoryBean"/>
 <jsp:useBean id="sMgr" class="match.category.skill_categoryMgr"/>
 <jsp:useBean id="sBean" class="match.category.skill_categoryBean"/>
+<jsp:useBean id="pMgr" class="match.PostingMgr" scope="request"/>
+<jsp:useBean id="coMgr" class="match.CompanyMgr"/>
+<jsp:useBean id="coBean" class="match.CompanyBean"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%
+	String manager_id = (String)session.getAttribute("idKey");
+	int company_idx = pMgr.getCompanyIdx(manager_id);
+	coBean = coMgr.getCompanyLocation(company_idx);
+	String company_name = pMgr.getCompanyName(company_idx);
+
 	String jobname[] = {"기획·전략","마케팅·홍보·조사","회계·세무·재무","인사·노무·HRD","총무·법무·사무","IT개발·데이터","디자인","영업·판매·무역","고객상담·TM","구매·자재·물류"};
 	String skillname[] = {"개발자 언어", "개발자 기술", "그래픽 디자인", "편집", "음악 및 사운드 편집", "애니메이션", "UI/UX 디자인", "3D 모델링 및 디자인", "일러스트레이션", "사진 편집", "비디오 및 영상 제작", "음악 제작 및 오디오 엔지니어링", "글쓰기 및 편집", "디지털 마케팅", "사업 관리 및 프로젝트 관리", "사진 및 비주얼 콘텐츠 제작", "사회 연결망 및 네트워킹", "온라인 교육 및 교육 기술", "헬스 및 피트니스", "온라인 쇼핑 및 전자상거래", "어학 및 언어 학습", "요리 및 조리", "여행 및 여행 계획", "자기 계발 및 심리학", "음악 감상 및 스트리밍", "온라인 커뮤니티 및 포럼", "자동화 및 생산성 도구", "환경 및 지속 가능성"};
 	
@@ -50,7 +58,7 @@
                         </div>
                         <span class="essential">[필수]</span> <!-- 필수 문구 추가 -->
                         <div class="col">
-                            <input type="text" class="input" id="posting_cname" name="posting_cname">
+                            <input type="text" class="input" id="posting_cname" name="posting_cname" value="<%=company_name%>">
                         </div>
                     </div>
                     
@@ -68,7 +76,7 @@
                     <!-- 회사주소와 상세주소 입력 -->
                     <div class="row">
                         <div class="col">
-                            <input type="text" class="input_noq" id="posting_address" name="posting_address" placeholder="회사주소" readonly >
+                            <input type="text" class="input_noq" id="posting_address" name="posting_address" placeholder="회사주소" readonly>
                         </div>
                         <div class="col">
                             <input type="text" class="input_noq" id="posting_dcode" name="posting_dcode" placeholder="상세주소" >    
