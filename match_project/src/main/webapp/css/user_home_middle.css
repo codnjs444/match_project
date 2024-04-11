@@ -237,11 +237,11 @@
 }
 .search-form2{
 	border: 1px solid lightgrey;
-	height: 42px;
+	height: 40px;
 }
 .form-content{
 	overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
-	height: 80px;
+	height: 40px;
 }
 .form-content-btn{
 	min-width: 50px;

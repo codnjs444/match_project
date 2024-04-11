@@ -23,8 +23,7 @@
 		<%@include file="../user_page/user_top.jsp" %>
 		<%@include file="../user_page/user_sidebar.jsp" %>
 		<%@include file="../user_page/user_subtop.jsp" %>
-		<div style="width: 1400px; margin-left: 40px;">
-			<h2> 비밀번호 변경 </h2>
+		<div style="width: 1400px; margin-left: 50px;">
 			<p class="text-secondary"> 비밀번호는 8~16자 숫자, 영어, 특수문자를 사용할 수 있습니다. </p>
 			<form id="frm" name="frm" method="POST" action="user_changePasswordProc.jsp">
 				<table class="table table-bordered border-dark">

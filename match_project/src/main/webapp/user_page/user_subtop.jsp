@@ -12,7 +12,7 @@
 
 <body>
 <!-- 상단 메뉴바 시작 -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="max-width: 1200px; margin: 0;"> <!-- 진한 파란색 배경색, 최대 너비 800px로 제한, 가운데 정렬 -->
+	<nav class="navbar navbar-expand-lg" style="max-width: 450px; margin: 0;"> <!-- 진한 파란색 배경색, 최대 너비 800px로 제한, 가운데 정렬 -->
 	  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>

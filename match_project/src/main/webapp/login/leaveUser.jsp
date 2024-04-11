@@ -24,14 +24,13 @@
 		<%@include file="../user_page/user_sidebar.jsp" %>
 		<%@include file="../user_page/user_subtop.jsp" %>
 		<div style="width: 1400px; margin-left: 50px;">
-			<h2> Match 회원탈퇴 </h2>
 			<div class="container ps-5 pe-5 mt-5 mb-5" >
 				<p class="text-secondary fs-5"> 지금까지 이용해주셔서 감사드립니다. 탈퇴하기 전 아래 유의사항을 확인해주세요. </p>
 				<p class="text-secondary fs-6"> 1. 탈퇴하신 아이디는 복구가 불가능하며, 추후 동일한 아이디로 재가입이 되지 않습니다. </p>
 				<p class="text-secondary fs-6"> 2. 이력서 정보, 구직 활동내역이 모두 삭제되며, 삭제된 데이터는 복구되지 않습니다. </p>
 				<p class="text-secondary fs-6"> 3. 소셜 로그인 회원의 경우, 모든 정보가 삭제되며 같은 소셜 아이돌 재가입시 신규 회원으로 가입됩니다. </p>
 			</div>
-			<form id="frm" name="frm" method="POST" >
+			<form id="frm" name="frm" method="POST" action="user_LeaveProc.jsp">
 				<table class="table table-bordered border-dark">
 					<colgroup>
 						<col style="width: 30%;" />
@@ -70,11 +69,16 @@
 				$("#frm").on("submit", function(e) {
 					var userPwdFromServer = "<%=uBean.getUser_pwd()%>";
 					var currentPwd = $("input[type=password]").eq(0).val().trim();
-					console.log(userPwdFromServer);
-					console.log(currentPwd);
+					var isTermsChecked = $("#flexCheckDefault").is(":checked"); // 체크박스 상태 확인
+
 					if (currentPwd !== userPwdFromServer) {
 		                e.preventDefault(); // 폼 제출 막기
 		                alert("비밀번호가 틀렸습니다.");
+		                return false;
+		            }
+					if (!isTermsChecked) {
+		                e.preventDefault(); // 폼 제출 막기
+		                alert("유의사항에 동의하지 않으면 탈퇴할 수 없습니다.");
 		                return false;
 		            }
 				});

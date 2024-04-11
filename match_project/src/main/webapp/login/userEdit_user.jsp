@@ -26,7 +26,6 @@
 		<%@include file="../user_page/user_subtop.jsp" %>
 		<%uBean = uMgr.getUser((String)session.getAttribute("idKey")); %>
 		<div style="margin-left: 50px; width: 1400px;">
-			<h2> 회원정보 수정 </h2>
 			<p class="text-secondary"> 회원님의 정보를 수정/확인할 수 있습니다.</p>
 			<form id="frm" name="frm" method="POST" action="user_Edit_proc.jsp">
 				<table class="table table-bordered border-dark">
