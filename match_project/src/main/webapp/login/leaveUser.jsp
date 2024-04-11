@@ -20,7 +20,10 @@
 	</head>
 	
 	<body>
-		<div class="container">
+		<%@include file="../user_page/user_top.jsp" %>
+		<%@include file="../user_page/user_sidebar.jsp" %>
+		<%@include file="../user_page/user_subtop.jsp" %>
+		<div style="width: 1400px; margin-left: 50px;">
 			<h2> Match 회원탈퇴 </h2>
 			<div class="container ps-5 pe-5 mt-5 mb-5" >
 				<p class="text-secondary fs-5"> 지금까지 이용해주셔서 감사드립니다. 탈퇴하기 전 아래 유의사항을 확인해주세요. </p>
@@ -28,7 +31,7 @@
 				<p class="text-secondary fs-6"> 2. 이력서 정보, 구직 활동내역이 모두 삭제되며, 삭제된 데이터는 복구되지 않습니다. </p>
 				<p class="text-secondary fs-6"> 3. 소셜 로그인 회원의 경우, 모든 정보가 삭제되며 같은 소셜 아이돌 재가입시 신규 회원으로 가입됩니다. </p>
 			</div>
-			<form id="frm" name="frm" method="POST">
+			<form id="frm" name="frm" method="POST" >
 				<table class="table table-bordered border-dark">
 					<colgroup>
 						<col style="width: 30%;" />
@@ -37,7 +40,7 @@
 					<tbody class="text-center">
 						<tr>
 							<th> 아이디 </th>
-							<td> hwj5614 </td>
+							<td> <%=uBean.getUser_id()%> </td>
 						</tr>
 						<tr>
 							<th> 비밀번호 </th>
@@ -64,9 +67,16 @@
 		<script>
 			$(document).ready(function() {
 				// 탈퇴하기 버튼 이벤트 
-				$("#btn-submit").on("click", function() {
-					// todo. validate 
-					return false;
+				$("#frm").on("submit", function(e) {
+					var userPwdFromServer = "<%=uBean.getUser_pwd()%>";
+					var currentPwd = $("input[type=password]").eq(0).val().trim();
+					console.log(userPwdFromServer);
+					console.log(currentPwd);
+					if (currentPwd !== userPwdFromServer) {
+		                e.preventDefault(); // 폼 제출 막기
+		                alert("비밀번호가 틀렸습니다.");
+		                return false;
+		            }
 				});
 			});
 		</script>

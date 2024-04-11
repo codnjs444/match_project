@@ -273,6 +273,15 @@
 			    justify-content: center; /* 아이콘을 우측으로 정렬 */
 			    align-items: center; /* 아이콘을 상단으로 정렬 */
 			}
+			.fas.fa-heart, .icon-label {
+    			cursor: pointer;
+			}
+			
+			/* 아이콘에 대한 추가적인 스타일링 */
+			.fas.fa-heart {
+			    color: #e83e8c; /* 하트 색상 설정 */
+			}
+			
 		</style>
 		
 		<title><%=posting_name%></title>
@@ -291,7 +300,8 @@
 					<div class="box-post">
 					    <div class="left-side">
 					        <div class="icons" style="margin-top: 10px;"> <!-- 아이콘들을 위로 이동 -->
-					            <i class="fas fa-print"></i> <span class="icon-label">인쇄</span>
+								<!-- 찜 아이콘과 텍스트 -->
+								<i class="fas fa-heart"></i> <span class="icon-label">찜</span>
 					            <i class="fas fa-exclamation-circle"></i> <span class="icon-label">신고</span>
 					            <i class="fas fa-share-alt"></i> <span class="icon-label">공유</span>
 					        </div>

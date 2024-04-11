@@ -8,8 +8,6 @@
 		url = request.getParameter("url");
 	}
 	
-	out.println(url);
-	
 	boolean result = uMgr.loginUser(login.getUser_id(), login.getUser_pwd());
 	String msg = "로그인 실패";
 	if(result){

@@ -23,6 +23,7 @@
 	<body>
 		<%@include file="../user_page/user_top.jsp" %>
 		<%@include file="../user_page/user_sidebar.jsp" %>
+		<%@include file="../user_page/user_subtop.jsp" %>
 		<%uBean = uMgr.getUser((String)session.getAttribute("idKey")); %>
 		<div style="margin-left: 50px; width: 1400px;">
 			<h2> 회원정보 수정 </h2>

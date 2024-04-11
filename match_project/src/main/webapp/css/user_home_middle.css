@@ -275,18 +275,23 @@
 }
 .form-btn1{
 	width: 100px;
-	height: 40px;
-	border: none;
-	background-color: #606060;
-	color: #fff;
+	height: 37px;
+	border: 1px solid lightgrey;
+	background-color: #F9FAFC;
+	color: #000;
+	font-size: 13px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 .form-btn2{
 	width: 100px;
-	height: 40px;
-	border: none;
-	background-color: #606060;
-	color: #fff;
+	height: 37px;
+	border: 1px solid lightgrey;
+	background-color: #F9FAFC;
+	color: #000;
 	font-size: 13px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 .list-head{
 	background-color: #f2f2f2;
@@ -407,16 +412,16 @@
 .scrab{
 	height: 30px;
 	width: 90px;
-	background-color: #ff537c;
-	border: none;
-	color: #fff;
+	background-color: #f9fafc;
+	border: 1px solid lightgrey;
+	color: #000;
 }
 .apply{
 	height: 30px;
 	width: 90px;
-	background-color: #3399ff;
-	border: none;
-	color: #fff;
+	background-color: #f9fafc;
+	border: 1px solid lightgrey;
+	color: #000;
 }
 .posting-header{
 	margin-top: 60px;

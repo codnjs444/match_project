@@ -8,8 +8,6 @@
 		url = request.getParameter("murl");
 	}
 	
-	out.println(url);
-	
 	boolean result = mMgr.loginManager(mlogin.getManager_id(), mlogin.getManager_pwd());;
 	String msg = "로그인 실패";
 	if(result){

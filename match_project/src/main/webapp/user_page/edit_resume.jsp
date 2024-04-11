@@ -478,7 +478,7 @@
 		<form name="resumeFrm" method="get" action="resumeUpdateProc.jsp">
 		<input type="hidden" name="resume_idx" value="<%= resume_idx %>">
 			<div class="fixed-left resume-side row ms-0">
-				<input class="left-img" type="file">
+				<label class="left-img"></label> 
 				<div class="left-name"><%=uBean.getUser_name()%></div>
 				<div class="left-info">
 					<table>
@@ -1046,7 +1046,7 @@
 	      </div>
 	      <form id="titleForm" method="get" action="resumeUpdateProc.jsp">
 	        <div class="modal-body">
-	          <input type="text" class="form-control" id="resume_name_modal" name="resume_name" placeholder="제목 입력" value="">
+	          <input type="text" class="form-control" id="resume_name_modal" name="resume_name" placeholder="제목 입력" value="<%=rBean.getResume_name()%>">
 	        </div>
 	        <div class="modal-footer">
 	          <button type="button" class="" data-bs-dismiss="modal">취소</button>

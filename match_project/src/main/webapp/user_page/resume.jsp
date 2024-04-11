@@ -433,7 +433,7 @@
 	<div class="resume">
 		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">
-				<input class="left-img" type="file">
+				<label class="left-img"></label>
 				<div class="left-name"><%=uBean.getUser_name()%></div>
 				<div class="left-info">
 					<table>

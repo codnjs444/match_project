@@ -5,7 +5,6 @@
 <jsp:useBean id="mBean" class="match.ManagerBean"/>
 <%
 	String id = (String)session.getAttribute("idKey");
-	String url = request.getParameter("url");
 %>	
 <html>
 <head>

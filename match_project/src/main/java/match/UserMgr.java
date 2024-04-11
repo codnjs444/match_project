@@ -145,5 +145,23 @@ public class UserMgr {
 		}
 		return updateSuccess;
 	}
-
+	
+	public void updateUserPassword(UserBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_pwd = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getUser_pwd());
+			pstmt.setString(2, bean.getUser_id());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return;
+	}
 }

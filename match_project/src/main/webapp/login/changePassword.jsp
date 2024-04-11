@@ -20,12 +20,13 @@
 	</head>
 	
 	<body>
-	<%@include file="../user_page/user_top.jsp" %>
-	<%@include file="../user_page/user_sidebar.jsp" %>
+		<%@include file="../user_page/user_top.jsp" %>
+		<%@include file="../user_page/user_sidebar.jsp" %>
+		<%@include file="../user_page/user_subtop.jsp" %>
 		<div style="width: 1400px; margin-left: 40px;">
 			<h2> 비밀번호 변경 </h2>
 			<p class="text-secondary"> 비밀번호는 8~16자 숫자, 영어, 특수문자를 사용할 수 있습니다. </p>
-			<form id="frm" name="frm" method="POST">
+			<form id="frm" name="frm" method="POST" action="user_changePasswordProc.jsp">
 				<table class="table table-bordered border-dark">
 					<colgroup>
 						<col style="width: 30%;" />
@@ -34,13 +35,13 @@
 					<tbody class="text-center">
 						<tr>
 							<th> 현재 비밀번호 </th>
-							<td> <input type="password" class="form-control"> </td>
+							<td> <input type="password" class="form-control" value=""> </td>
 						</tr>
 						<tr>
 							<th> 새로운 비밀번호 </th>
 							<td> 
 								<input type="password" class="form-control" id="new_password">
-								<input type="hidden" id="flag_confirm_password" value="N"> 
+								<input type="hidden" name="new_password" id="flag_confirm_password" value=""> 
 							</td>
 						</tr>
 						<tr>
@@ -58,29 +59,45 @@
 		
 		<script>
 			$(document).ready(function() {
-				// 비밀번호 일치여부 확인 
-				$("#confirm_new_password").on("change", function() {
-					var _this_val = $(this).val().trim(),
-						_new_password = $("#new_password").val().trim();
-					if ( _this_val != _new_password ) {
-						$("#flag_confirm_password").val("N");
-						// todo. 비밀번호가 일치하지 않는 경우, 처리될 내용
-						alert("비밀번호가 일치하지 않습니다.");						
-					} else {
-						$("#flag_confirm_password").val("Y");
-					}
-				});
-				// 수정하기 버튼 이벤트 
-				$("#btn-submit").on("click", function() {
-					// todo. validate 
-					return false;
-				});
-				// 취소하기 버튼 이벤트 
-				$("#btn-cancel").on("click", function() {
-					// todo. 이전페이지 돌아가기
-					history.back();
-				});
-			});
+		        // 폼 제출 이벤트 핸들러
+		        $("#frm").on("submit", function(e) {
+		            var userPwdFromServer = "<%=uBean.getUser_pwd()%>";
+		            var currentPwd = $("input[type=password]").eq(0).val().trim(); // 현재 비밀번호 입력 필드 값
+		            var newPassword = $("#new_password").val().trim(); // 새로운 비밀번호 입력 필드 값
+		            var confirmNewPassword = $("#confirm_new_password").val().trim(); // 새로운 비밀번호 확인 입력 필드 값
+	
+		            // 현재 비밀번호가 서버의 비밀번호와 일치하지 않는 경우
+		            if (currentPwd !== userPwdFromServer) {
+		                e.preventDefault(); // 폼 제출 막기
+		                alert("현재 비밀번호가 틀렸습니다.");
+		                return false;
+		            }
+	
+		            // 새 비밀번호가 비어 있는 경우
+		            if (newPassword === "") {
+		                e.preventDefault();
+		                alert("변경할 비밀번호를 입력해주세요.");
+		                return false;
+		            }
+	
+		            // 새 비밀번호와 새 비밀번호 확인 값이 일치하지 않는 경우
+		            if (newPassword !== confirmNewPassword) {
+		                e.preventDefault(); // 폼 제출 막기
+		                alert("새로운 비밀번호가 일치하지 않습니다.");
+		                return false;
+		            }
+	
+		            // 새 비밀번호 값을 hidden input에 설정
+		            $("#flag_confirm_password").val(newPassword);
+	
+		            // 폼 제출 진행
+		        });
+	
+		        // 취소 버튼 이벤트
+		        $("#btn-cancel").click(function() {
+		            history.back(); // 이전 페이지로 이동
+		        });
+		    });
 		</script>
 	</body>
 </html>

@@ -606,10 +606,9 @@ public class ResumeMgr {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
-		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update resume set resume_name=?, self_intro1=?, self_intro2=?, self_intro3=? where resume_idx = ?";
+			sql = "update resume set resume_name=?, self_intro1=?, self_intro2=?, self_intro3=?, resume_datetime=now() where resume_idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getResume_name());
 			pstmt.setString(2, bean.getSelf_intro1());
