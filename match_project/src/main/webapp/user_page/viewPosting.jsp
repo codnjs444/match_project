@@ -1,3 +1,6 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
 <%@page import="match.ResumeBean"%>
 <%@page import="match.posting.OpenPositionBean"%>
 <%@page import="match.posting.WelfareBean"%>
@@ -296,10 +299,46 @@
 			OpenPositionBean openPosition = pMgr.searchOpenPositionInfo(posting_idx);
 			String openpositionName = openPosition.getOpenposition_name();
 		
-			  Boolean isBookmarkedObj = (Boolean) request.getAttribute("isBookmarked");
-			    boolean isBookmarked = (isBookmarkedObj != null) ? isBookmarkedObj : false;
-		    request.setAttribute("isBookmarked", isBookmarked);
 		
+			String postingId = request.getParameter("posting_idx"); // 현재 페이지의 공고 ID
+		    StringBuffer url = request.getRequestURL();
+		    String queryString = request.getQueryString(); // 쿼리 스트링 (GET 파라미터)
+		    if (queryString != null) {
+		        url.append('?').append(queryString);
+		    }
+		    String currentPageUrl = url.toString(); // 현재 페이지의 전체 URL
+		    // 최근 본 공고 정보를 세션에서 가져오기
+		    List<Map<String, String>> recentPosts2 = (List<Map<String, String>>) session.getAttribute("recentPosts");
+		    if (recentPosts2 == null) {
+		        recentPosts2 = new ArrayList<>();
+		    }
+
+		    boolean exists = false;
+		    // 이미 리스트에 동일한 공고가 있는지 확인
+		    for (Map<String, String> post : recentPosts2) {
+		        if (post.get("id").equals(posting_idx)) {
+		            exists = true;
+		            break;
+		        }
+		    }
+
+		    // 동일한 공고가 없을 경우 새로 추가
+		    if (!exists) {
+		        Map<String, String> postInfo = new HashMap<>();
+		        postInfo.put("id", posting_idx); // 공고 ID
+		        postInfo.put("title", posting_name); // 공고 제목
+		        postInfo.put("url", currentPageUrl); // 현재 페이지 URL
+		        recentPosts2.add(0, postInfo); // 리스트 맨 앞에 추가
+
+		        // 리스트 크기가 10을 초과하지 않도록 조정
+		        if (recentPosts2.size() > 10) {
+		            recentPosts2 = recentPosts2.subList(0, 10);
+		        }
+
+		        // 세션에 업데이트된 리스트 저장
+		        session.setAttribute("recentPosts", recentPosts2);
+		    }
+
 		%>
 		<title><%=posting_name%></title>
 		<!-- 최신 버전의 부트스트랩 CSS 추가 -->
@@ -310,6 +349,7 @@
 	<body>
 		<%@include file="../user_page/user_top.jsp" %>
 		<%@include file="../user_page/user_sidebar.jsp" %>
+		
 		<div class="container mt-10" style="text-align: left;">
 		    <!-- 좌측 레이아웃 -->
 		    <div class="row" style="text-align: left;">
@@ -579,19 +619,8 @@
 		});
 		
 		// 찜하기 기능
-document.addEventListener("DOMContentLoaded", function() {
+		document.addEventListener("DOMContentLoaded", function() {
     var favoriteIcon = document.getElementById("favoriteIcon");
-
-    var isBookmarked = <%= isBookmarked %>; // "true" 또는 "false" 문자열을 사용하지 않고, 바로 true 또는 false를 사용합니다.
-
-    if (isBookmarked) {
-        favoriteIcon.classList.add("fas");
-        favoriteIcon.classList.remove("far");
-    } else {
-        favoriteIcon.classList.add("far");
-        favoriteIcon.classList.remove("fas");
-    }
-
     favoriteIcon.addEventListener("click", function() {
         var isFilled = favoriteIcon.classList.contains("fas");
         favoriteIcon.classList.toggle("fas");
@@ -613,7 +642,6 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     });
 });
-
 
 
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

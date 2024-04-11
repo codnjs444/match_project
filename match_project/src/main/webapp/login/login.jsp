@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 
 
@@ -5,6 +7,9 @@
 <jsp:useBean id="mBean" class="match.ManagerBean"/>
 <%
 	String id = (String)session.getAttribute("idKey");
+	//세션에서 최근 본 공고 목록을 가져옵니다.
+	List<Map<String, String>> recentViewedPostings = (List<Map<String, String>>) session.getAttribute("recentViewedPostings");
+
 %>	
 <html>
 <head>
