@@ -53,6 +53,22 @@
 	    text-align: center;
 	    flex-wrap: wrap; /* 이 부분 추가 */
 	}
+		.top-menu {
+	    border: 1px solid #C4C4C4;
+	    padding: 20px;
+	    padding-top: 0; /* 상단 패딩 제거 */
+	    padding-bottom: 0; /* 상단 패딩 제거 */
+	    padding-right: 0; /* 상단 패딩 제거 */
+	    padding-left: 0; /* 상단 패딩 제거 */
+	    margin-bottom: 20px;
+	    margin-right: auto;
+	    margin-top: 0; /* 상단 마진 제거 */
+	    margin-bottom: 0; /* 상단 마진 제거 */
+	    margin-left: 0; /* 상단 마진 제거 */
+	    margin-right: 0; /* 상단 마진 제거 */
+	    height: 30px;
+	    width: 107%;
+	}
 		.modal-dialog {
 	    position: fixed; /* 모달 위치 고정 */
 	    width: 700px;

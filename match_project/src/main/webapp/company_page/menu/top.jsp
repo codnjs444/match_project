@@ -192,7 +192,7 @@
   <div class="nav-links">
     <a href="#" id="openModal">공고등록</a>
     <a href="../login/logout.jsp">로그아웃</a>
-    <a href="/corporate-services">마이페이지</a>
+    <a href="../company_page/Edit_admin_page.jsp">회원정보 수정</a>
   </div>
 </header>
 

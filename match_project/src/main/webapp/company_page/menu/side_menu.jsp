@@ -70,16 +70,7 @@
 
 <div class="sidebar">
   <ul>
-	<li><a href="#" onclick="window.location.href='company_home.jsp'"><i class="fas fa-home icon"></i><span>홈</span></a></li>
-    <li>
-      <a href="#" onclick="toggleSubMenu('jobSubMenu')">
-        <i class="fas fa-briefcase icon"></i><span>공고</span>
-      </a>
-      <ul id="jobSubMenu" class="submenu">
-        <li><a href="#" onclick="loadPage('applicant_management.jsp')"><i class="fas fa-user-friends icon"></i>지원자 관리</a></li>
-        <li><a href="#" onclick="loadPage('job_calendar.jsp')"><i class="far fa-calendar-alt icon"></i>공고 캘린더</a></li>
-      </ul>
-    </li>
+	<li><a href="#" onclick="window.location.href='company_home.jsp'"><i class="fas fa-home icon"></i><span>공고</span></a></li>
     <li><a href="#" onclick="loadPage('talent.jsp')"><i class="fas fa-users icon"></i><span>인재 관리</span></a></li>
     <li><a href="#" onclick="loadPage('promotion.jsp')"><i class="fas fa-bullhorn icon"></i><span>홍보 관리</span></a></li>
     <li><a href="#" onclick="loadPage('member.jsp')"><i class="fas fa-user-cog icon"></i><span>회원정보 관리</span></a></li>

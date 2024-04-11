@@ -111,4 +111,81 @@ public class ManagerMgr {
 		return company_idx;
 	}
 	
+	public boolean updateManager(ManagerBean bean) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    boolean updateResult = false;
+	    try {
+	        con = pool.getConnection();
+	        String sql = "UPDATE manager SET manager_name = ?, manager_email = ?, manager_phonenum = ? WHERE manager_id = ?";
+	        pstmt = con.prepareStatement(sql);
+	        
+	        // ManagerBean에서 정보를 가져와 쿼리에 설정
+	        pstmt.setString(1, bean.getManager_name());
+	        pstmt.setString(2, bean.getManager_email());
+	        pstmt.setString(3, bean.getManager_phonenum());
+	        pstmt.setString(4, bean.getManager_id());
+	        
+	        int rowsAffected = pstmt.executeUpdate();
+	        updateResult = (rowsAffected > 0); // 업데이트된 행이 있으면 true, 없으면 false
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        updateResult = false;
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	    return updateResult;
+	}
+	
+	public boolean updateManagerPassword(String managerId, String newPassword) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    boolean updateResult = false;
+	    try {
+	        con = pool.getConnection();
+	        String sql = "UPDATE manager SET manager_pwd = ? WHERE manager_id = ?";
+	        pstmt = con.prepareStatement(sql);
+	        
+	        // 새로운 비밀번호를 쿼리에 설정
+	        pstmt.setString(1, newPassword);
+	        // manager_id를 쿼리에 설정
+	        pstmt.setString(2, managerId);
+	        
+	        int rowsAffected = pstmt.executeUpdate();
+	        updateResult = (rowsAffected > 0); // 업데이트된 행이 있으면 true, 없으면 false
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        updateResult = false;
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	    return updateResult;
+	}
+
+	public String getManagerPassword(String id) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String managerPassword = null; // 반환할 manager_pwd 값을 저장할 변수 선언
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT manager_pwd FROM manager WHERE manager_id = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, id); // 매개변수로 받은 id를 쿼리에 설정
+	        rs = pstmt.executeQuery(); // 쿼리 실행
+	        
+	        if (rs.next()) { // 결과 집합에서 첫 번째 행이 존재한다면
+	            managerPassword = rs.getString("manager_pwd"); // manager_pwd 값을 변수에 저장
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // 예외 발생 시 스택 추적 정보 출력
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs); // 리소스 해제
+	    }
+	    return managerPassword; // 조회된 manager_pwd 반환
+	}
+
+
+	
+	
 }
