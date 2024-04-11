@@ -52,7 +52,7 @@
 						<button class="my-btn-icon4 my-btn-icon"></button>
 						<p class="my-btn-text">최근 본 공고</p>
 					</div>
-					<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
+					<div class="my-btn-div px-0 border-end border-top border-light-subtitle" onclick="location.href='../login/applicationScrap.jsp'">
 						<button class="my-btn-icon5 my-btn-icon"></button>
 						<p class="my-btn-text">스크랩 공고</p>
 					</div>

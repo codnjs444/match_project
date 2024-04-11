@@ -9,6 +9,7 @@
 <%@page import="match.PostingMgr"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="pMgr" class="match.PostingMgr2"/>
+<jsp:useBean id="coMgr" class="match.CompanyMgr"/>
 <jsp:useBean id="aMgr" class="match.application.ApplicationMgr2"/>
 <jsp:useBean id="jcMgr" class="match.category.job_categoryMgr"/>
 <jsp:useBean id="resumeMgr" class="match.ResumeMgr"></jsp:useBean>
@@ -599,7 +600,7 @@
 			    		<th class="application-sdate-head">등록일</th>
 			    	</tr>
 			<% for(int i = startIndex; i < endIndex && i < postingNames.size() && i < dateRanges.size(); i++) { 
-					
+				boolean isBookmarked = coMgr.searchBookmark(idd, postIdxList.get(i));
 				
 			%>
 			    	<tr class="list-body">
@@ -618,7 +619,7 @@
 			    					<%=postTypes.get(i)%>
 			    				</div>
 			    				<div class="col testcol">
-			    					<button class="scrab">스크랩</button>
+									<button class="scrab" value="<%= isBookmarked ? "true" : "false" %>" data-posting-idx="<%= postIdxList.get(i) %>">스크랩</button>
 			    					<div style="width: 10px;"></div>
 			    					<button id="register-btn" class="apply" data-posting-idx="<%= postIdxList.get(i) %>">즉시지원</button>
 			    				</div>
@@ -1003,6 +1004,34 @@
 		        });
 		    });
 		});
+		
+		$(document).ready(function() {
+		    $('.scrab').click(function() {
+		        var postingIdx = $(this).data('posting-idx'); // data-posting-idx 속성의 값을 올바르게 읽어옴
+		        var userId = '<%=idd%>'; // 사용자 ID
+		        var isBookmarked = $(this).val() === 'true'; // 스크랩 상태
+		        
+		        // AJAX 요청 설정
+		        $.ajax({
+		            url: 'updateBookmark.jsp', // 서버 측 처리를 위한 JSP 파일
+		            type: 'POST',
+		            data: {
+		                posting_idx: postingIdx,
+		                user_id: userId,
+		                bookmarked: isBookmarked
+		            },
+		            success: function(response) {
+		                // 처리 성공 시 로직 (예: 버튼 상태 업데이트)
+		                console.log('Bookmark status updated successfully.');
+		            },
+		            error: function(xhr, status, error) {
+		                // 오류 처리
+		                console.error('Error updating bookmark status.');
+		            }
+		        });
+		    });
+		});
+
 	</script>
 </body>
 </html>

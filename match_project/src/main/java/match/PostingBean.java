@@ -10,6 +10,13 @@ public class PostingBean {
 	private String posting_address;
 	private int posting_view;
 	private String posting_status;
+	public String getPosting_datetime() {
+		return posting_datetime;
+	}
+	public void setPosting_datetime(String posting_datetime) {
+		this.posting_datetime = posting_datetime;
+	}
+	private String posting_datetime;
 	
 	public int getPosting_idx() {
 		return posting_idx;

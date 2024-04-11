@@ -6,15 +6,224 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>회원가입</title>
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	    <link href="../css/signupstyle.css" rel="stylesheet" type="text/css">
-	    
+	 
+	 <style>
+	 	.main-tab {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0; /* 기본 마진 제거 */
+	padding: 0; /* 기본 패딩 제거 */
+}
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo span {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .login-button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .login-form .input-text input {
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        #footer-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .sep-line {
+            margin: 0 10px;
+            color: #bbbbbb;
+        }
+        .logo button {
+		    border: none; /* 테두리 제거 */
+		    background: none; /* 배경 제거 */
+		    padding: 0; /* 패딩 제거 */
+		    margin: 0; /* 마진 제거 */
+		    box-shadow: none; /* 박스 그림자 제거 */
+		}
+		.logo span {
+	        font-size: 2rem;
+	        font-weight: bold;
+	        color: #007bff;
+	        background-color: #ffffff; /* 배경색 추가 */
+	        padding: 10px 20px; /* 텍스트 주변의 패딩 추가 */
+	        border-radius: 8px; /* 둥근 모서리 추가 */
+	        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 추가 */
+	        display: inline-block; /* 필요한 만큼의 공간만 차지하도록 설정 */
+	    }
+body {
+ 	background-color: #f5f6f8; /* body의 배경색을 변경 */
+	margin: 0;
+	padding: 0;
+}
+main {
+	background-color: #ffffff;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: #3399ff; /* 선택된 탭의 배경색 */
+color: #ffffff; /* 선택된 탭의 글자색 */
+}
+.nav-tabs .nav-link {
+    background-color: #ffffff; /* 선택되지 않은 탭의 배경색 */
+color: #000000; /* 선택되지 않은 탭의 글자색 */
+}
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.form-container {
+    display: flex;
+    flex-direction: column; /* 입력 필드를 세로로 배치 */
+}
+.checkbox-container{
+	margin-left: auto;
+}
+.input-text {
+    width: 540px; /* 입력 필드의 너비를 폼 컨테이너의 너비에 맞춤 */
+    height: 40px;
+    margin-bottom: 10px; /* 입력 필드 사이의 여백 */
+    font-size: 14px; /* 입력 필드의 글꼴 크기를 조정 */
+    border: 1px solid #ccc; /* 입력 필드의 테두리를 연하게 */
+}
+.input-text2 {
+    width: 260px; /* 입력 필드의 너비를 폼 컨테이너의 너비에 맞춤 */
+    height: 40px;
+    margin-bottom: 10px; /* 입력 필드 사이의 여백 */
+    font-size: 14px; /* 입력 필드의 글꼴 크기를 조정 */
+    border: 1px solid #ccc; /* 입력 필드의 테두리를 연하게 */
+}
+.check-text{
+	display: flex;
+	flex-direction: row; 
+	align-items: left; 
+	width: 540px;
+}
+.required::after {
+    content: '*'; /* placeholder 끝에 '*'를 추가합니다. */
+    color: #ff0000; /* 빨간색으로 설정합니다. */
+    margin-left: 3px; /* '*'과 텍스트 사이의 간격을 조절합니다. */
+}
+.form-group {
+    display: flex;
+    align-items: center;
+    /* 세로 중앙 정렬 */
+      }
+.form-group2 {
+    display: flex;
+}
+.form-group label {
+    margin: 5px/* 체크박스와 텍스트 사이 간격 */
+}
+.form-group.checkbox-container {
+    width: 20px; /* 원하는 너비로 조절 */
+    height: 20px;
+    display: flex;
+    justify-content: flex-end; /* 체크박스를 오른쪽으로 정렬 */
+}
+.keep{
+	height: 20px;
+	margin-bottom: 30px;
+	font-size: 14px;
+	display: flex; 
+	flex-direction: column;
+}
+.keep-small1{
+	height: 20px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	color: #ff0000;
+	display: flex; 
+	flex-direction: column;
+}
+.keep-small2{
+	height: 20px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	display: flex; 
+	flex-direction: column;
+}
+.keep2{
+	height: 20px;
+	margin-bottom: 30px;
+	font-size: 14px;
+	display: flex; 
+	flex-direction: column;
+}
+.keep-small3{
+	height: 20px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	color: #ff0000;
+	display: flex; 
+	flex-direction: column;
+}
+.keep-small4{
+	height: 20px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	display: flex; 
+	flex-direction: column;
+}
+.join-button {
+    height: 50px;
+    width: 100%;
+    padding: 10px; /* 버튼 내부의 여백 */
+    font-size: 18px; /* 버튼의 글꼴 크기를 조정 */
+    border-radius: 5px; /* 버튼의 모서리를 둥글게 */
+    align-self: stretch; /* 버튼을 입력 필드의 높이에 맞춤 */
+    background-color: #3399ff; /* 버튼의 배경색을 파란색으로 */
+    color: white; /* 버튼 텍스트의 색상을 흰색으로 */
+    border: none; /* 버튼의 테두리를 없앰 */
+}
+.user{
+	border: none;
+	width: 520px;
+}
+.manager{
+	border: none;
+	width: 520px;
+}
+.company{
+	border: none;
+	width: 520px;
+}
+.company2{
+	border: none;
+	width: 240px;
+}
+.address1{
+	border: none;
+	width: 415px;
+}
+.address2{
+	border: none;
+	width: 520px;
+}
+	 
+	 </style>   
     </head>
 	<body class="main-tab">
-		<div class="logo" align="center">
-			<button type="button" onclick="redirectTo('../user_page/user_home.jsp')">
-				<img src="../img/logo.png" width="210" height="50">
-			</button>
-		</div>
+	<div class="logo">
+		<button type="button" style="font-size: 20px" onclick="redirectTo('../user_page/user_home.jsp')">
+			<span>Match</span>
+		</button>
+	</div>
 		<main class="form-signin">
 			<div class="row">
 				<div class="col-12">
