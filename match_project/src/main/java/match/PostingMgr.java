@@ -8,7 +8,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
+import match.posting.BookmarkPostingBean;
 import match.posting.OpenPositionBean;
 import match.posting.QualificationBean;
 import match.posting.WelfareBean;
@@ -1048,6 +1050,28 @@ public class PostingMgr {
 		}
 		return postingName; // Return the posting name
 	}
+	public String getPostingCname(String posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String postingcname = "";
+		try {
+			con = pool.getConnection();
+			sql = "select posting_cname from posting where posting_idx=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, posting_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				postingcname = rs.getString("posting_cname");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return postingcname;
+	}
 
 	public String getManagerId(String posting_idx) {
 		Connection con = null;
@@ -1123,5 +1147,51 @@ public class PostingMgr {
 		}
 		return companyName; // Return the company name
 	}
-
+	public Vector<BookmarkPostingBean> getBookmarkPosting(String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<BookmarkPostingBean> vlist = new Vector<BookmarkPostingBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select posting_idx from bookmark_posting where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BookmarkPostingBean bean = new BookmarkPostingBean();
+				bean.setPosting_idx(rs.getInt(1));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	public String getProcedureEdatetime(int posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String procedureEdatetime = "";
+		try {
+			con = pool.getConnection();
+			sql = "select procedure_edatetime from `procedure` where posting_idx = ? and procedure_num = 0";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, posting_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				procedureEdatetime = rs.getString("procedure_edatetime");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return procedureEdatetime;
+	}
 }

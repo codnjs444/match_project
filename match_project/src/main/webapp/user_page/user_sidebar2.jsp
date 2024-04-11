@@ -1,3 +1,5 @@
+<%@page import="match.posting.BookmarkPostingBean"%>
+<%@page import="java.util.Vector"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
@@ -7,9 +9,12 @@
 <jsp:useBean id="resumeBean2" class="match.ResumeMgr"/>
 <jsp:setProperty property="*" name="resumeBean2"/>
 <jsp:setProperty property="*" name="userBean"/>
+<jsp:useBean id="pMgr2" class="match.PostingMgr"/>
+<jsp:useBean id="bpBean" class="match.posting.BookmarkPostingBean"/>
 <%
 	String posting_idxx = (String)session.getAttribute("posting_idx");
 	List<Map<String, String>> recentPosts = (List<Map<String, String>>)session.getAttribute("recentPosts");
+	Vector<BookmarkPostingBean> vlist = pMgr2.getBookmarkPosting((String)session.getAttribute("idKey"));
 %>
 <html>
 	<head>
@@ -36,6 +41,15 @@
 			.recent-post-link {
     color: #666666; /* 연한 검정색 */
 }
+			.modal-content{
+				width: 800px;
+			}
+			.modal-dialog {
+			    position: fixed; /* 모달 위치 고정 */
+			    top: 20%; /* 상단에서 50% 위치 */
+			    left: 560px; /* 좌측에서 50% 위치 */
+			    transform: translate(-50%, -50%); /* 정확한 중앙 정렬을 위해 변환 적용 */
+			}
 		</style>
 	</head>
 	<body>
@@ -43,7 +57,7 @@
 			<div class="border border-light-subtitle m-0 px-0">
 				<button type="button" class="row m-0 px-0 text-btn" data-bs-toggle="modal" data-bs-target="#scrapModal">
 				    <div class="col-8 pe-0 d-flex justify-content-center align-self-center">스크랩 공고</div>
-				    <div class="col-4 ps-0 d-flex justify-content-end align-self-center">(갯수)</div>
+				    <div class="col-4 ps-0 d-flex justify-content-end align-self-center">(<%=vlist.size()%>)</div>
 				</button>
 				<button type="button" class="row border-top border-light-subtitle m-0 px-0 text-btn" data-bs-toggle="modal" data-bs-target="#recentModal">
 				    <div class="col-8 pe-0 d-flex justify-content-center align-self-center">최근 본 공고</div>
@@ -67,7 +81,23 @@
 		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		            </div>
 		            <div class="modal-body">
-		                <!-- 스크랩 공고 내용 -->
+		                <%
+		                	for(int i = 0; i < vlist.size(); i++){
+		                		bpBean = vlist.get(i);
+		                		String postingIdxStr = String.valueOf(bpBean.getPosting_idx());
+		                        // 변환된 문자열로 posting_name과 posting_cname을 조회
+		                        String postingName = pMgr2.getPostingName(postingIdxStr);
+		                        String postingCname = pMgr2.getPostingCname(postingIdxStr);
+		                        String procedureEdatetime = pMgr2.getProcedureEdatetime(bpBean.getPosting_idx());
+	               		%>
+	               			<div class="row m-0">
+	               				<div class="col p-0"><%=postingCname%></div>
+	               				 <a href="viewPosting.jsp?posting_idx=<%=postingIdxStr%>" class="col"><%=postingName%></a>
+	               				<div class="col p-0"><%=procedureEdatetime%></div>
+	               			</div>
+	               		<%
+		                	}
+		                %>
 		            </div>
 		        </div>
 		    </div>
