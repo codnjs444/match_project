@@ -1,3 +1,5 @@
+<%@page import="match.ResumeBean"%>
+<%@page import="match.ResumeMgr" %>
 <%@page import="match.posting.environmentBean"%>
 <%@page import="javax.annotation.PostConstruct"%>
 <%@page import="java.util.Vector"%>
@@ -9,6 +11,9 @@
 <jsp:useBean id="pMgr" class="match.PostingMgr2"/>
 <jsp:useBean id="aMgr" class="match.application.ApplicationMgr2"/>
 <jsp:useBean id="jcMgr" class="match.category.job_categoryMgr"/>
+<jsp:useBean id="resumeMgr" class="match.ResumeMgr"></jsp:useBean>
+<jsp:useBean id="resumeBean" class="match.ResumeBean"></jsp:useBean>
+<jsp:setProperty property="*" name="resumeBean"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -120,6 +125,10 @@
 
     int startIndex = (currentPage - 1) * numperPage;
     int endIndex = Math.min(startIndex + numperPage, totalPosts);
+    
+    String idd = (String)session.getAttribute("idKey");
+    String resume_idxx = (String)session.getAttribute("resume_idx");
+    String posting_idx = (String)session.getAttribute("posting_idx");
     
  	// 사용 후 세션 데이터 제거
  	session.removeAttribute("environment_type");
@@ -564,8 +573,6 @@
 				</div>
 	  		</div>
 		</div>
-	
-	    
 	</div>
 	<div class="posting-header">전체 채용 정보</div>
 	<div class="row alignment">
@@ -613,7 +620,7 @@
 			    				<div class="col testcol">
 			    					<button class="scrab">스크랩</button>
 			    					<div style="width: 10px;"></div>
-			    					<button class="apply">즉시지원</button>
+			    					<button id="register-btn" class="apply" data-posting-idx="<%= postIdxList.get(i) %>">즉시지원</button>
 			    				</div>
 			    			</div>
 			    		</td>
@@ -671,12 +678,64 @@
             </div>
         </div>
     </div>
-    
+    <div class="modal fade" id="titleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">이력서 선택하기</h5>
+				</div>
+				<form id="submitFrm" method="post" action="submitApplicationProc.jsp">
+					<input type="hidden" name="user_id" value="<%=idd%>">
+					<input type="hidden" name="posting_idx" id="postingIdx" value="<%=posting_idx%>">
+					<div class="modal-body">
+					<%
+						
+						Vector<ResumeBean> rvlist = resumeMgr.getResumeIdxList(idd);
+						for(int i = 0; i < rvlist.size(); i++){
+							resumeBean = rvlist.get(i);
+					%>
+							<button type="button" class="form-control"  name="resume_name" data-resume-idx="<%=resumeBean.getResume_idx()%>"><%=resumeBean.getResume_name()%></button>
+					<%
+						}
+					%>
+						<!-- 숨겨진 입력 필드로 선택된 resume_idx 값을 저장 -->
+						<input type="hidden" id="ResumeIdx" name="resume_idx" value="">
+					</div> 
+					<div class="modal-btn">
+						<button type="submit" class="btn btn-primary" onclick="">지원</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
     
     
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script>
+
+		document.addEventListener("DOMContentLoaded", function() {
+		    // 모든 이력서 선택 버튼에 대해 이벤트 리스너 추가
+		    document.querySelectorAll('[data-resume-idx]').forEach(function(button) {
+		        button.addEventListener('click', function() {
+		            // 버튼의 data-resume-idx 값을 가져옴
+		            var resumeIdx = this.getAttribute('data-resume-idx');
+		            // 숨겨진 필드의 값을 업데이트
+		            document.getElementById('ResumeIdx').value = resumeIdx;
+		        });
+		    });
+		});
+		$(document).ready(function() {
+	        // 즉시지원 버튼에 대한 클릭 이벤트 리스너 추가
+	        $(".apply").each(function() {
+	            $(this).on("click", function() {
+	                var postingIdx = $(this).data("posting-idx"); // 버튼에서 posting_idx 읽기
+	                $("#postingIdx").val(postingIdx); // 모달의 hidden input 필드에 posting_idx 설정
+	                $('#titleModal').modal('show'); // 모달 표시
+	            });
+	        });
+	    });
 		function toggleContent(contentId) {
 		    var selectedBox = document.getElementById(contentId);
 		    

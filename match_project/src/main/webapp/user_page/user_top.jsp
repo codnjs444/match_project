@@ -1,3 +1,5 @@
+<%@page import="match.ResumeBean"%>
+<%@page import="java.util.Vector"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
 	String id = (String)session.getAttribute("idKey");

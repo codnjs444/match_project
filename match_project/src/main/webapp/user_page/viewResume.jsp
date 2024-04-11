@@ -16,8 +16,6 @@
 <jsp:useBean id="cBean" class="match.category.certificate_categoryBean"/>
 <jsp:useBean id="uMgr" class="match.UserMgr"/>
 <jsp:useBean id="uBean" class="match.UserBean"/>
-<jsp:useBean id="rBean" class="match.ResumeBean"/>
-<jsp:useBean id="rMgr" class="match.ResumeMgr"/>
 
 <jsp:useBean id="eBean" class="match.resume.EduBean"/>
 <jsp:useBean id="caBean" class="match.resume.CareerBean"/>

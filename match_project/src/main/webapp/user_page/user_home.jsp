@@ -18,7 +18,7 @@
 
 <%@ include file="user_middle.jsp" %>
 <%@ include file="user_sidebar.jsp" %>
-
+<%@ include file="user_sidebar2.jsp" %>
 <%@ include file="user_bottom.jsp" %>
 
 </body>

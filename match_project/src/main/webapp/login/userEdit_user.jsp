@@ -105,7 +105,7 @@
 									</div>
 									<span class="col-1">-</span>
 									<div class="row col-3">
-										<input type="text" class="form-control" name="phone_number3" maxlength='4' value="<%=uBean.getUser_phonenum().substring(9,13)%>">
+										<input type="text" class="form-control" name="phone_number3" maxlength='4' value="<%=uBean.getUser_phonenum().substring(9)%>">
 									</div>
 								</div> 
 							</td>
