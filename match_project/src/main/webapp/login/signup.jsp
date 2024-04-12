@@ -221,7 +221,7 @@ color: #000000; /* 선택되지 않은 탭의 글자색 */
 	<body class="main-tab">
 	<div class="logo">
 		<button type="button" style="font-size: 20px" onclick="redirectTo('../user_page/user_home.jsp')">
-			<span>Match</span>
+			<span style="margin-top: 10px;">Match</span>
 		</button>
 	</div>
 		<main class="form-signin">

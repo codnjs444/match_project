@@ -241,6 +241,7 @@
 			    <a href="user_resume.jsp?resume_idx=<%= resumeIdxs.get(i) %>" style="text-decoration: none; color: inherit;" target="_blank">
 			        <%= userNames.get(userIds.get(i)) %>
 			        <input type="hidden" name="posting_idx" value="<%= posting_idx %>">
+			        <input type="hidden" name="resume_idx" value="<%= resumeIdxs.get(i) %>">
 			    </a>
 	            <br> <!-- 줄바꿈을 위해 사용 -->
     			<span style="font-size: 13px;"> (<%= userGenders.get(userIds.get(i)) %>)</span>

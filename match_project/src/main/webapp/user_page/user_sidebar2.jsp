@@ -91,9 +91,9 @@
 		                        String procedureEdatetime = pMgr2.getProcedureEdatetime(bpBean.getPosting_idx());
 	               		%>
 	               			<div class="row m-0">
-	               				<div class="col p-0"><%=postingCname%></div>
-	               				 <a href="viewPosting.jsp?posting_idx=<%=postingIdxStr%>" class="col"><%=postingName%></a>
-	               				<div class="col p-0"><%=procedureEdatetime%></div>
+	               				<div class="col-3 p-0"><%=postingCname%></div>
+	               				 <a href="viewPosting.jsp?posting_idx=<%=postingIdxStr%>" class="col-6"><%=postingName%></a>
+	               				<div class="col-3 p-0"><%=procedureEdatetime%></div>
 	               			</div>
 	               		<%
 		                	}

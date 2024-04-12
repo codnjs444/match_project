@@ -70,7 +70,7 @@
 									</div>
 									<div class="row col-4 ps-5 pt-2">
 										<div class="form-check col-auto">
-											<input class="form-check-input" type="radio" name="flexRadioDefault" id="gender1" <%= (uBean.getUser_gender()) ? "checked" : "" %> value="1">
+											<input class="form-check-input" type="radio" name="flexRadioDefault" id="gender1" <%= !(uBean.getUser_gender()) ? "checked" : "" %> value="1">
 										  <label class="form-check-label" for="gender1">
 										    남
 										  </label>

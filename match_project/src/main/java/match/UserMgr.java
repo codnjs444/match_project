@@ -76,7 +76,10 @@ public class UserMgr {
 				bean.setUser_pwd(rs.getString(3));
 				bean.setUser_email(rs.getString(4));
 				bean.setUser_phonenum(rs.getString(5));
-				bean.setBirthday(rs.getString(6));
+				String birthday = rs.getString(6);
+			    if (birthday != null) {
+			        bean.setBirthday(birthday);
+			    }
 				bean.setUser_gender(rs.getBoolean(7));
 				bean.setPostal_code(rs.getString(8));
 				bean.setUser_address(rs.getString(9));
@@ -163,5 +166,27 @@ public class UserMgr {
 			pool.freeConnection(con, pstmt);
 		}
 		return;
+	}
+	
+	public String getUserId(int resume_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String user_id = "";
+		try {
+			con = pool.getConnection();
+			sql = "select user_id from resume where resume_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, resume_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				user_id = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return user_id;
 	}
 }

@@ -771,9 +771,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addProjectBox(this)">추가하기</button>
-					</div>
 				</div>
 				
 				<div class="title" id="portfolioInfo">포트폴리오</div>
@@ -782,10 +779,6 @@
 					    <div class="row">
 
 					    </div>
-					</div>
-					
-					<div class="row m-0">
-					<button class="add-btn mx-auto" type="button" id="addPortfolioButton">추가하기</button>					
 					</div>
 				</div>
 				
@@ -810,9 +803,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addAwardBox(this)">추가하기</button>
-					</div>
 				</div>
 				<div class="title" id="globalInfo">해외경험</div>
 				<div class="box">
@@ -836,9 +826,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addGlobalexBox(this)">추가하기</button>
-					</div>
 				</div>
 				<div class="title" id="languageInfo">어학</div>
 				<div class="box">
@@ -851,9 +838,6 @@
 								<input class="box-style mbox-con" type="text" id="language_level[]" name="language_level[]" placeholder="회화능력">
 							</div>
 						</div>
-					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addLanguageBox(this)">추가하기</button>
 					</div>
 				</div>
 				<div class="title" id="prefferInfo">취업우대</div>

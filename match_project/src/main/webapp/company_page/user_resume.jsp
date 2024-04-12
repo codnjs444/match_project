@@ -438,8 +438,8 @@
 	<body>
 
 		<%
-		
-			String id = (String)session.getAttribute("idKey");
+			int resume_idx = Integer.parseInt(request.getParameter("resume_idx"));
+			String id = uMgr.getUserId(resume_idx);
 
 		
 		
@@ -449,8 +449,16 @@
 				response.sendRedirect("../login/login.jsp");
 				return;
 			}
+			int year = 1999;
 			uBean = uMgr.getUser(id);
-			int year = Integer.parseInt(uBean.getBirthday().substring(0, 4));
+			String birthday = uBean.getBirthday();
+			if (birthday != null) {
+			    year = Integer.parseInt(birthday.substring(0, 4));
+			    // 다른 로직 수행
+			} else {
+			    // birthday가 null인 경우의 처리 로직
+			    year = 1999;
+			}
 			
 			String gender = "";
 			if(uBean.getUser_gender() == false)
@@ -463,7 +471,6 @@
 				SNS = "없음";
 			else
 				SNS = uBean.getSns();
-			int resume_idx = Integer.parseInt(request.getParameter("resume_idx"));
 			rBean = rMgr.getResume(resume_idx);
 			List<EduBean> eduList = rMgr.getEduList(resume_idx);
 			List<CareerBean> careerList = rMgr.getCareerList(resume_idx);
@@ -786,9 +793,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addProjectBox(this)">추가하기</button>
-					</div>
 				</div>
 				
 				<div class="title" id="portfolioInfo">포트폴리오</div>
@@ -797,10 +801,6 @@
 					    <div class="row">
 
 					    </div>
-					</div>
-					
-					<div class="row m-0">
-					<button class="add-btn mx-auto" type="button" id="addPortfolioButton">추가하기</button>					
 					</div>
 				</div>
 				
@@ -825,9 +825,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addAwardBox(this)">추가하기</button>
-					</div>
 				</div>
 				<div class="title" id="globalInfo">해외경험</div>
 				<div class="box">
@@ -851,9 +848,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addGlobalexBox(this)">추가하기</button>
-					</div>
 				</div>
 				<div class="title" id="languageInfo">어학</div>
 				<div class="box">
@@ -866,9 +860,6 @@
 								<input class="box-style mbox-con" type="text" id="language_level[]" name="language_level[]" placeholder="회화능력">
 							</div>
 						</div>
-					</div>
-					<div class="row m-0">
-						<button class="add-btn mx-auto" type="button" onclick="addLanguageBox(this)">추가하기</button>
 					</div>
 				</div>
 				<div class="title" id="prefferInfo">취업우대</div>
