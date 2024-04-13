@@ -1,24 +1,32 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="match.PostingBean"%>
+<%@page import="java.util.List"%>
 <%@page import="match.ResumeBean"%>
 <%@page import="java.util.Vector"%>
 <%@page contentType="text/html; charset=UTF-8"%>
 <jsp:useBean id="rMgr" class="match.ResumeMgr"/>
+<jsp:useBean id="coMgr" class="match.CompanyMgr"/>
 <jsp:useBean id="rBean" class="match.ResumeBean"/>
+<jsp:useBean id="pBean" class="match.PostingBean"/>
+<jsp:useBean id="aBean" class="match.application.Application_periodBean"/>
+<jsp:useBean id="aMgr" class="match.application.ApplicationMgr2"/>
 
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title> 이력서 관리 </title>
+		<title> 최근 본 공고 </title>
 		
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-		
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<style>
 			table.table th { background-color: #e2e3e5; line-height: 30px; vertical-align: middle; }
 			table.table td { text-align: left; padding: 0.55rem 1.15rem; }
 			table.table span { line-height: 35px; vertical-align: middle; }
 			.applist-body{
-				width:1400px;
+				width:1200px;
 				margin-left:50px;
 			}
 			.fixed-div1 {
@@ -151,12 +159,25 @@
 				response.sendRedirect("login.jsp");
 				return;
 			}
-			Vector<ResumeBean> rvlist = rMgr.getResumeIdxList(id);
-			
+
+		    // 북마크한 posting_idx 목록을 가져옵니다.
+		    List<Integer> bookmarkedPostIdxs = coMgr.getBookmarkedPostIdxs(id);
+		    // 조회한 PostingBean 객체들을 저장할 리스트를 선언합니다.
+		    List<PostingBean> bookmarkedPostings = new ArrayList<>();
+
+		    // bookmarkedPostIdxs 리스트의 각 요소에 대해 반복합니다.
+		    for(Integer postIdx : bookmarkedPostIdxs) {
+		        // 각 posting_idx에 해당하는 PostingBean 객체를 조회합니다.
+		        PostingBean posting = coMgr.getPostingByIdx(postIdx);
+		        // 조회된 PostingBean 객체를 bookmarkedPostings 리스트에 추가합니다.
+		        if(posting != null) {
+		            bookmarkedPostings.add(posting);
+		        }
+		    }
 		%>
 		
 		<div class="applist-body">
-			<h2 style="font-weight: bold;"> 이력서 관리 </h2>
+			<h2 style="font-weight: bold;"> 최근 본 공고 </h2>
 			
 			<table class="table text-center text-nowrap">
 				
@@ -172,30 +193,35 @@
 				<thead class="table-secondary">
 					<tr>
 						<th><input type="checkbox" class="form-check-input" id="all-check"></th>
-						<th>이력서 제목</th>
-						<th>최종수정일</th>
-						<th>이력서 관리</th>
+						<th>공고 제목</th>
+						<th>접수 마감일</th>
 						<th>인쇄</th>
 						<th>이메일 전송</th>
 						<th>설정변경</th>
 					</tr>
 				</thead>
 				<tbody>
-				<%for(int i = 0; i < rvlist.size(); i++){ 
-					rBean = rvlist.get(i);
-				%>
+					<%
+						List<Map<String, String>> recentPosts = (List<Map<String, String>>)session.getAttribute("recentPosts");
+						if(recentPosts != null && !recentPosts.isEmpty()){
+							for(Map<String, String> post : recentPosts){
+								int postId = Integer.parseInt(post.get("id"));
+		                        String title = post.get("title");
+		                        String url2 = post.get("url"); // URL 정보 가져오기
+		                        String edatetime = aMgr.getApplicationEdatetime(postId);
+					%>
 					<tr>
 						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><button type="button" class="btn view-btn" data-resume-idx="<%=rBean.getResume_idx()%>"><%=rBean.getResume_name()%></button></td>
-						<td><span><%=rBean.getResume_datetime().substring(0,10)%></span></td>
-						<td><button type="button" class="btn btn-primary edit-btn" data-resume-idx="<%=rBean.getResume_idx()%>">수정</button></td>
+						<td class="text-start"><a href="<%=url2%>" class="btn view-btn" data-posting-idx=""><%=title %></a></td>
+						<td><span></span><%=edatetime%></td>
 						<td><button type="button" class="btn btn-light">인쇄</button></td>
 						<td><button type="button" class="btn btn-light">이메일전송</button></td>
 						<td>&nbsp;</td>
 					</tr>
-				<%
-				}
-				%>
+					<%
+							}
+						}
+					%>
 				</tbody>
 			</table>
 			<div class="">
@@ -203,7 +229,6 @@
 			</div>
 		</div>
 		
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<script>
 			$(document).ready(function() {
 				// table > thead > th > input#all-check 
@@ -240,19 +265,12 @@
 			$(document).ready(function() {
 			    $(".view-btn").on("click", function() {
 			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
-			        var resumeIdx = $(this).data("resume-idx");
-			        // URL에 이력서 idx 값을 포함시켜 view_resume.jsp 페이지로 이동합니다.
-			        window.location.href = "../user_page/viewResume.jsp?resume_idx=" + resumeIdx;
-			    });
-			});
-			$(document).ready(function() {
-			    $(".edit-btn").on("click", function() {
-			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
-			        var resumeIdx = $(this).data("resume-idx");
+			        var postingIdx = $(this).data("posting-idx");
 			        // URL에 이력서 idx 값을 포함시켜 edit_resume.jsp 페이지로 이동합니다.
-			        window.location.href = "../user_page/edit_resume.jsp?resume_idx=" + resumeIdx;
+			        window.location.href = "../user_page/viewPosting.jsp?posting_idx=" + postingIdx;
 			    });
 			});
+
 		</script>
 	</body>
 </html>

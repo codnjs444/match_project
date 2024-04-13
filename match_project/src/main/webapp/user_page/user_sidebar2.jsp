@@ -13,7 +13,9 @@
 <jsp:useBean id="bpBean" class="match.posting.BookmarkPostingBean"/>
 <%
 	String posting_idxx = (String)session.getAttribute("posting_idx");
+
 	List<Map<String, String>> recentPosts = (List<Map<String, String>>)session.getAttribute("recentPosts");
+	
 	Vector<BookmarkPostingBean> vlist = pMgr2.getBookmarkPosting((String)session.getAttribute("idKey"));
 %>
 <html>
@@ -112,19 +114,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <% 
+               <% 
                 if (recentPosts != null && !recentPosts.isEmpty()) {
                     for (Map<String, String> post : recentPosts) {
                         String postId = post.get("id");
                         String title = post.get("title");
-                        String url = post.get("url"); // URL 정보 가져오기
-                %>
-					<p>
-					    최근에 본 제목: <a href="<%= url %>" target="_blank" class="recent-post-link"><%= title %></a>
-					</p>
-                <% 
-                    }
-                } %>
+                        String url2 = post.get("url"); // URL 정보 가져오기
+               %>
+						<p>
+						    최근에 본 제목: <a href="<%= url2 %>" target="_blank" class="recent-post-link"><%= title %></a>
+						</p>
+               <% 
+                   	}
+               	} 
+               %>
             </div>
         </div>
     </div>

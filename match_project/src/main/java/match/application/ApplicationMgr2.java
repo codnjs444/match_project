@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 import match.DBConnectionMgr;
@@ -735,5 +736,77 @@ public class ApplicationMgr2 {
 			pool.freeConnection(con, pstmt);
 		}
 		return;
+	}
+	
+	public Vector<ApplicationBean> getApplication(String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ApplicationBean> vlist = new Vector<ApplicationBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select posting_idx, resume_idx, application_datetime from application where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				ApplicationBean bean = new ApplicationBean();
+				bean.setPosting_idx(rs.getInt("posting_idx"));
+				bean.setResume_idx(rs.getInt("resume_idx"));
+				bean.setApplication_datetime(rs.getString("application_datetime"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	public String getApplicationEdatetime(int posting_idx) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String edatetime = "";
+		try {
+			con = pool.getConnection();
+			sql = "select application_edatetime from application_period where posting_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, posting_idx);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				edatetime = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return edatetime;
+	}
+	
+	public boolean duplicateCheck(int posting_idx, String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select application_idx from application where posting_idx = ? and user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, posting_idx);
+			pstmt.setString(2, user_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				flag = true; //이미 유저가 해당 공고에 지원한 적이 있다면 true 리턴
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
 	}
 }

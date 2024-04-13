@@ -8,6 +8,8 @@
 <jsp:useBean id="coMgr" class="match.CompanyMgr"/>
 <jsp:useBean id="rBean" class="match.ResumeBean"/>
 <jsp:useBean id="pBean" class="match.PostingBean"/>
+<jsp:useBean id="aBean" class="match.application.Application_periodBean"/>
+<jsp:useBean id="aMgr" class="match.application.ApplicationMgr2"/>
 
 <!DOCTYPE html>
 <html>
@@ -191,33 +193,29 @@
 					<tr>
 						<th><input type="checkbox" class="form-check-input" id="all-check"></th>
 						<th>공고 제목</th>
-						<th>최종수정일</th>
+						<th>접수 마감일</th>
 						<th>인쇄</th>
 						<th>이메일 전송</th>
 						<th>설정변경</th>
 					</tr>
 				</thead>
 				<tbody>
-<%
-List<PostingBean> postings = coMgr.getBookmarkedPostings(bookmarkedPostIdxs); // 사용자가 북마크한 게시물 목록을 가져옵니다.
-for(PostingBean posting : postings) {
-
-	
-	%>
+					<%
+						List<PostingBean> postings = coMgr.getBookmarkedPostings(bookmarkedPostIdxs); // 사용자가 북마크한 게시물 목록을 가져옵니다.
+						for(PostingBean posting : postings) {
+							String edatetime = aMgr.getApplicationEdatetime(posting.getPosting_idx());
+					%>
 					<tr>
 						<td><input type="checkbox" class="form-check-input"></td>
-						<td class="text-start"><button type="button" class="btn view-btn" data-resume-idx="<%= posting.getPosting_idx() %>"><%= posting.getPosting_name() %></button></td>
-						<td><span><%= posting.getPosting_datetime().substring(0,10)%></span></td>
+						<td class="text-start"><button type="button" class="btn view-btn" data-posting-idx="<%= posting.getPosting_idx() %>"><%= posting.getPosting_name() %></button></td>
+						<td><span><%= edatetime.substring(0,10)%></span></td>
 						<td><button type="button" class="btn btn-light">인쇄</button></td>
 						<td><button type="button" class="btn btn-light">이메일전송</button></td>
 						<td>&nbsp;</td>
 					</tr>
-<%
-}
-%>
-	
-	
-
+					<%
+					}
+					%>
 				</tbody>
 			</table>
 			<div class="">
@@ -261,9 +259,9 @@ for(PostingBean posting : postings) {
 			$(document).ready(function() {
 			    $(".view-btn").on("click", function() {
 			        // data-resume-idx 속성에서 이력서 idx 값을 읽어옵니다.
-			        var resumeIdx = $(this).data("resume-idx");
+			        var postingIdx = $(this).data("posting-idx");
 			        // URL에 이력서 idx 값을 포함시켜 edit_resume.jsp 페이지로 이동합니다.
-			        window.location.href = "../user_page/viewResume.jsp?resume_idx=" + resumeIdx;
+			        window.location.href = "../user_page/viewPosting.jsp?posting_idx=" + postingIdx;
 			    });
 			});
 

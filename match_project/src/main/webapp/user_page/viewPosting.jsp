@@ -57,7 +57,6 @@
 			body {
 			    background-color: #F8F8F8;
 			}
-			
 			/* 흰색 박스 스타일 */
 			.box-post {
 			    background-color: #fff;
@@ -67,8 +66,6 @@
 			    margin-bottom: 20px;
 			    text-align: left;
 			}
-			
-			
 			.addbtn22 {
 			    /* 원하는 스타일 속성을 여기에 추가하세요 */
 			    background-color: #606060; /* 배경색을 파란색으로 변경 */
@@ -263,10 +260,8 @@
 			    color: #e83e8c; /* 하트 색상 설정 */
 			}
 			.heart-filled {
-    color: #e83e8c; /* 핑크색 */
-}
-			
-			
+			    color: #e83e8c; /* 핑크색 */
+			}
 		</style>
 <%
 			String user_id = (String)session.getAttribute("idKey");
@@ -307,6 +302,9 @@
 		        url.append('?').append(queryString);
 		    }
 		    String currentPageUrl = url.toString(); // 현재 페이지의 전체 URL
+		    
+		    
+		    
 		    // 최근 본 공고 정보를 세션에서 가져오기
 		    List<Map<String, String>> recentPosts2 = (List<Map<String, String>>) session.getAttribute("recentPosts");
 		    if (recentPosts2 == null) {
@@ -344,12 +342,11 @@
 		<!-- 최신 버전의 부트스트랩 CSS 추가 -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	
 	</head>
 	<body>
 		<%@include file="../user_page/user_top.jsp" %>
 		<%@include file="../user_page/user_sidebar.jsp" %>
-		
+		<%@include file="../user_page/user_sidebar2.jsp" %>
 		<div class="container mt-10" style="text-align: left;">
 		    <!-- 좌측 레이아웃 -->
 		    <div class="row" style="text-align: left;">
@@ -573,8 +570,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.5/dist/umd/popper.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b28368048064031cb16c46ec4323c355"></script>
-
-		
 		<script>
 		document.addEventListener("DOMContentLoaded", function() {
 		    // 모든 이력서 선택 버튼에 대해 이벤트 리스너 추가
@@ -587,9 +582,11 @@
 		        });
 		    });
 		});
+		
 		document.getElementById("register-btn").addEventListener("click", function() {
 	        $('#titleModal').modal('show');
 		});
+		
 		// 우측 메뉴바
 		document.querySelectorAll('.Postsidebar a').forEach(link => {
 		    link.addEventListener('click', function(e) {
@@ -620,48 +617,47 @@
 		
 		// 찜하기 기능
 		document.addEventListener("DOMContentLoaded", function() {
-    var favoriteIcon = document.getElementById("favoriteIcon");
-    favoriteIcon.addEventListener("click", function() {
-        var isFilled = favoriteIcon.classList.contains("fas");
-        favoriteIcon.classList.toggle("fas");
-        favoriteIcon.classList.toggle("far");
-
-        var action = isFilled ? "delete" : "insert"; // 상태에 따라 액션 결정
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/match_project/BookmarkServlet", true); // 서블릿 URL
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        var data = "postingId=<%=posting_idx%>&userId=<%=user_id%>&action=" + action;
-        xhr.send(data);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
-                // 필요한 경우 추가적인 클라이언트 측 로직 구현
-            }
-        };
-    });
-});
-
-
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = { 
-	    center: new kakao.maps.LatLng(<%=company_latitude%>, <%=company_longitude%>), // 지도의 중심좌표 동적 값으로 변경
-	        level: 3 // 지도의 확대 레벨
-	    };
-
-	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-	// 마커가 표시될 위치입니다 
-	var markerPosition  = new kakao.maps.LatLng(<%=company_latitude%> , <%=company_longitude%>); 
-
-	// 마커를 생성합니다
-	var marker = new kakao.maps.Marker({
-	    position: markerPosition
-	});
-
-	// 마커가 지도 위에 표시되도록 설정합니다
-	marker.setMap(map);	
+		    var favoriteIcon = document.getElementById("favoriteIcon");
+		    favoriteIcon.addEventListener("click", function() {
+		        var isFilled = favoriteIcon.classList.contains("fas");
+		        favoriteIcon.classList.toggle("fas");
+		        favoriteIcon.classList.toggle("far");
+		
+		        var action = isFilled ? "delete" : "insert"; // 상태에 따라 액션 결정
+		        var xhr = new XMLHttpRequest();
+		        xhr.open("POST", "/match_project/BookmarkServlet", true); // 서블릿 URL
+		        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		        var data = "postingId=<%=posting_idx%>&userId=<%=user_id%>&action=" + action;
+		        xhr.send(data);
+		
+		        xhr.onreadystatechange = function() {
+		            if (xhr.readyState == 4 && xhr.status == 200) {
+		                console.log(xhr.responseText);
+		                // 필요한 경우 추가적인 클라이언트 측 로직 구현
+		            }
+		        };
+		    });
+		});
+		
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = { 
+		    center: new kakao.maps.LatLng(<%=company_latitude%>, <%=company_longitude%>), // 지도의 중심좌표 동적 값으로 변경
+		        level: 3 // 지도의 확대 레벨
+		    };
+	
+		var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new kakao.maps.LatLng(<%=company_latitude%> , <%=company_longitude%>); 
+	
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+		    position: markerPosition
+		});
+	
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);	
 	</script>
 	</body>
 </html>

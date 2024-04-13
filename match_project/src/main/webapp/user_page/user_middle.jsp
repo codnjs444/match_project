@@ -566,7 +566,7 @@
 				            <div class="row px-0 mx-0 search-form2" style="height: 40px;">
 				            	<div class="col form-content3" style="height : 40px"></div>
 				            	<div class="col form-content4" style="flex-grow:0; height: 40px;">
-				            		<button type="submit" class="form-btn2" onclick="updateArrays()" style="height: 40px; font-size: 13px;">조건 검색</button>
+				            		<button type="button" class="form-btn2" onclick="updateArrays()" style="height: 40px; font-size: 13px;">조건 검색</button>
 				            	</div>
 				            </div>
 			            </div>

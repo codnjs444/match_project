@@ -1393,5 +1393,4 @@ public class PostingMgr2 {
 		}
 		return postingName; // Return the posting name
 	}
-
 }

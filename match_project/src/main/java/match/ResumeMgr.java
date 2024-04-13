@@ -623,21 +623,25 @@ public class ResumeMgr {
 		}
 	}
 	
-	public void getResumeName(int Resume_idx) {
+	public String getResumeName(int Resume_idx) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
+		String resumeName = "";
 		try {
 			con = pool.getConnection();
 			sql = "select resume_name from resume where resume_idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, Resume_idx);
 			rs = pstmt.executeQuery();
+			if(rs.next())
+				resumeName = rs.getString(1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
+		return resumeName;
 	}
 }
