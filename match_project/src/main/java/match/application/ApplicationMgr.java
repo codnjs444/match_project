@@ -425,58 +425,61 @@ public class ApplicationMgr {
 		return languageNameList; // 조회된 언어 명칭 목록 반환
 	}
 
-	public List<String> getApplicationLikesByResumeIdxs(List<Integer> resumeIdxs) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<String> applicationLikeList = new ArrayList<>(); // 결과를 저장할 List 객체 초기화
-		try {
-			con = pool.getConnection();
+	public List<String> getApplicationLikesByResumeIdxs(List<Integer> resumeIdxs, int posting_idx) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<String> applicationLikeList = new ArrayList<>(); // 결과를 저장할 List 객체 초기화
+	    try {
+	        con = pool.getConnection();
 
-			// resumeIdxs 목록을 순회하며 각 resume_idx에 대한 application_like 조회
-			for (Integer resumeIdx : resumeIdxs) {
-				String sql = "SELECT application_like FROM application WHERE resume_idx=? LIMIT 1";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, resumeIdx);
-				rs = pstmt.executeQuery();
-				if (rs.next()) {
-					// application 테이블에 해당 resume_idx에 대한 application_like 값이 있으면 추가
-					applicationLikeList.add(rs.getString("application_like"));
-				} else {
-					// application 테이블에 해당 resume_idx에 대한 정보가 없으면 "없음" 처리
-					applicationLikeList.add("없음");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (pstmt != null)
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					/* Ignored */ }
-			if (rs != null)
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					/* Ignored */ }
-			if (con != null)
-				pool.freeConnection(con);
-		}
-		return applicationLikeList; // 조회된 application_like 목록 반환
+	        // resumeIdxs 목록을 순회하며 각 resume_idx에 대한 application_like 조회
+	        for (Integer resumeIdx : resumeIdxs) {
+	            String sql = "SELECT application_like FROM application WHERE resume_idx=? AND posting_idx=? LIMIT 1";
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, resumeIdx);
+	            pstmt.setInt(2, posting_idx); // posting_idx 조건 추가
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                // application 테이블에 해당 resume_idx에 대한 application_like 값이 있으면 추가
+	                applicationLikeList.add(rs.getString("application_like"));
+	            } else {
+	                // application 테이블에 해당 resume_idx와 posting_idx에 대한 정보가 없으면 "없음" 처리
+	                applicationLikeList.add("없음");
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (pstmt != null)
+	            try {
+	                pstmt.close();
+	            } catch (SQLException e) {
+	                /* Ignored */ }
+	        if (rs != null)
+	            try {
+	                rs.close();
+	            } catch (SQLException e) {
+	                /* Ignored */ }
+	        if (con != null)
+	            pool.freeConnection(con);
+	    }
+	    return applicationLikeList; // 조회된 application_like 목록 반환
 	}
 
-	public void updateApplicationLikeByResumeIdx(Integer resumeIdx, String applicationLike) {
+
+	public void updateApplicationLikeByResumeIdx(Integer resumeIdx,int posting_idx, String applicationLike) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 			con = pool.getConnection();
-			String sql = "UPDATE application SET application_like=? WHERE resume_idx=?";
+			String sql = "UPDATE application SET application_like=? WHERE resume_idx=? AND posting_idx=?";
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, applicationLike); // 새로운 application_like 상태
 			pstmt.setInt(2, resumeIdx); // 대상 resume_idx
+			pstmt.setInt(3, posting_idx);
 
 			int rowsAffected = pstmt.executeUpdate();
 			if (rowsAffected > 0) {
@@ -496,7 +499,7 @@ public class ApplicationMgr {
 		}
 	}
 
-	public List<String> getApplicationIgnoreByResumeIdxs(List<Integer> resumeIdxs) {
+	public List<String> getApplicationIgnoreByResumeIdxs(List<Integer> resumeIdxs, int posting_idx) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -512,9 +515,10 @@ public class ApplicationMgr {
 
 			// resumeIdxs 목록을 순회하며 각 resume_idx에 대한 application_ignore 조회
 			for (Integer resumeIdx : resumeIdxs) {
-				String sql = "SELECT application_ignored FROM application WHERE resume_idx=? LIMIT 1";
+				String sql = "SELECT application_ignored FROM application WHERE resume_idx=? AND posting_idx=? LIMIT 1";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, resumeIdx);
+				pstmt.setInt(2, posting_idx); // posting_idx 조건 추가
 				rs = pstmt.executeQuery();
 				if (rs.next()) {
 					// application 테이블에 해당 resume_idx에 대한 application_ignore 값이 있으면 추가
@@ -544,17 +548,18 @@ public class ApplicationMgr {
 		return applicationIgnoreList; // 조회된 application_ignore 목록 반환
 	}
 
-	public void updateApplicationIgnoredByResumeIdx(Integer resumeIdx, String applicationIgnored) {
+	public void updateApplicationIgnoredByResumeIdx(Integer resumeIdx, int posting_idx, String applicationIgnored) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 			con = pool.getConnection();
-			String sql = "UPDATE application SET application_ignored=? WHERE resume_idx=?";
+			String sql = "UPDATE application SET application_ignored=? WHERE resume_idx=? AND posting_idx=?";
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, applicationIgnored); // 새로운 application_like 상태
 			pstmt.setInt(2, resumeIdx); // 대상 resume_idx
+			pstmt.setInt(3, posting_idx); // 대상 resume_idx
 
 			int rowsAffected = pstmt.executeUpdate();
 			if (rowsAffected > 0) {
@@ -600,7 +605,7 @@ public class ApplicationMgr {
 		return resumeCount;
 	}
 
-	public List<String> getApplicationSResultByResumeIdxs(List<Integer> resumeIdxs) {
+	public List<String> getApplicationSResultByResumeIdxs(List<Integer> resumeIdxs, int posting_idx) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -616,9 +621,10 @@ public class ApplicationMgr {
 
 			// resumeIdxs 목록을 순회하며 각 resume_idx에 대한 application_sresult 조회
 			for (Integer resumeIdx : resumeIdxs) {
-				String sql = "SELECT application_sresult FROM application WHERE resume_idx=? LIMIT 1";
+				String sql = "SELECT application_sresult FROM application WHERE resume_idx=? AND posting_idx=? LIMIT 1";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, resumeIdx);
+				pstmt.setInt(2, posting_idx);
 				rs = pstmt.executeQuery();
 				if (rs.next()) {
 					// application 테이블에 해당 resume_idx에 대한 application_sresult 값이 있으면 추가
@@ -648,17 +654,18 @@ public class ApplicationMgr {
 		return applicationSResultList; // 조회된 application_sresult 목록 반환
 	}
 
-	public void updateApplicationReultByResumeIdx(Integer resumeIdx, String sresult) {
+	public void updateApplicationReultByResumeIdx(Integer resumeIdx, int posting_idx, String sresult) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 			con = pool.getConnection();
-			String sql = "UPDATE application SET application_sresult=? WHERE resume_idx=?";
+			String sql = "UPDATE application SET application_sresult=? WHERE resume_idx=? AND posting_idx=?";
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, sresult); // 새로운 application_like 상태
 			pstmt.setInt(2, resumeIdx); // 대상 resume_idx
+			pstmt.setInt(3, posting_idx); // 대상 resume_idx
 
 			int rowsAffected = pstmt.executeUpdate();
 			if (rowsAffected > 0) {

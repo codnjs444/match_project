@@ -18,5 +18,27 @@
 <%@ include file="post_manage_middle.jsp"%>
 <%@ include file="menu/bottom.jsp"%>
 
+
+<script>	
+	document.addEventListener('DOMContentLoaded', function() {
+		  var currentPage = window.location.pathname.split("/").pop(); // 현재 페이지 파일 이름을 가져옵니다.
+	
+		  var links = document.querySelectorAll('.sidebar a'); // 모든 사이드바 링크를 가져옵니다.
+		  links.forEach(function(link) {
+		    // href 속성에서 파일 이름 부분만 추출하여 현재 페이지와 비교
+		    if (link.getAttribute('href') === currentPage) {
+		      link.classList.add('active'); // 일치하면 active 클래스 추가
+		    } else {
+		      link.classList.remove('active'); // 일치하지 않으면 active 클래스 제거
+		    }
+		  });
+		});
+	
+	
+
+	
+</script>
+
+
 </body>
 </html>

@@ -14,6 +14,14 @@
 <body>
 
 <%
+	String posting_idxStr = request.getParameter("posting_idx");
+	int posting_idx2 = 0; // 기본값 설정 혹은 에러 처리를 위한 기본값 설정
+	try {
+	    posting_idx2 = Integer.parseInt(posting_idxStr);
+	} catch (NumberFormatException e) {
+	    System.out.println("Error converting posting_idx to integer: " + e.getMessage()); // 에러 메시지 출력
+	}
+
 
     String manager_id = (String)session.getAttribute("idKey");
 	// 공고 idx
@@ -21,8 +29,21 @@
 	// 공고 이름
 	String postingName = pMgr.getPostingName(posting_idx);
 	// 채용 절차 수
+	//현재 채용 절자
+	
+	
 	int procedureNum = pMgr.countProcedureNum(posting_idx);
-	int procecount = 0;
+	int procecount = 0; // 기본값 설정
+	String procecountParam = request.getParameter("procecount");
+	if (procecountParam != null && !procecountParam.isEmpty()) {
+	    try {
+	        procecount = Integer.parseInt(procecountParam); // 문자열을 정수로 변환
+	    } catch (NumberFormatException e) {
+	        // 변환 실패 시, procecount는 0으로 처리
+	        procecount = 0;
+	    }
+	}
+
 	// 채용 절차 출력하기 위한 파일 (상단 메뉴)
 	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procecount);
 	// x 절차의 user id의 정보를 담음
@@ -46,28 +67,26 @@
 	// resume_idx에 맞게 저장된 언어 실력 내용
 	List<String> languageNameList = aMgr.getLanguageNamesByResumeIdxs(resumeIdxs);
 	// resume_idx에 맞게 저장된 좋아요 내용들
-	List<String> applicationLikes = aMgr.getApplicationLikesByResumeIdxs(resumeIdxs);
-	
+	List<String> applicationLikes = aMgr.getApplicationLikesByResumeIdxs(resumeIdxs,posting_idx2);
 	for (Integer idx : resumeIdxs) {
 	    String applicationLike = request.getParameter("application_like_" + idx);
-	    aMgr.updateApplicationLikeByResumeIdx(idx, applicationLike); // 상태 업데이트
+	    aMgr.updateApplicationLikeByResumeIdx(idx,posting_idx2,applicationLike); // 상태 업데이트
 	}
     // 추가된 application_ignored 값을 처리하는 로직
     for (Integer idx : resumeIdxs) {
         String applicationIgnored = request.getParameter("application_ignored_" + idx);
         if (applicationIgnored != null) { // null 체크를 추가하여 요청에 해당 파라미터가 포함되어 있는 경우에만 처리
-            aMgr.updateApplicationIgnoredByResumeIdx(idx, applicationIgnored); // 상태 업데이트
+            aMgr.updateApplicationIgnoredByResumeIdx(idx,posting_idx2, applicationIgnored); // 상태 업데이트
         }
     }
     for (Integer idx : resumeIdxs) {
         String applicationResult = request.getParameter("application_result_" + idx);
         if (applicationResult != null) { // null 체크를 추가하여 요청에 해당 파라미터가 포함되어 있는 경우에만 처리
-            aMgr.updateApplicationReultByResumeIdx(idx, applicationResult); // 결과 상태 업데이트
+            aMgr.updateApplicationReultByResumeIdx(idx, posting_idx2, applicationResult); // 결과 상태 업데이트
         }
     }
 
-	response.sendRedirect("post_manage.jsp?posting_idx=" + posting_idx);
-	
+    response.sendRedirect("post_manage.jsp?posting_idx=" + posting_idx + "&procecount=" + procecount);
 
 %>
 

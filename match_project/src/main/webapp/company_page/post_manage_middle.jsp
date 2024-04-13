@@ -146,6 +146,15 @@
             // 잘못된 값이 입력된 경우, procecount는 0으로 처리
         }
     }
+    
+	String posting_idxStr = request.getParameter("posting_idx");
+	int posting_idx2 = 0; // 기본값 설정 혹은 에러 처리를 위한 기본값 설정
+	try {
+	    posting_idx2 = Integer.parseInt(posting_idxStr);
+	} catch (NumberFormatException e) {
+	    System.out.println("Error converting posting_idx to integer: " + e.getMessage()); // 에러 메시지 출력
+	}
+	
 	// 채용 절차 출력하기 위한 파일 (상단 메뉴)
 	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
 	// x 절차의 user id의 정보를 담음
@@ -169,11 +178,11 @@
 	// resume_idx에 맞게 저장된 언어 실력 내용
 	List<String> languageNameList = aMgr.getLanguageNamesByResumeIdxs(resumeIdxs);
 	// resume_idx에 맞게 저장된 좋아요 내용들
-	List<String> applicationLikes = aMgr.getApplicationLikesByResumeIdxs(resumeIdxs);
+	List<String> applicationLikes = aMgr.getApplicationLikesByResumeIdxs(resumeIdxs,posting_idx2);
 	// resume_idx에 맞게 저장된 제외 여부
-	List<String> applicationIgnoreList = aMgr.getApplicationIgnoreByResumeIdxs(resumeIdxs);
+	List<String> applicationIgnoreList = aMgr.getApplicationIgnoreByResumeIdxs(resumeIdxs,posting_idx2);
 	// resume_idx에 맞게 저장된 합격 상태
-	List<String> applicationSResultList = aMgr.getApplicationSResultByResumeIdxs(resumeIdxs);
+	List<String> applicationSResultList = aMgr.getApplicationSResultByResumeIdxs(resumeIdxs,posting_idx2);
 %>
 <form id="submitForm" action="post_manage_proc.jsp" method="POST">
 <div class="container-fluid custom-container"> <!-- fluid container for full width -->
@@ -185,16 +194,25 @@
 			<label style="font-weight: bold; font-size: 20px; margin-bottom: 20px;"><span style="font-size: 25px;">]</span></label>   
         </div>
     </div>
-    <div class="row">
-		<div class="col filter-buttons">
-	        <% int index = 0; %>
-	        <% for (procedureBean procedure : procedureList) { %>
-	            <%-- 각 절차마다 링크에 procecount 값을 포함하여 설정 --%>
-	            <a href="?posting_idx=<%=posting_idx%>&procecount=<%=index%>" class="top_btn" style="margin-right: 80px; margin-left: 10px;"><%= procedure.getProcedure_name() %></a>
-	            <% index++; %>
-	        <% } %>
-		</div>
+<div class="row">
+    <div class="col filter-buttons">
+        <% int index = 0; %>
+        <% String currentProcecount = request.getParameter("procecount"); %>
+        <% for (procedureBean procedure : procedureList) { %>
+            <% 
+                boolean isActive = currentProcecount != null && index == Integer.parseInt(currentProcecount);
+                String style = "margin-right: 80px; margin-left: 10px; font-weight: bold; font-size: 20px;";
+                if (isActive) {
+                    style += "color: #4698EA;"; // 선택된 버튼에 파란색 적용
+                }
+            %>
+            <a href="?posting_idx=<%=posting_idx%>&procecount=<%=index%>" class="<%= isActive ? "top_btn_active" : "top_btn" %>" style="<%= style %>">
+                <%= procedure.getProcedure_name() %>
+            </a>
+            <% index++; %>
+        <% } %>
     </div>
+</div>
     <div class="row mt-1">
         <div class="col d-flex justify-content-between">
             <!-- 추가 필터링 옵션 드롭다운 버튼들 -->
@@ -212,8 +230,8 @@
     <div class="col" style="flex: 0 0 1%; max-width: 1%; text-align: center;">찜</div>
     <div class="col" style="flex: 0 0 8%; max-width: 8%; text-align: center;">신상</div>
     <div class="col" style="flex: 0 0 5%; max-width: 5%; text-align: center;">경력</div>
-    <div class="col" style="flex: 0 0 12%; max-width: 12%; text-align: center;">전공</div>
-    <div class="col" style="flex: 0 0 13%; max-width: 13%; text-align: center;">자격증</div>
+    <div class="col" style="flex: 0 0 10%; max-width: 10%; text-align: center;">전공</div>
+    <div class="col" style="flex: 0 0 14%; max-width: 14%; text-align: center;">자격증</div>
     <div class="col" style="flex: 0 0 14%; max-width: 14%; text-align: center;">포토폴리오</div>
     <div class="col" style="flex: 0 0 10%; max-width: 10%; text-align: center;">스킬</div>
     <div class="col" style="flex: 0 0 8%; max-width: 8%; text-align: center;">어학</div>
@@ -241,6 +259,7 @@
 			    <a href="user_resume.jsp?resume_idx=<%= resumeIdxs.get(i) %>" style="text-decoration: none; color: inherit;" target="_blank">
 			        <%= userNames.get(userIds.get(i)) %>
 			        <input type="hidden" name="posting_idx" value="<%= posting_idx %>">
+			        <input type="hidden" name="procecount" value="<%= procecount %>"> <!-- procecount를 전송하는 hidden 필드 추가 -->
 			        <input type="hidden" name="resume_idx" value="<%= resumeIdxs.get(i) %>">
 			    </a>
 	            <br> <!-- 줄바꿈을 위해 사용 -->
@@ -249,10 +268,10 @@
 			<div class="col" style="flex: 0 0 5%; min-width: 5%; white-space: normal; overflow: visible;">
 			    <%= careerStatus.get(i) %>
 			</div>
-	        <div class="col" style="flex: 0 0 12%; max-width: 12%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+	        <div class="col" style="flex: 0 0 10%; max-width: 10%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
 	            <%= eduMajorsList.get(i) %>
 	        </div>
-			<div class="col" style="flex: 0 0 13%; max-width: 13%; flex-wrap: wrap;">
+			<div class="col" style="flex: 0 0 14%; max-width: 14%; flex-wrap: wrap;">
 				<% 
 				    List<String> certificates = certificateSNameList.get(resumeIdxs.get(i));
 				    if (certificates != null && !certificates.isEmpty()) {
@@ -361,7 +380,6 @@
 </form>
 
 <!-- 결과 발표 모달 -->
-<!-- 결과 발표 모달 -->
 <div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -375,17 +393,25 @@
         <button id="showPassed" class="btn btn-success">합격자 보기</button>
         <button id="showFailed" class="btn btn-danger">불합격자 보기</button>
         <div id="resultsList"></div>
-         <div>
-        <label for="emailSubject">메일 제목:</label>
-        <input type="text" id="emailSubject" class="form-control" value="축하합니다! 합격을 알려드립니다">
-    </div>
-    <div>
-        <label for="emailContent">메일 내용:</label>
-        <textarea id="emailContent" class="form-control">귀하가 지원하신 포지션에 대해 합격하셨음을 알려드립니다. 다음 1차 면접 발표 날짜는 xx월 xx일 입니다. 자세한 사항은 문자를 참고해주시기 바랍니다.</textarea>
-    </div>
+
+        <!-- 합격자 메일 설정 -->
+        <div id="passSection" style="display:none;">
+            <label for="passEmailSubject">합격 메일 제목:</label>
+            <input type="text" id="passEmailSubject" class="form-control" value="축하합니다! 합격을 알려드립니다">
+            <label for="passEmailContent">합격 메일 내용:</label>
+            <textarea id="passEmailContent" class="form-control">귀하가 지원하신 포지션에 대해 합격하셨습니다. 자세한 사항은 이메일을 참고해주시기 바랍니다.</textarea>
+        </div>
+
+        <!-- 불합격자 메일 설정 -->
+        <div id="failSection" style="display:none;">
+            <label for="failEmailSubject">불합격 메일 제목:</label>
+            <input type="text" id="failEmailSubject" class="form-control" value="불합격 통지">
+            <label for="failEmailContent">불합격 메일 내용:</label>
+            <textarea id="failEmailContent" class="form-control">이번에는 불합격하셨습니다. 다음 기회에 도전해 주시길 바랍니다.</textarea>
+        </div>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-primary" id="confirmPublish">발표하기</button>
+        <button type="button" class="btn btn-primary" id="confirmPublish">발표하기</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
       </div>
     </div>
@@ -455,72 +481,88 @@
 	    $('#resultsModal').modal('show');
 	});
 
-	var { passedUserIds, failedUserIds } = collectApplicationResults();
-
-	document.getElementById('showPassed').addEventListener('click', function() {
-	    document.getElementById('resultsList').innerHTML = '합격자 ID: <br>' + passedUserIds.join('<br>');
-	});
-
-	document.getElementById('showFailed').addEventListener('click', function() {
-	    document.getElementById('resultsList').innerHTML = '불합격자 ID: <br>' + failedUserIds.join('<br>');
-	});
-
-	document.getElementById('confirmPublish').addEventListener('click', function() {
-	    var emailSubject = document.getElementById('emailSubject').value; // 메일 제목
-	    var emailContent = document.getElementById('emailContent').value; // 메일 내용
-	    // JSP에서 JavaScript로 변수 값을 전달
-	    var postingIdx = '<%= posting_idx %>'; // JSP 변수
-	    var procedureNum = <%= procedureNum %>; // JSP 변수, 숫자이므로 따옴표 없이 삽입
-	    var procedureCount = <%= procecount %>; // JSP 변수, 숫자이므로 따옴표 없이 삽입
-	    var passedUserIds = collectApplicationResults().passedUserIds; // 합격자 ID 배열을 가져오는 함수의 결과
-	    
-	    // XMLHttpRequest 객체 생성
-	    var xhr = new XMLHttpRequest();
-	    xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
-	    xhr.setRequestHeader("Content-Type", "application/json");
-	    
-	    xhr.onload = function() {
-	        if (xhr.status == 200) {
-	            // 성공 시 처리
-	            $('#resultsModal').modal('hide');
-	            alert('결과 발표를 완료했습니다.');
-	        } else {
-	            // 실패 시 처리
-	            console.error("Error: ", xhr.statusText);
-	        }
-	    };
-	    
-	    // 서버로 전송할 데이터에 메일 제목과 내용 추가
-	    var dataToSend = JSON.stringify({
-	        postingIdx: postingIdx,
-	        procedureNum: procedureNum,
-	        procedureCount: procedureCount,
-	        passedUserIds: passedUserIds,
-	        emailSubject: emailSubject, // 메일 제목
-	        emailContent: emailContent // 메일 내용
-	    });
-	    xhr.send(dataToSend);
-	});
-	
-	
-	function collectApplicationResults() {
-	    var passedUserIds = []; // 합격한 사용자의 ID를 저장할 배열
-	    var failedUserIds = []; // 불합격한 사용자의 ID를 저장할 배열
-
-	    document.querySelectorAll('.applicant-info').forEach(function(applicantInfoElement) {
-	        var applicationResult = applicantInfoElement.querySelector('input[name^="application_result_"]').value;
-	        var userId = applicantInfoElement.getAttribute('data-user-id');
-
-	        if (applicationResult === '합격') {
-	            passedUserIds.push(userId);
-	        } else if (applicationResult === '불합격') {
-	            failedUserIds.push(userId);
-	        }
+	document.addEventListener('DOMContentLoaded', function() {
+	    document.getElementById('showPassed').addEventListener('click', function() {
+	        document.getElementById('resultsList').innerHTML = '합격자 ID: <br>' + collectApplicationResults().passedUserIds.join('<br>');
+	        $('#passSection').show();
+	        $('#failSection').hide();
 	    });
 
-	    return { passedUserIds, failedUserIds };
-	}
+	    document.getElementById('showFailed').addEventListener('click', function() {
+	        document.getElementById('resultsList').innerHTML = '불합격자 ID: <br>' + collectApplicationResults().failedUserIds.join('<br>');
+	        $('#failSection').show();
+	        $('#passSection').hide();
+	    });
 
+	    document.getElementById('confirmPublish').addEventListener('click', function() {
+	        // 공통 데이터
+	        var postingIdx = '<%= posting_idx %>';
+	        var procedureNum = <%= procedureNum %>;
+	        var procedureCount = <%= procecount %>;
+
+	        // 합격자 데이터 수집
+	        var passedUserIds = collectApplicationResults().passedUserIds;
+	        var passEmailSubject = document.getElementById('passEmailSubject').value;
+	        var passEmailContent = document.getElementById('passEmailContent').value;
+
+	        // 불합격자 데이터 수집
+	        var failedUserIds = collectApplicationResults().failedUserIds;
+	        var failEmailSubject = document.getElementById('failEmailSubject').value;
+	        var failEmailContent = document.getElementById('failEmailContent').value;
+
+	        var dataToSend = JSON.stringify({
+	            postingIdx: postingIdx,
+	            procedureNum: procedureNum,
+	            procedureCount: procedureCount,
+	            passedUserIds: passedUserIds,
+	            passedEmailSubject: passEmailSubject,
+	            passedEmailContent: passEmailContent,
+	            failedUserIds: failedUserIds,
+	            failedEmailSubject: failEmailSubject,
+	            failedEmailContent: failEmailContent
+	        });
+
+	        sendEmails(dataToSend);
+	    });
+
+
+
+
+	    function collectApplicationResults() {
+	        var passedUserIds = [];
+	        var failedUserIds = [];
+
+	        document.querySelectorAll('.applicant-info').forEach(function(applicantInfoElement) {
+	            var applicationResult = applicantInfoElement.querySelector('input[name^="application_result_"]').value;
+	            var userId = applicantInfoElement.getAttribute('data-user-id');
+
+	            if (applicationResult === '합격') {
+	                passedUserIds.push(userId);
+	            } else if (applicationResult === '불합격') {
+	                failedUserIds.push(userId);
+	            }
+	        });
+
+	        return { passedUserIds, failedUserIds };
+	    }
+
+	    function sendEmails(data) {
+	        var xhr = new XMLHttpRequest();
+	        xhr.open("POST", "/match_project/GetUserEmailsServlet", true);
+	        xhr.setRequestHeader("Content-Type", "application/json");
+
+	        xhr.onload = function() {
+	            if (xhr.status == 200) {
+	                alert('이메일 전송 완료: ' + xhr.responseText);
+	                $('#resultsModal').modal('hide');
+	            } else {
+	                alert('이메일 전송 실패');
+	            }
+	        };
+
+	        xhr.send(data);
+	    }
+	});
 	   $(document).ready(function() {
 	        // URL에서 쿼리 파라미터를 파싱하는 함수
 	        function getQueryParam(param) {

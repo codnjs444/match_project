@@ -250,7 +250,6 @@ body {
             <a href="?posting_status=임시저장" class="top_btn">임시저장</a>
             <a href="?posting_status=마감" class="top_btn">마감</a>
             <a href="?posting_status=협업" class="top_btn">협업</a>
-            <a href="?posting_status=전체" class="top_btn">전체</a>
 		</div>
     </div>
     <div class="row mt-1">
@@ -305,7 +304,6 @@ body {
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">권한</button>
 									<button type="button" class="btn" style="color: #606060; font-weight: bold;" data-posting-idx="<%= postingIdx %>">수정</button>
 				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">복사</button>
-				                    <button type="button" class="btn" style="color: #606060; font-weight: bold;">마감</button>
 									<button type="button" class="btn" style="color: #606060; font-weight: bold;"
 									    onclick="deletePosting('<%= postingIdx %>', '<%= postingNames.get(i).replaceAll("'", "\\\\'") %>')">삭제</button>
 				                </div>

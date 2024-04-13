@@ -19,60 +19,80 @@ import match.application.ApplicationMgr;
 
 @WebServlet("/GetUserEmailsServlet")
 public class GetUserEmailsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		StringBuilder builder = new StringBuilder();
-		String line;
-		while ((line = request.getReader().readLine()) != null) {
-			builder.append(line);
-		}
-		String body = builder.toString();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
-		JSONParser parser = new JSONParser();
-		try {
-			JSONObject json = (JSONObject) parser.parse(body);
-			JSONArray userIdsJson = (JSONArray) json.get("passedUserIds");
-			String emailSubject = (String) json.get("emailSubject");
-			String emailContent = (String) json.get("emailContent");
-			int postingIdx = Integer.parseInt((String) json.get("postingIdx"));
-			int procedureNum = ((Long) json.get("procedureNum")).intValue();
-			int procedureCount = ((Long) json.get("procedureCount")).intValue();
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = request.getReader().readLine()) != null) {
+            builder.append(line);
+        }
+        String body = builder.toString();
 
-			System.out.println("ProcedureNum: " + postingIdx);
-			System.out.println("ProcedureNum: " + postingIdx);
-			System.out.println("ProcedureNum: " + procedureNum);
-			System.out.println("ProcedureCount: " + procedureCount);
+        JSONParser parser = new JSONParser();
+        try {
+        	
+            JSONObject json = (JSONObject) parser.parse(body);
+            JSONArray passedUserIdsJson = (JSONArray) json.get("passedUserIds");
+            JSONArray failedUserIdsJson = (JSONArray) json.get("failedUserIds");
+            String passedEmailSubject = (String) json.get("passedEmailSubject");
+            String passedEmailContent = (String) json.get("passedEmailContent");
+            String failedEmailSubject = (String) json.get("failedEmailSubject");
+            String failedEmailContent = (String) json.get("failedEmailContent");
+            String postingIdxStr = (String) json.get("postingIdx");
+            Long procedureNumObj = (Long) json.get("procedureNum");
+            Long procedureCountObj = (Long) json.get("procedureCount");
 
-			List<String> userIds = new ArrayList<>();
-			for (Object userIdObj : userIdsJson) {
-				userIds.add((String) userIdObj);
-			}
+            
+            if (postingIdxStr == null || procedureNumObj == null || procedureCountObj == null) {
+                throw new IllegalArgumentException("Required data missing in JSON payload");
+            }
 
-			ApplicationMgr aMgr = new ApplicationMgr();
-			List<String> userEmails = aMgr.searchPassedUserEmails(userIds);
+            int postingIdx = Integer.parseInt(postingIdxStr);
+            int procedureNum = procedureNumObj.intValue();
+            int procedureCount = procedureCountObj.intValue();
+            
+            List<String> passedUserIds = new ArrayList<>();
+            for (Object userIdObj : passedUserIdsJson) {
+                passedUserIds.add((String) userIdObj);
+            }
 
-			if (procedureCount + 1 < procedureNum) {
-				aMgr.insertApplicationResults(userIds, postingIdx, procedureCount);
-			} else {
-				// 마지막 절차 이후의 로직: 최종 합격자 업데이트 및 공고 마감 처리
-				aMgr.closePostingByPostingIdx(postingIdx);
-				aMgr.updateApplicationResultsToFinalSelection(userIds, postingIdx, procedureCount);
-			}
+            List<String> failedUserIds = new ArrayList<>();
+            for (Object userIdObj : failedUserIdsJson) {
+                failedUserIds.add((String) userIdObj);
+            }
 
-			try {
-				SendEmail.sendMail(userEmails, emailSubject, emailContent);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write("{\"message\":\"Emails sent successfully.\"}");
-			} catch (MessagingException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error sending emails");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JSON format");
-		}
-	}
+            ApplicationMgr aMgr = new ApplicationMgr();
+            List<String> passedUserEmails = aMgr.searchPassedUserEmails(passedUserIds);
+            List<String> failedUserEmails = aMgr.searchPassedUserEmails(failedUserIds);
+
+            // Handle the procedure count logic
+            if (procedureCount + 1 < procedureNum) {
+                aMgr.insertApplicationResults(passedUserIds, postingIdx, procedureCount);
+                response.getWriter().write("{\"message\":\"Intermediate results published.\"}");
+            } else {
+                // Last procedure handling: Finalizing results and closing the posting
+                aMgr.closePostingByPostingIdx(postingIdx);
+                aMgr.updateApplicationResultsToFinalSelection(passedUserIds, postingIdx, procedureCount);
+                response.getWriter().write("{\"message\":\"All recruitment stages completed. Thank you.\"}");
+            }
+
+            // Send emails to passed users
+            SendEmail.sendMail(passedUserEmails, passedEmailSubject, passedEmailContent);
+
+            // Send emails to failed users
+            SendEmail.sendMail(failedUserEmails, failedEmailSubject, failedEmailContent);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to send email.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JSON format");
+        }
+    }
 }

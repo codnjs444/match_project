@@ -183,7 +183,7 @@
 <body>
 
 <header class="header">
-  <a href="../user_page/user_home.jsp" class="logo">Match</a>
+  <a href="../company_page/company_home.jsp" class="logo">Match</a>
 
   <div class="search-bar">
     <input type="text" placeholder="인재, 등록하신 공고를 검색해보세요.">
@@ -192,7 +192,7 @@
   <div class="nav-links">
     <a href="#" id="openModal">공고등록</a>
     <a href="../login/logout.jsp">로그아웃</a>
-    <a href="../company_page/Edit_admin_page.jsp">회원정보 수정</a>
+    <a href="../user_page/user_home.jsp">지원 서비스</a>
   </div>
 </header>
 

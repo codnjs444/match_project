@@ -70,66 +70,45 @@
 
 <div class="sidebar">
   <ul>
-	<li><a href="#" onclick="window.location.href='company_home.jsp'"><i class="fas fa-home icon"></i><span>공고</span></a></li>
-    <li><a href="#" onclick="loadPage('talent.jsp')"><i class="fas fa-users icon"></i><span>인재 관리</span></a></li>
-    <li><a href="#" onclick="loadPage('promotion.jsp')"><i class="fas fa-bullhorn icon"></i><span>홍보 관리</span></a></li>
-    <li><a href="#" onclick="loadPage('member.jsp')"><i class="fas fa-user-cog icon"></i><span>회원정보 관리</span></a></li>
-    <li><a href="#" onclick="loadPage('support.jsp')"><i class="fas fa-headset icon"></i><span>고객지원</span></a></li>
+    <li><a id="homeLink" href="company_home.jsp"><i class="fas fa-home icon"></i>공고 관리</a></li>
+    <li><a id="talentLink" href="talent.jsp"><i class="fas fa-users icon"></i>인재 관리</a></li>
+    <li><a id="promotionLink" href="promotion.jsp"><i class="fas fa-bullhorn icon"></i>홍보 관리</a></li>
+    <li><a id="memberLink" href="Edit_admin_page.jsp"><i class="fas fa-user-cog icon"></i>회원정보 관리</a></li>
+    <li><a id="supportLink" href="support.jsp"><i class="fas fa-headset icon"></i>고객지원</a></li>
   </ul>
 </div>
 
 <script>
-  var prevActiveLink = null; // 이전에 활성화된 링크를 저장하기 위한 변수
+// 문서 로드 시 active 메뉴 강조
+document.addEventListener('DOMContentLoaded', function() {
+    setActiveLink();
+});
 
-  function loadPage(page) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("content").innerHTML = this.responseText;
-        // 현재 활성화된 메뉴 표시를 제거합니다.
-        if (prevActiveLink !== null) {
-          prevActiveLink.classList.remove('active');
+function setActiveLink() {
+    const currentPath = window.location.pathname.split('/').pop();
+    const links = document.querySelectorAll('.sidebar a');
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
         }
-      }
-    };
-    xhttp.open("GET", page, true);
-    xhttp.send();
-    // 현재 클릭한 메뉴를 활성화합니다.
-    var currentActiveLink = event.target.closest('a');
-    currentActiveLink.classList.add('active');
-    // 이전에 활성화된 메뉴가 있으면 흰색으로 변경합니다.
-    if (prevActiveLink !== null && prevActiveLink !== currentActiveLink) {
-      prevActiveLink.classList.remove('active');
-    }
-    // 현재 활성화된 링크를 이전에 활성화된 링크로 설정합니다.
-    prevActiveLink = currentActiveLink;
-  }
-
-  function toggleSubMenu(subMenuId) {
-    var subMenu = document.getElementById(subMenuId);
-    subMenu.classList.toggle('active');
-  }
-
-  // 페이지 상단으로 자연스럽게 스크롤하는 함수
-  function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth" // 자연스러운 스크롤
     });
-  }
+}
 
-  window.addEventListener('scroll', function() {
-	    var sidebar = document.querySelector('.sidebar');
-	    if (window.scrollY > 100) { // 스크롤 위치가 100 이상이면 사이드 메뉴를 위로 올립니다.
-	      sidebar.style.top = '0';
-	    } else { // 스크롤 위치가 100 미만이면 사이드 메뉴를 아래로 내립니다.
-	      sidebar.style.top = '61px'; // 이 값은 초기 위치인 61px로 설정해야 합니다.
-	    }
-	  });
+// 해당 링크로 이동할 때 URL을 통해 active 상태를 설정
+function navigate(pageUrl) {
+    window.location.href = pageUrl;
+    setActiveLink();
+}
+
+// 이벤트 리스너 연결
+document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', function() {
+        navigate(this.getAttribute('href'));
+    });
+});
 </script>
-
-<!-- 상단으로 스크롤 버튼 -->
-<button id="scrollTopBtn" onclick="scrollToTop()" style="position: fixed; bottom: 20px; right: 20px; display: none;">상단으로</button>
 
 </body>
 </html>
