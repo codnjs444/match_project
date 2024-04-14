@@ -60,6 +60,12 @@
 	        // 숨겨진 입력 필드에 값 설정
 	        document.getElementById('environment_type[]').value = envTypes.join(', ');
 	    }
+	    function updateArraysAndSubmit() {
+	        updateArrays(); // 기존의 updateArrays 함수 호출
+
+	        // 서버에 데이터를 전송하기 위해 form을 submit
+	        document.forms['allfilterFrm'].submit();
+	    }
     </script>
 </head>
 <body>
@@ -351,7 +357,7 @@
 				            <div class="row px-0 mx-0 search-form" style="height: 40px;">
 				            	<div class="col form-content" style="height: 40px;"></div>
 				            	<div class="col form-content2" style="flex-grow:0; height: 40px;">
-				            		<button type="submit" class="form-btn1" style="height: 38px; font-size: 13px">조건 검색</button>
+				            		<button type="button" class="form-btn1" style="height: 38px; font-size: 13px">조건 검색</button>
 				            	</div>
 				            </div>
 			            </div>
@@ -564,10 +570,12 @@
 								</div>
 					        </div>
 				            <div class="row px-0 mx-0 search-form2" style="height: 40px;">
-				            	<div class="col form-content3" style="height : 40px"></div>
-				            	<div class="col form-content4" style="flex-grow:0; height: 40px;">
-				            		<button type="button" class="form-btn2" onclick="updateArrays()" style="height: 40px; font-size: 13px;">조건 검색</button>
-				            	</div>
+				            	<div class="col form-content3" style="height: 40px;">
+							        <form name="allfilterFrm" method="post" action="javascript:updateArrays();">
+							            <!-- 폼 내용 -->
+							            <button type="submit" class="form-btn2" style="height: 40px; font-size: 13px;">조건 검색</button>
+							        </form>
+							    </div>
 				            </div>
 			            </div>
 		            </form>

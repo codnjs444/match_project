@@ -633,6 +633,7 @@
 		
 		        xhr.onreadystatechange = function() {
 		            if (xhr.readyState == 4 && xhr.status == 200) {
+		            	location.reload(); // 성공 시 페이지 리로드
 		                console.log(xhr.responseText);
 		                // 필요한 경우 추가적인 클라이언트 측 로직 구현
 		            }
