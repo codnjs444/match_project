@@ -10,12 +10,19 @@
 	aBean.setUser_id(user_id);
 	aBean.setResume_idx(resume_idx);
 	aBean.setPosting_idx(posting_idx);
-	
-	aMgr.insertApplication(posting_idx, resume_idx, user_id);
-	aMgr.insertApplicationResult(posting_idx, user_id);
-	
-	String msg = "지원 완료했습니다.";
+
 	String location = "user_home.jsp";
+	String msg = "";
+	if(aMgr.duplicateCheck(posting_idx, user_id)){
+		msg = "이미 지원한 채용 공고입니다.";
+	}
+	
+	else{
+		aMgr.insertApplication(posting_idx, resume_idx, user_id);
+		aMgr.insertApplicationResult(posting_idx, user_id);
+		
+		msg = "채용 공고에 지원 완료했습니다.";
+	}
 %>
 <script>
 	alert("<%=msg%>");

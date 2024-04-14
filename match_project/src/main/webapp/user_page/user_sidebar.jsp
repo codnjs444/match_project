@@ -44,11 +44,11 @@
 						<button class="my-btn-icon2 my-btn-icon"></button>
 						<p class="my-btn-text">이력서 열람</p>
 					</div>
-					<div class="my-btn-div px-0">
+					<div class="my-btn-div px-0" onclick="location.href='../login/applicationStatus.jsp'">
 						<button class="my-btn-icon3 my-btn-icon"></button>
 						<p class="my-btn-text">입사지원 현황</p>
 					</div>
-					<div class="my-btn-div px-0 border-end border-top border-light-subtitle">
+					<div class="my-btn-div px-0 border-end border-top border-light-subtitle" onclick="location.href='../login/recentViewPosting.jsp'">
 						<button class="my-btn-icon4 my-btn-icon"></button>
 						<p class="my-btn-text">최근 본 공고</p>
 					</div>
