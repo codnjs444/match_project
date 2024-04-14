@@ -192,7 +192,7 @@
   <div class="nav-links">
     <a href="#" id="openModal">공고등록</a>
     <a href="../login/logout.jsp">로그아웃</a>
-    <a href="../user_page/user_home.jsp">지원 서비스</a>
+    <a href="../user_page/user_home.jsp">지원자 홈</a>
   </div>
 </header>
 

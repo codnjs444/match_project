@@ -129,6 +129,22 @@
 	    color: #ccc; /* 회색 글자 */
 	    background-color: #f3f3f3; /* 밝은 회색 배경 */
 }
+
+.memo-form {
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 100; /* Ensure it's above other elements */
+}
+
+.memo-input {
+    width: 200px;
+    height: 100px;
+    margin-bottom: 5px;
+}
+
 </style>
 <body>
 
@@ -189,6 +205,7 @@
 	List<String> applicationIgnoreList = aMgr.getApplicationIgnoreByResumeIdxs(resumeIdxs,posting_idx2);
 	// resume_idx에 맞게 저장된 합격 상태
 	List<String> applicationSResultList = aMgr.getApplicationSResultByResumeIdxs(resumeIdxs,posting_idx2);
+
 %>
 <form id="submitForm" action="post_manage_proc.jsp" method="POST">
 <div class="container-fluid custom-container"> <!-- fluid container for full width -->
@@ -252,7 +269,7 @@
         // applicationIgnoreList에서 현재 인덱스의 값이 "yes"인지 확인하여 스타일을 결정합니다.
         String ignoreStyle = "yes".equals(applicationIgnoreList.get(i)) ? "background-color: #606060; color: white;" : "";
     %>
-	<div class="row applicant-info justify-content-center" style="<%= ignoreStyle %>" id="row_<%= resumeIdxs.get(i) %>" data-user-id="<%= userIds.get(i) %>">
+	<div class="row applicant-info justify-content-center" style="<%= ignoreStyle %>" id="row_<%= resumeIdxs.get(i) %>" data-user-id="<%= userIds.get(i) %>"data-posting-idx="<%= posting_idx %>">
 		<input type="hidden" name="application_ignored_<%= resumeIdxs.get(i) %>" id="application_ignored_<%= resumeIdxs.get(i) %>" value="<%= applicationIgnoreList.get(i) %>">
 	        <div class="col-1 d-flex align-items-center justify-content-center" style="flex: 0 0 5%; max-width: 5%;">
 	            <%= i + 1 %>
@@ -324,7 +341,20 @@
 	            <%= languageNameList.get(i)%>
 	        </div>
 	        <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">
-	            <button type="button" class="addbtn">메모</button>
+            	<% 
+			        boolean memoExists = aMgr.checkMemoExists(posting_idx2, userIds.get(i)); // 메모 존재 여부 확인
+			        String buttonStyle = memoExists ? "background-color: #4F4F4F; color: white;" : "";
+			        String memoContent = aMgr.getMemo(posting_idx2, userIds.get(i)); // 특정 user_id와 posting_idx에 대한 메모 내용 가져오기
+   				 %>
+            <button type="button" class="addbtn" style="<%= buttonStyle %>" onclick="toggleMemoForm(this, '<%= resumeIdxs.get(i) %>');">메모</button>
+			
+			<div id="memoForm_<%= resumeIdxs.get(i) %>" class="memo-form" style="display: none;">
+			     <textarea class="memo-input" placeholder="메모를 입력하세요..."><%= memoContent != null ? memoContent : "" %></textarea>
+			    <button type="button" onclick="saveMemo(this, '<%= resumeIdxs.get(i) %>');">확인</button>
+			    <button type="button" onclick="deleteMemo('<%= resumeIdxs.get(i) %>');">삭제</button>
+			    
+			</div>
+
 	        </div>
 	        <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">
 	            <button type="button" class="addbtn">평가</button>
@@ -569,7 +599,7 @@
 
 	        xhr.onload = function() {
 	            if (xhr.status == 200) {
-	                alert('이메일 전송 완료: ' + xhr.responseText);
+	                alert(xhr.responseText);
 	                $('#resultsModal').modal('hide');
 	            } else {
 	                alert('이메일 전송 실패');
@@ -671,6 +701,95 @@
 		        finalBtn.classList.add('disabledButton');
 		    }
 		};
+		
+		function toggleMemoForm(button, resumeIdx) {
+		    var memoForm = document.getElementById('memoForm_' + resumeIdx);
+		    if (memoForm.style.display === 'none') {
+		        memoForm.style.display = 'block';
+		        memoForm.style.position = 'absolute';
+		        memoForm.style.left = button.offsetLeft + 'px'; // Position it below the button
+		        memoForm.style.top = (button.offsetTop + button.offsetHeight + 5) + 'px'; // 5px below the button
+		    } else {
+		        memoForm.style.display = 'none';
+		    }
+		}
+
+		function saveMemo(button, resumeIdx) {
+		    var memoInput = button.previousElementSibling;
+		    if (memoInput.value.trim() !== '') {
+		        // 버튼의 부모 요소인 .applicant-info 로우에서 user_id와 posting_idx 추출
+		        var memoRow = document.getElementById('row_' + resumeIdx);
+		        var userId = memoRow.getAttribute('data-user-id');
+		        var postingIdx = memoRow.getAttribute('data-posting-idx');
+
+		        // AJAX 요청 설정
+		        var xhr = new XMLHttpRequest();
+		        xhr.open("POST", "/match_project/SaveMemoServlet", true);
+		        xhr.setRequestHeader("Content-Type", "application/json");  // JSON 형식으로 데이터 전송
+
+		        // JSON 데이터 생성
+		        var data = JSON.stringify({
+		            user_id: userId,
+		            posting_idx: postingIdx,
+		            memo: memoInput.value
+		        });
+
+		        xhr.onload = function() {
+		            if (xhr.status == 200) {
+		                alert(xhr.responseText);
+		                location.reload(); // 성공 시 페이지 리로드
+		            } else {
+		                alert(xhr.status);
+		            }
+		        };
+
+		        xhr.onerror = function() {
+		            alert("Request failed, unable to connect to server.");
+		        };
+
+		        xhr.send(data);  // JSON 데이터 전송
+		        document.getElementById('memoForm_' + resumeIdx).style.display = 'none';
+		    }
+		}
+		
+		function deleteMemo(resumeIdx) {
+		    // 삭제 여부를 확인하고 사용자에게 확인 메시지를 띄우기
+		    var confirmDelete = confirm("정말로 이 메모를 삭제하시겠습니까?");
+		    if (confirmDelete) {
+		        // AJAX 요청 설정
+		        var xhr = new XMLHttpRequest();
+		        xhr.open("POST", "/match_project/DeleteMemoServlet", true);
+		        xhr.setRequestHeader("Content-Type", "application/json");  // JSON 형식으로 데이터 전송
+
+		        // .applicant-info 로우에서 user_id와 posting_idx 추출
+		        var memoRow = document.getElementById('row_' + resumeIdx);
+		        var userId = memoRow.getAttribute('data-user-id');
+		        var postingIdx = memoRow.getAttribute('data-posting-idx');
+
+		        // JSON 데이터 생성
+		        var data = JSON.stringify({
+		            user_id: userId,
+		            posting_idx: postingIdx
+		        });
+
+		        xhr.onload = function() {
+		            if (xhr.status == 200) {
+		                alert(xhr.responseText);
+		                location.reload(); // 성공 시 페이지 리로드
+		            } else {
+		                alert(xhr.status);
+		            }
+		        };
+
+		        xhr.onerror = function() {
+		            alert("Request failed, unable to connect to server.");
+		        };
+
+		        xhr.send(data);  // JSON 데이터 전송
+		    }
+		}
+
+
 </script>
 
 

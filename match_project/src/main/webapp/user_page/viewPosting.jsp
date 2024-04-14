@@ -304,6 +304,16 @@
 		    String currentPageUrl = url.toString(); // 현재 페이지의 전체 URL
 		    
 		    
+		    String posting_idxStr = request.getParameter("posting_idx");
+			int posting_idx2 = 0; // 기본값 설정 혹은 에러 처리를 위한 기본값 설정
+			try {
+			    posting_idx2 = Integer.parseInt(posting_idxStr);
+			} catch (NumberFormatException e) {
+			    System.out.println("Error converting posting_idx to integer: " + e.getMessage()); // 에러 메시지 출력
+			}
+		    boolean like = coMgr.checkBookmarkExists(user_id, posting_idx2);
+		    
+		    
 		    
 		    // 최근 본 공고 정보를 세션에서 가져오기
 		    List<Map<String, String>> recentPosts2 = (List<Map<String, String>>) session.getAttribute("recentPosts");
@@ -355,7 +365,8 @@
 					    <div class="left-side">
 					        <div class="icons" style="margin-top: 10px;"> <!-- 아이콘들을 위로 이동 -->
 								<!-- 찜 아이콘과 텍스트 -->
-								<i class="far fa-heart" id="favoriteIcon"></i> <span class="icon-label">찜</span>
+								<i class="<%= like ? "fas fa-heart" : "far fa-heart" %>" id="favoriteIcon"></i> <span class="icon-label">찜</span>
+
 
 					            <i class="fas fa-exclamation-circle"></i> <span class="icon-label">신고</span>
 					            <i class="fas fa-share-alt"></i> <span class="icon-label">공유</span>
