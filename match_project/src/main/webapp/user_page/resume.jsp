@@ -57,6 +57,7 @@
 			width: 140px;
 			height: 140px;
 			background-color: #fff;
+			border-radius: 50%;
 		}
 		.left-name{
 			text-align: center;
@@ -402,7 +403,7 @@
 		.right-content ul li a:hover {
 		    color: #007bff; /* 링크 호버 색상 */
 		}
-        .resume-side label {
+		       .resume-side label {
 		    display: inline-block;
 		    padding-left: 13px;
 		    padding-right: 10px;
@@ -423,7 +424,7 @@
 		    padding: 0;
 		    overflow: hidden;
 		    border: 0;
-		}
+		} 
 	</style>
 </head>
 <body>
@@ -451,11 +452,11 @@
 			SNS = uBean.getSns();
 	%>
 	<div class="resume">
-		<form name="resumeFrm" method="post" action="resumeProc.jsp" enctype="multipart/form-data">
+		<form name="resumeFrm" method="post" action="resumeProc.jsp">
 			<div class="fixed-left resume-side row ms-0">
-				<div class="left-img"></div>
+			<div class="left-img"></div>
 				<input type="file" id="file">
-				<label for="file" class="py-0">프로필 사진 업로드</label> 
+				<label for="file" class="py-0">프로필 사진 업로드</label>
 				<div class="left-name"><%=uBean.getUser_name()%></div>
 				<div class="left-info">
 					<table>
