@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -85,6 +86,50 @@ public class ApplicationMgr {
 		}
 		return userIds; // 조회된 user_id 목록 반환
 	}
+	
+	public List<String> getSortedUserIdsByApplicationDate(String posting_idx, List<String> userIds) {
+	    if (userIds == null || userIds.isEmpty()) {
+	        // 유저 ID 리스트가 null이거나 비어 있을 경우, 비어 있는 리스트 반환
+	        return new ArrayList<>();
+	    }
+
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<String> sortedUserIds = new ArrayList<>();
+	    try {
+	        con = pool.getConnection();
+
+	        // SQL 쿼리 구성. IN 절에 사용자 ID 목록을 동적으로 삽입
+	        StringBuilder userIdParams = new StringBuilder();
+	        for (int i = 0; i < userIds.size(); i++) {
+	            userIdParams.append("?,");
+	        }
+	        userIdParams.deleteCharAt(userIdParams.length() - 1); // 마지막 쉼표 제거
+
+	        String query = "SELECT user_id FROM application WHERE posting_idx = ? AND user_id IN (" 
+	                       + userIdParams.toString() + ") ORDER BY application_datetime ASC";
+
+	        pstmt = con.prepareStatement(query);
+	        pstmt.setString(1, posting_idx);
+	        int index = 2; // 첫 번째 인덱스는 posting_idx에 할당됨
+	        for (String userId : userIds) {
+	            pstmt.setString(index++, userId);
+	        }
+
+	        rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            sortedUserIds.add(rs.getString("user_id"));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+	    return sortedUserIds;
+	}
+
+
 
 	public List<Integer> getResumeIdxsByUserIds(String posting_idx, List<String> userIds) {
 		Connection con = null;
@@ -887,6 +932,148 @@ public class ApplicationMgr {
 		}
 	}
 	
+	// updateApplicationDate 메서드 정의
+	public boolean updateApplicationDate(int postingIdx, String userId) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    boolean updateSuccess = false;  // 업데이트 성공 여부를 저장할 변수
+
+	    try {
+	        con = pool.getConnection();
+
+	        // SQL 쿼리 작성
+	        String sql = "UPDATE application SET application_datetime = CURRENT_TIMESTAMP " +  // 현재 시간을 직접 SQL에서 설정
+	                     "WHERE posting_idx = ? AND user_id = ?";
+
+	        // PreparedStatement 객체 생성
+	        pstmt = con.prepareStatement(sql);
+
+	        // 매개변수 설정
+	        pstmt.setInt(1, postingIdx);
+	        pstmt.setString(2, userId);
+
+	        // 쿼리 실행
+	        int rowsAffected = pstmt.executeUpdate();
+
+	        // 업데이트 성공 여부 체크
+	        if (rowsAffected > 0) {
+	            System.out.println("application_date 업데이트 성공!");
+	            updateSuccess = true;  // 성공 시 true 반환
+	        } else {
+	            System.out.println("해당하는 행이 없거나 업데이트가 실패했습니다.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 리소스 해제
+	        pool.freeConnection(con, pstmt);
+	    }
+	    return updateSuccess;  // 업데이트 성공 여부 반환
+	}
+
+	public boolean updateApplicationDateUp(int postingIdx, String userId) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    boolean updateSuccess = false;  // 업데이트 성공 여부를 저장할 변수
+
+	    try {
+	        con = pool.getConnection();
+
+	        String sql = "UPDATE application SET application_datetime = (" +
+	                     "SELECT new_date FROM (" +
+	                     "SELECT DATE_SUB(MIN(application_datetime), INTERVAL 1 YEAR) AS new_date " +
+	                     "FROM application WHERE posting_idx = ?) AS sub) " +
+	                     "WHERE posting_idx = ? AND user_id = ?";
+
+	        pstmt = con.prepareStatement(sql);
+
+	        // Set the first parameter in the subquery
+	        pstmt.setInt(1, postingIdx);
+	        // Set the second parameter in the WHERE clause
+	        pstmt.setInt(2, postingIdx);
+	        // Set the user_id
+	        pstmt.setString(3, userId);
+
+	        int rowsAffected = pstmt.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            updateSuccess = true;
+	            System.out.println("Application date updated successfully!");
+	        } else {
+	            System.out.println("No rows updated. Check if the user and posting index are correct.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (pstmt != null) try { pstmt.close(); } catch (SQLException e) { /* ignored */ }
+	        if (con != null) pool.freeConnection(con);
+	    }
+	    return updateSuccess;
+	}
+	
+	
+	   public int getMaxProcedureNum(int postingIdx) {
+	        Connection con = null;
+	        PreparedStatement pstmt = null;
+	        ResultSet rs = null;
+	        int maxProcedureNum = 0; // 기본값 설정
+
+	        try {
+	            con = pool.getConnection(); // 커넥션 풀에서 연결 객체 얻기
+
+	            String query = "SELECT MAX(procedure_num) AS max_proc_num FROM application_result WHERE posting_idx = ?";
+	            pstmt = con.prepareStatement(query);
+	            pstmt.setInt(1, postingIdx);
+
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                maxProcedureNum = rs.getInt("max_proc_num");
+	            }
+	        } catch (SQLException e) {
+		        e.printStackTrace();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+	            pool.freeConnection(con, pstmt, rs); // 자원 반납
+	        }
+
+	        return maxProcedureNum;
+	    }
+	   
+	   public String getProcedureNameByMaxNum(int postingIdx, int maxProcedureNum) {
+	        Connection con = null;
+	        PreparedStatement pstmt = null;
+	        ResultSet rs = null;
+	        String procedureName = null; // 기본값은 null
+
+	        try {
+	            con = pool.getConnection(); // 커넥션 풀에서 연결 객체 얻기
+
+	            String query = "SELECT procedure_name FROM `procedure` " +
+	                           "WHERE posting_idx = ? AND procedure_num = ?";
+	            pstmt = con.prepareStatement(query);
+	            pstmt.setInt(1, postingIdx);
+	            pstmt.setInt(2, maxProcedureNum);
+
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                procedureName = rs.getString("procedure_name");
+	            }
+	        } catch (SQLException e) {
+		        e.printStackTrace();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+	            pool.freeConnection(con, pstmt, rs); // 자원 반납
+	        }
+
+	        return procedureName;
+	    }
+
 	
     
 }

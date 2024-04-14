@@ -125,6 +125,10 @@
 	    border-top: 1px solid #dee2e6; /* 모달 바닥의 상단 경계선 추가 */
 	    background-color: #f8f9fa; /* 모달 바닥 배경색 추가 */
 	}
+	.disabledButton {
+	    color: #ccc; /* 회색 글자 */
+	    background-color: #f3f3f3; /* 밝은 회색 배경 */
+}
 </style>
 <body>
 
@@ -158,8 +162,10 @@
 	// 채용 절차 출력하기 위한 파일 (상단 메뉴)
 	List<procedureBean> procedureList = pMgr.getProcedure(posting_idx, procedureNum);
 	// x 절차의 user id의 정보를 담음
-	List<String> userIds = aMgr.searchUserId(posting_idx, procecount);
-	// user id의 순서에 맞게 저장된 resume_IDX값들
+	List<String> userid = aMgr.searchUserId(posting_idx, procecount);
+	
+	List<String> userIds = aMgr.getSortedUserIdsByApplicationDate(posting_idx, userid);
+ 	// user id의 순서에 맞게 저장된 resume_IDX값들
 	List<Integer> resumeIdxs = aMgr.getResumeIdxsByUserIds(posting_idx, userIds);
 	// user_id의 값에 맞게 저장된 user_name들
 	Map<String, String> userNames = aMgr.getUserNamesByUserIds(userIds);
@@ -355,8 +361,18 @@
 			                <i class="fas fa-ellipsis-v" style="font-size: 6px;"></i> <!-- 인라인 스타일로 크기 조정 -->
 			            </button>
 			            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#"><i class="fas fa-arrow-up"></i> 상단으로 이동</a>
-							<a class="dropdown-item" href="#"><i class="fas fa-arrow-down"></i> 하단으로 이동</a>
+							<a class="dropdown-item" href="javascript:void(0);"
+							   data-posting-idx="<%= posting_idx %>"
+							   data-user-id="<%= userIds.get(i) %>"
+							   onclick="moveApplicationUp(this)">
+							    <i class="fas fa-arrow-up"></i> 상단으로 이동
+							</a>
+							<a class="dropdown-item" href="javascript:void(0);" 
+							   data-posting-idx="<%= posting_idx %>" 
+							   data-user-id="<%= userIds.get(i) %>" 
+							   onclick="moveApplicationDown(this)">
+							    <i class="fas fa-arrow-down"></i> 하단으로 이동
+							</a>
 							<a class="dropdown-item" href="javascript:void(0);" onclick="toggleIgnore(<%= resumeIdxs.get(i) %>);"><i class="fas fa-times"></i> 제외하기</a>
 							<a class="dropdown-item" href="#"><i class="far fa-save"></i> 인재 저장</a>
 			                <!-- 필요에 따라 추가 메뉴 아이템 -->
@@ -397,9 +413,9 @@
         <!-- 합격자 메일 설정 -->
         <div id="passSection" style="display:none;">
             <label for="passEmailSubject">합격 메일 제목:</label>
-            <input type="text" id="passEmailSubject" class="form-control" value="축하합니다! 합격을 알려드립니다">
+            <input type="text" id="passEmailSubject" class="form-control" value="축하합니다! Match 합격을 알려드립니다">
             <label for="passEmailContent">합격 메일 내용:</label>
-            <textarea id="passEmailContent" class="form-control">귀하가 지원하신 포지션에 대해 합격하셨습니다. 자세한 사항은 이메일을 참고해주시기 바랍니다.</textarea>
+            <textarea id="passEmailContent" class="form-control">귀하가 지원하신 포지션에 대해 합격하셨습니다. 축하드립니다!!!</textarea>
         </div>
 
         <!-- 불합격자 메일 설정 -->
@@ -575,9 +591,86 @@
 	        var procedure_num = getQueryParam('procecount');
 	        console.log('Current procedure_num: ', procedure_num);
 	    });
+	   
+	   
+	   function moveApplicationDown(element) {
+		    var postingIdx = element.getAttribute('data-posting-idx'); // HTML 요소에서 posting_idx 읽기
+		    var userId = element.getAttribute('data-user-id'); // HTML 요소에서 user_id 읽기
 
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("POST", "/match_project/MoveApplicationDownServlet", true);
+		    xhr.setRequestHeader("Content-Type", "application/json");  // JSON 형식으로 데이터 전송
 
+		    // 객체를 JSON 문자열로 변환
+		    var jsonData = JSON.stringify({
+		        posting_idx: postingIdx,
+		        user_id: userId
+		    });
 
+		    xhr.onload = function() {
+		        if (xhr.status === 200) {
+		            var response = xhr.responseText.trim();
+		            if (response === "Success") {
+		                alert('하단으로 이동 처리되었습니다.');
+		                location.reload(); // 성공 시 페이지 리로드
+		            } else {
+		                alert('이동 실패: ' + response);
+		            }
+		        } else {
+		            alert('서버 오류가 발생했습니다. 상태 코드: ' + xhr.status);
+		        }
+		    };
+
+		    xhr.send(jsonData);
+		}
+	   
+	   function moveApplicationUp(element) {
+		    var postingIdx = element.getAttribute('data-posting-idx'); // HTML 요소에서 posting_idx 읽기
+		    var userId = element.getAttribute('data-user-id'); // HTML 요소에서 user_id 읽기
+
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("POST", "/match_project/MoveApplicationUpServlet", true);
+		    xhr.setRequestHeader("Content-Type", "application/json");  // JSON 형식으로 데이터 전송
+
+		    // 객체를 JSON 문자열로 변환
+		    var jsonData = JSON.stringify({
+		        posting_idx: postingIdx,
+		        user_id: userId
+		    });
+
+		    xhr.onload = function() {
+		        if (xhr.status === 200) {
+		            var response = xhr.responseText.trim();
+		            if (response === "Success") {
+		                alert('상단으로 이동 처리되었습니다.');
+		                location.reload(); // 성공 시 페이지 리로드
+		            } else {
+		                alert('이동 실패: ' + response);
+		            }
+		        } else {
+		            alert('서버 오류가 발생했습니다. 상태 코드: ' + xhr.status);
+		        }
+		    };
+
+		    xhr.send(jsonData);
+		}
+	   
+	   window.onload = function() {
+		    // 유저 목록의 길이를 확인합니다.
+		    var userIds = <%= userIds.size() %>;
+
+		    // userIds가 0일 경우, 저장 및 결과 발표 버튼을 비활성화하고 스타일을 변경합니다.
+		    if (userIds === 0) {
+		        var sendBtn = document.getElementById('sendBtn');
+		        var finalBtn = document.getElementById('finalBtn');
+
+		        sendBtn.disabled = true;
+		        finalBtn.disabled = true;
+
+		        sendBtn.classList.add('disabledButton');
+		        finalBtn.classList.add('disabledButton');
+		    }
+		};
 </script>
 
 

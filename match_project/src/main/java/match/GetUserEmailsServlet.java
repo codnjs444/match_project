@@ -73,12 +73,12 @@ public class GetUserEmailsServlet extends HttpServlet {
             // Handle the procedure count logic
             if (procedureCount + 1 < procedureNum) {
                 aMgr.insertApplicationResults(passedUserIds, postingIdx, procedureCount);
-                response.getWriter().write("{\"message\":\"Intermediate results published.\"}");
+                response.getWriter().write("결과 발표가 완료되었습니다.!");
             } else {
                 // Last procedure handling: Finalizing results and closing the posting
                 aMgr.closePostingByPostingIdx(postingIdx);
                 aMgr.updateApplicationResultsToFinalSelection(passedUserIds, postingIdx, procedureCount);
-                response.getWriter().write("{\"message\":\"All recruitment stages completed. Thank you.\"}");
+                response.getWriter().write("모든 채용 절차가 종료되었습니다. 감사합니다.");
             }
 
             // Send emails to passed users
@@ -89,7 +89,7 @@ public class GetUserEmailsServlet extends HttpServlet {
 
         } catch (MessagingException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to send email.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "메시지 전송에 실패하였습니다.");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JSON format");

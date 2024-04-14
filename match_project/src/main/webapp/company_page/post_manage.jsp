@@ -18,7 +18,6 @@
 <%@ include file="post_manage_middle.jsp"%>
 <%@ include file="menu/bottom.jsp"%>
 
-
 <script>	
 	document.addEventListener('DOMContentLoaded', function() {
 		  var currentPage = window.location.pathname.split("/").pop(); // 현재 페이지 파일 이름을 가져옵니다.

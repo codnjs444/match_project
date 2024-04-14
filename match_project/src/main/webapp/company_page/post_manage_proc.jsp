@@ -14,6 +14,7 @@
 <body>
 
 <%
+
 	String posting_idxStr = request.getParameter("posting_idx");
 	int posting_idx2 = 0; // 기본값 설정 혹은 에러 처리를 위한 기본값 설정
 	try {

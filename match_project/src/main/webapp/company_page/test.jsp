@@ -1,38 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GET Request Example</title>
+    <title>Dynamic Dropdown with Bootstrap</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<button onclick="sendGetRequest()">GET 요청 보내기</button>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown button
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <form class="px-4 py-3">
+      <div class="form-group">
+        <label for="newItemText">New item</label>
+        <input type="text" class="form-control" id="newItemText" placeholder="Enter new item">
+      </div>
+      <button type="button" class="btn btn-primary" onclick="addDropdownItem()">Add item</button>
+    </form>
+    <div id="dropdownItemList">
+      <!-- New items will be added here -->
+    </div>
+  </div>
+</div>
 
-<script>
-// 서버로 GET 요청을 보내는 함수
-function sendGetRequest() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // 요청 성공 시 응답 출력
-                console.log(xhr.responseText);
-                alert('서버로부터의 응답: ' + xhr.responseText);
-            } else {
-                // 요청 실패 시 에러 출력
-                console.error('요청 실패: ', xhr.status);
-                alert('요청 실패: ' + xhr.status);
-            }
-        }
-    };
+<script type="text/javascript">
+function addDropdownItem() {
+    var newItemText = document.getElementById("newItemText").value;
+    if (newItemText.trim() !== "") {
+        var newItem = document.createElement("a");
+        newItem.classList.add("dropdown-item");
+        newItem.href = "#";
+        newItem.textContent = newItemText;
 
- // GET 요청 보내기
-    xhr.open('GET', '/match/GetContextPathServlet', true);
-    xhr.send();
+        // Create delete button
+        var deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "X";
+        deleteBtn.className = "btn btn-danger btn-sm";
+        deleteBtn.onclick = function() {
+            this.parentElement.remove(); // Removes the dropdown item
+        };
 
+        newItem.appendChild(deleteBtn);
+        document.getElementById("dropdownItemList").appendChild(newItem);
+        document.getElementById("newItemText").value = "";  // Clear input field after adding
+    } else {
+        alert("Please enter some text!");
+    }
 }
 </script>
 </body>
 </html>
+
+

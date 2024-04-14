@@ -268,18 +268,27 @@ body {
 				<div class="job-post">
 				    <div class="section top">
 				                       <div class="procedure-box">
-                    <% 
-                    Integer postingIdx = postIdxList.get(i);
-                    ArrayList<String> procedures = proceduresMap.get(postingIdx);
-                    if (procedures != null) {
-                        for (int j = 0; j < procedures.size(); j++) {
-                            out.print(procedures.get(j));
-                            if (j < procedures.size() - 1) {
-                                out.print(" -> ");
-                            }
-                        }
-                    }
-                    %>
+					<%
+					    Integer postingIdx = postIdxList.get(i);
+					    ArrayList<String> procedures = proceduresMap.get(postingIdx);
+					    int maxProcedureNum = aMgr.getMaxProcedureNum(postingIdx);
+					    String maxProcedureName = aMgr.getProcedureNameByMaxNum(postingIdx, maxProcedureNum);
+					
+					    if (procedures != null) {
+					        for (int j = 0; j < procedures.size(); j++) {
+					            String procedureName = procedures.get(j);
+					            if (procedureName.equals(maxProcedureName)) {
+					            	out.print("<span style='color: #4698EA; font-weight: bolder;'>" + procedureName + "</span>");
+					            } else {
+					                out.print(procedureName);
+					            }
+					            if (j < procedures.size() - 1) {
+					                out.print(" -> ");
+					            }
+					        }
+					    }
+					%>
+
                 </div>
 				    </div>
 				    <div class="section middle">
