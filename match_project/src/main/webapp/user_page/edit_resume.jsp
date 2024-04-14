@@ -439,7 +439,28 @@
 		.right-content ul li a:hover {
 		    color: #007bff; /* 링크 호버 색상 */
 		}
-		        
+       .resume-side label {
+		    display: inline-block;
+		    padding-left: 13px;
+		    padding-right: 10px;
+		    margin-left: 100px;
+		    margin-right: 100px;
+		    color: #000;
+		    vertical-align: middle;
+		    background-color: #fff;
+		    cursor: pointer;
+		    height: 22px;
+		    width: 163px;
+		    border: 1px solid #000;
+		}
+		.resume-side input[type="file"] {
+		    position: absolute;
+		    width: 0;
+		    height: 0;
+		    padding: 0;
+		    overflow: hidden;
+		    border: 0;
+		} 
 	</style>
 </head>
 <body>
@@ -475,10 +496,12 @@
 	List<CertificateBean> certificateList = rMgr.getCertificateList(resume_idx);
 %>
 	<div class="resume">
-		<form name="resumeFrm" method="get" action="resumeUpdateProc.jsp">
+		<form name="resumeFrm" method="post" action="resumeUpdateProc.jsp">
 		<input type="hidden" name="resume_idx" value="<%= resume_idx %>">
 			<div class="fixed-left resume-side row ms-0">
-				<label class="left-img"></label> 
+				<div class="left-img"></div>
+				<input type="file" id="file">
+				<label for="file" class="py-0">프로필 사진 업로드</label>
 				<div class="left-name"><%=uBean.getUser_name()%></div>
 				<div class="left-info">
 					<table>
@@ -539,11 +562,11 @@
 			<div class="resume-center">
 				<div class="title" id="introInfo">자기소개</div>
 				<div class="stitle">당신은 어떤 사람인가요? (한 줄 소개)</div>
-				<input class="input-box" type="text" id="intro1" name="intro1" value="<%=rBean.getSelf_intro1()%>">
+				<textarea class="input-box" id="intro1" name="intro1"><%=rBean.getSelf_intro1()%></textarea>
 				<div class="stitle">당신의 꿈, 목표와 비전에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" id="intro2" name="intro2" value="<%=rBean.getSelf_intro2()%>">
+				<textarea class="input-box" id="intro2" name="intro2"><%=rBean.getSelf_intro2()%></textarea>
 				<div class="stitle">당신의 가치관에 대해 기술해주세요.</div>
-				<input class="input-box" type="text" id="intro3" name="intro3" value="<%=rBean.getSelf_intro3()%>">
+				<textarea class="input-box" id="intro3" name="intro3"><%=rBean.getSelf_intro3()%></textarea>
 				<input type="hidden" name="resume_name">
 				
 				<div class="title" id="eduInfo">학력</div>
@@ -854,7 +877,7 @@
 						</div>
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<input type="text" id="project_duty[]" name="project_duty[]" class="box-style lbox-con">
+								<textarea id="project_duty[]" name="project_duty[]" class="box-style lbox-con"></textarea>
 							</div>
 						</div>
 					</div>

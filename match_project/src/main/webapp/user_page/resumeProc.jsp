@@ -74,7 +74,9 @@
 	        	eBean.setEdu_eyear(eduEndYears[i].substring(0,7));
 	        eBean.setEdu_status(eduStatuses[i]);
 
-	        boolean edu_result = rMgr.insertEdu(eBean); // Insert edu-box entry into the database
+	        if(eduTypes[i] != ""){
+	        	boolean edu_result = rMgr.insertEdu(eBean); // Insert edu-box entry into the database
+	        }
 	    }
 	}
 	
@@ -97,7 +99,9 @@
 				caBean.setCareer_eyear(careerEyears[i].substring(0,7));
 			caBean.setCareer_duty(careerDutys[i]);
 			
-			boolean career_result = rMgr.insertCareer(caBean);
+			if(careerCnames[i] != ""){
+				boolean career_result = rMgr.insertCareer(caBean);
+			}
 		}
 	}
 	
@@ -116,7 +120,9 @@
 			iBean.setInternship_eyear(internEyears[i]);
 			iBean.setInternship_duty(internDutys[i]);
 			
-			boolean intern_result = rMgr.insertInternship(iBean);
+			if(internTypes[i] != ""){
+				boolean intern_result = rMgr.insertInternship(iBean);
+			}
 		}
 	}
 	
@@ -135,7 +141,9 @@
 			cuBean.setCurriculum_eyear(curriculumEyears[i]);
 			cuBean.setCurriculum_content(curriculumContents[i]);
 			
-			boolean curriculum_result = rMgr.insertCurriculum(cuBean);
+			if(curriculumNames[i] != ""){
+				boolean curriculum_result = rMgr.insertCurriculum(cuBean);
+			}
 		}
 	}
 	
@@ -145,6 +153,7 @@
 		for(int i = 0; i < skillSnames.length; i++){
 			sBean.setResume_idx(generatedKey);
 			sBean.setSkill_sname(skillSnames[i]);
+			
 			
 			boolean skill_result = rMgr.insertSkill(sBean);
 		}
@@ -174,7 +183,9 @@
 			aBean.setAward_syear(awardSyears[i]);
 			aBean.setAward_content(awardContents[i]);
 			
-			boolean award_result = rMgr.insertAward(aBean);
+			if(awardNames[i] != ""){
+				boolean award_result = rMgr.insertAward(aBean);
+			}
 		}
 	}
 	
@@ -191,7 +202,9 @@
 			gBean.setGlobalex_eyear(globalexEyears[i]);
 			gBean.setGlobalex_content(globalexContents[i]);
 			
-			boolean globalex_result = rMgr.insertGlobalex(gBean);
+			if(globalexNames[i] != ""){
+				boolean globalex_result = rMgr.insertGlobalex(gBean);
+			}
 		}
 	}
 	
@@ -204,7 +217,9 @@
 			lBean.setLanguage_name(languageNames[i]);
 			lBean.setLanguage_level(languageLevels[i]);
 			
-			boolean language_result = rMgr.insertLanguage(lBean);
+			if(languageNames[i] != ""){
+				boolean language_result = rMgr.insertLanguage(lBean);
+			}
 		}
 	}
 	
@@ -218,16 +233,18 @@
 	
 	preBean.setResume_idx(generatedKey);
 	// 체크박스 값이 "on"이면 "대상자", null이면 "대상자 아님"
-	preBean.setPreffer_miliprotect(checkbox1 != null ? "대상자" : "대상자 아님");
-	preBean.setPreffer_eprotect(checkbox2 != null ? "대상자" : "대상자 아님");
-	preBean.setPreffer_sprotect(checkbox3 != null ? "대상자" : "대상자 아님");
+	if(!(checkbox1 == null && checkbox2 == null && checkbox3 == null && checkbox4 == null && checkbox5 == null)){
+		preBean.setPreffer_miliprotect(checkbox1 != null ? "대상자" : "대상자 아님");
+		preBean.setPreffer_eprotect(checkbox2 != null ? "대상자" : "대상자 아님");
+		preBean.setPreffer_sprotect(checkbox3 != null ? "대상자" : "대상자 아님");
 
-	// 장애와 병역은 선택된 경우 해당 값을, 아니면 "대상자 아님"
-	preBean.setPreffer_disabilitype(checkbox4 != null ? disable : "대상자 아님");
-	preBean.setPreffer_militype(checkbox5 != null ? military : "대상자 아님");
-	
-	
-	boolean preffer_result = rMgr.insertPreffer(preBean);
+		// 장애와 병역은 선택된 경우 해당 값을, 아니면 "대상자 아님"
+		preBean.setPreffer_disabilitype(checkbox4 != null ? disable : "대상자 아님");
+		preBean.setPreffer_militype(checkbox5 != null ? military : "대상자 아님");
+		
+		
+		boolean preffer_result = rMgr.insertPreffer(preBean);
+	}
 	
 	String[] projectNames = request.getParameterValues("project_name[]");
 	String[] projectSyears = request.getParameterValues("project_syear[]");
@@ -250,7 +267,9 @@
 			proBean.setProject_fname(projectFnames[i]);
 			proBean.setProject_extension(projectExtensions[i]);
 			
-			boolean project_result = rMgr.insertProject(proBean);
+			if(projectNames[i] != ""){
+				boolean project_result = rMgr.insertProject(proBean);
+			}
 		}
 	}
 	
