@@ -389,7 +389,7 @@
 						</div>
 						<div class="row">
 							<div class="box-style lbox p-0">
-								<input type="text" id="project_duty[]" name="project_duty[]" class="box-style lbox-con" placeholder="프로젝트에 대한 설명과 자신의 역할에 대해 설명해주세요.">
+								<textarea id="project_duty[]" name="project_duty[]" class="box-style lbox-con" placeholder="프로젝트에 대한 설명과 자신의 역할에 대해 설명해주세요."></textarea>
 							</div>
 						</div>
 					</div>
