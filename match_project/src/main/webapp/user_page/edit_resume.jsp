@@ -148,7 +148,7 @@
 		}
 		.input-box{
 			width: 930px;
-			height: 100px;
+			height: 200px;
 			border: 1px solid lightgrey;
 			border-radius: 10px/10px;
 		}
@@ -696,11 +696,11 @@
 							</div>
 							<span class="sstext p-0">시작연도</span>
 							<select name="intern_syear[]" class="box-style ssbox p-0 intern-syear">
-								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+								<option value="<%=intern.getInternship_syear()%>" selected><%=intern.getInternship_syear()%></option>
 							</select>
 							<span class="sstext p-0">종료연도</span>
 							<select name="intern_eyear[]" class="box-style ssbox p-0 intern-eyear">
-								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+								<option value="<%=intern.getInternship_eyear()%>" selected><%=intern.getInternship_eyear()%></option>
 							</select>
 						</div>
 						<div class="row">
@@ -732,11 +732,11 @@
 							</div>
 							<span class="sstext p-0">시작연도</span>
 							<select name="curriculum_syear[]" class="box-style ssbox p-0 curriculum-syear">
-								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+								<option value="<%=curriculum.getCurriculum_syear()%>" selected><%=curriculum.getCurriculum_syear()%></option>
 							</select>
 							<span class="sstext p-0">종료연도</span>
 							<select name="curriculum_eyear[]" class="box-style ssbox p-0 curriculum-eyear">
-								<!-- 연도 옵션은 JavaScript로 동적으로 추가됩니다. -->
+								<option value="<%=curriculum.getCurriculum_eyear()%>" selected><%=curriculum.getCurriculum_eyear()%></option>
 							</select>
 						</div>
 						<div class="row">

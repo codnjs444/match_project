@@ -90,7 +90,7 @@
 		}
 		.input-box{
 			width: 930px;
-			height: 100px;
+			height: 200px;
 			border: 1px solid lightgrey;
 			border-radius: 10px/10px;
 		}
@@ -151,7 +151,7 @@
 			margin-left: 20px;
 			margin-top: 10px;
 			width: 900px;
-			height: 70px;
+			height: 150px;
 		}
 		.lsbox{
 			margin-left: 20px;
@@ -180,7 +180,7 @@
 		}
 		.lbox-con{
 			width: 900px;
-			height: 68px;
+			height: 148px;
 			resize: none;
 			overflow-y: auto;
 		}
