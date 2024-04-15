@@ -36,7 +36,16 @@
 	}
 
 %>
+<style>
+	.modal-dialog {
+    position: fixed;
+    top: 30%; /* 상단에서 30% 떨어진 위치에 설정 */
+    transform: translate(-50%, -50%);
+    width: 600px;
+    margin: 0;
+}
 
+</style>
 <title>Announcement Form with Bootstrap</title>
 <!-- 최신 버전의 부트스트랩 CSS 추가 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -745,15 +754,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="titleForm" method="get" action="own_post_proc.jsp">
-        <div class="modal-body">
-          <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" onclick="submitAnnouncement()">확인</button>
-        </div>
-      </form>
+      <div class="modal-body">
+        <input type="text" class="form-control" id="posting_name_modal" name="posting_name" placeholder="제목 입력">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" onclick="submitAnnouncement()">확인</button>
+      </div>
     </div>
   </div>
 </div>

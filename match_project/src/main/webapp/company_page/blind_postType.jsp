@@ -36,7 +36,16 @@
 		 data[i] = certificateList.get(i).getCertificate_name().toLowerCase();
 		}
 %>
+<style>
+	.modal-dialog {
+    position: fixed;
+    top: 30%; /* 상단에서 30% 떨어진 위치에 설정 */
+    transform: translate(-50%, -50%);
+    width: 600px;
+    margin: 0;
+}
 
+</style>
 <title>Announcement Form with Bootstrap</title>
 <!-- 최신 버전의 부트스트랩 CSS 추가 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

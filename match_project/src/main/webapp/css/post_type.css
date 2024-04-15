@@ -6,6 +6,14 @@ body {
         background-color: #606060; /* 버튼의 배경색을 파란색으로 지정 */
         color: white; /* 버튼 텍스트 색상을 흰색으로 지정 */
 }
+    .modal-dialog {
+    position: fixed;
+    top: 30%; /* 상단에서 30% 떨어진 위치에 설정 */
+    left: 50%; /* 가로 중앙 */
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 0;
+}
     
 .title {
     font-size: 16px;
@@ -211,12 +219,7 @@ body {
     color: black; /* 빨간색으로 설정 */
     margin-left: 50px;
 }
-.custom-modal-position {
-  position: fixed;
-  top: 10%;  /* 상단에서 10% 떨어진 위치 */
-  left: 50%; /* 중앙 정렬을 위해 좌측에서 50% 위치 */
-  transform: translate(-50%, -10%); /* 중앙 정렬을 위한 조정 */
-}
+
 /* ------------------------------------------------------------------------------ */
 /* [지원자 자격 요건_경력 여부 버튼] */
 .btn-group {
