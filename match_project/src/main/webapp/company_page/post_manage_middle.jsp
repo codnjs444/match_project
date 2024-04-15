@@ -144,7 +144,10 @@
     height: 100px;
     margin-bottom: 5px;
 }
-
+.dropdown-menu {
+    position: absolute;
+    transform: translate3d(0, 0, 0);
+}
 </style>
 <body>
 
@@ -356,9 +359,30 @@
 			</div>
 
 	        </div>
-	        <div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center;">
-	            <button type="button" class="addbtn">평가</button>
-	        </div>
+	        
+<div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center; position: relative;">
+    <%
+        // 평가 점수를 불러오는 로직
+        String commentsScore = pMgr.checkCommentsNum(posting_idx2, userIds.get(i));
+        String displayScore = "평가"; // 기본값 설정
+        if (!"no".equals(commentsScore)) {
+            displayScore = commentsScore + "점"; // DB에서 점수를 불러왔다면 해당 점수를 표시
+        }
+    %>
+        <div class="dropdown">
+            <button class="addbtn dropdown-toggle" type="button" id="dropdownMenuButtonScore<%= i %>"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= displayScore %>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonScore<%= i %>">
+                <% for (int score = 0; score <= 10; score++) { %>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="setScore(<%= score %>, '<%= userIds.get(i) %>', <%= posting_idx2 %>);"><%= score %>점</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+
 			<div class="col" style="flex: 0 0 7%; max-width: 7%; text-align: center; position: relative;">
 		        <div class="dropdown">
 		            <% 
@@ -788,7 +812,42 @@
 		        xhr.send(data);  // JSON 데이터 전송
 		    }
 		}
+		
+		function setScore(score, userId, postingIdx) {
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("POST", "/match_project/SaveScoreServlet", true); // 경로 확인 필요
+		    xhr.setRequestHeader("Content-Type", "application/json");  // JSON 형식으로 데이터 전송
 
+		    // 객체를 JSON 문자열로 변환
+		    var jsonData = JSON.stringify({
+		        user_id: userId,
+		        posting_idx: postingIdx,
+		        score: score.toString()  // 점수를 문자열로 변환
+		    });
+
+		    xhr.onload = function() {
+		        if (xhr.status === 200) {
+		            var response = JSON.parse(xhr.responseText);
+		            if (response.success) {
+		                
+		                alert(response.message);
+		                location.reload(); // 성공 시 페이지 리로드
+		            } else {
+		                alert("점수 업데이트 실패: " + response.message);
+		            }
+		        } else {
+		            alert('서버 오류가 발생했습니다. 상태 코드: ' + xhr.status);
+		        }
+		    };
+
+		    xhr.onerror = function() {
+		        alert("Request failed, unable to connect to server.");
+		    };
+
+		    xhr.send(jsonData);  // JSON 데이터 전송
+		}
+
+		
 
 </script>
 

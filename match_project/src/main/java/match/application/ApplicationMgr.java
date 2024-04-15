@@ -272,10 +272,10 @@ public class ApplicationMgr {
 				if (rs.next()) {
 					// edu 테이블에 해당 resume_idx에 대한 edu_major 값이 있으면 추가
 					String eduMajor = rs.getString("edu_major");
-					eduMajorsList.add(eduMajor != null ? eduMajor : "전공 없음"); // null 체크
+					eduMajorsList.add(eduMajor != null ? eduMajor : "고등학교 졸업"); // null 체크
 				} else {
 					// edu 테이블에 해당 resume_idx에 대한 edu_major 값이 없으면 "전공 없음"
-					eduMajorsList.add("전공 없음");
+					eduMajorsList.add("고등학교 졸업");
 				}
 			}
 		} catch (Exception e) {

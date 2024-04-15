@@ -3,6 +3,7 @@ package match;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -1194,4 +1195,119 @@ public class PostingMgr {
 		}
 		return procedureEdatetime;
 	}
+	
+	public void updateOrInsertComment(int postingIdx, String userId, String commentsScore) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        con = pool.getConnection();
+
+	        // 주어진 postingIdx와 userId에 해당하는 레코드가 이미 있는지 확인합니다.
+	        String selectQuery = "SELECT * FROM application_comments WHERE posting_idx = ? AND user_id = ?";
+	        pstmt = con.prepareStatement(selectQuery);
+	        pstmt.setInt(1, postingIdx);
+	        pstmt.setString(2, userId);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) { // 이미 레코드가 존재하면 업데이트
+	            String updateQuery = "UPDATE application_comments SET comments_score = ? WHERE posting_idx = ? AND user_id = ?";
+	            pstmt = con.prepareStatement(updateQuery);
+	            pstmt.setString(1, commentsScore);
+	            pstmt.setInt(2, postingIdx);
+	            pstmt.setString(3, userId);
+	            pstmt.executeUpdate(); // SQL 문 실행
+	        } else { // 레코드가 존재하지 않으면 삽입
+	            String insertQuery = "INSERT INTO application_comments (posting_idx, user_id, comments_score) VALUES (?, ?, ?)";
+	            pstmt = con.prepareStatement(insertQuery);
+	            pstmt.setInt(1, postingIdx);
+	            pstmt.setString(2, userId);
+	            pstmt.setString(3, commentsScore);
+	            pstmt.executeUpdate(); // SQL 문 실행
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 자원 해제
+	        try {
+	            if (rs != null) rs.close();
+	            if (pstmt != null) pstmt.close();
+	            if (con != null) pool.freeConnection(con);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+	
+	
+	public String checkCommentsNum(int postingIdx, String userId) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String commentsScore = "no"; // 기본값으로 'no'를 설정합니다.
+
+	    try {
+	        con = pool.getConnection();
+
+	        // 주어진 postingIdx와 userId에 해당하는 레코드가 있는지 확인합니다.
+	        String selectQuery = "SELECT comments_score FROM application_comments WHERE posting_idx = ? AND user_id = ?";
+	        pstmt = con.prepareStatement(selectQuery);
+	        pstmt.setInt(1, postingIdx);
+	        pstmt.setString(2, userId);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) { // 레코드가 존재하면 해당하는 comments_score 값을 가져옵니다.
+	            commentsScore = rs.getString("comments_score");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 자원 해제
+	        try {
+	            if (rs != null) rs.close();
+	            if (pstmt != null) pstmt.close();
+	            if (con != null) pool.freeConnection(con);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return commentsScore;
+	}
+	
+	public void deleteComment(int postingIdx, String userId) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        con = pool.getConnection();
+
+	        // 주어진 postingIdx와 userId에 해당하는 레코드를 삭제합니다.
+	        String deleteQuery = "DELETE FROM application_comments WHERE posting_idx = ? AND user_id = ?";
+	        pstmt = con.prepareStatement(deleteQuery);
+	        pstmt.setInt(1, postingIdx);
+	        pstmt.setString(2, userId);
+	        pstmt.executeUpdate(); // SQL 문 실행
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // 자원 해제
+	        try {
+	            if (pstmt != null) pstmt.close();
+	            if (con != null) pool.freeConnection(con);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+
 }
